@@ -8,7 +8,9 @@ function SEO({
   noIndex = false,
 }) {
   const siteName = "Toolora";
-  const siteUrl = "https://toolora.com";
+
+  // Current live domain
+  const siteUrl = "https://toolora-inky.vercel.app";
 
   const fullTitle =
     title === "Free Online Tools"
@@ -17,11 +19,15 @@ function SEO({
 
   const canonicalUrl = canonical.startsWith("http")
     ? canonical
-    : `${siteUrl}${canonical.startsWith("/") ? canonical : `/${canonical}`}`;
+    : `${siteUrl}${
+        canonical.startsWith("/") ? canonical : `/${canonical}`
+      }`;
 
   const robotsContent = noIndex
     ? "noindex, nofollow"
     : "index, follow";
+
+  const ogImageUrl = `${siteUrl}/og-image.png`;
 
   return (
     <Helmet>
@@ -65,7 +71,6 @@ function SEO({
         href={canonicalUrl}
       />
 
-
       {/* =========================
           OPEN GRAPH / FACEBOOK
       ========================= */}
@@ -102,7 +107,7 @@ function SEO({
 
       <meta
         property="og:image"
-        content={`${siteUrl}/og-image.png`}
+        content={ogImageUrl}
       />
 
       <meta
@@ -125,7 +130,6 @@ function SEO({
         content="630"
       />
 
-
       {/* =========================
           TWITTER / X
       ========================= */}
@@ -147,14 +151,13 @@ function SEO({
 
       <meta
         name="twitter:image"
-        content={`${siteUrl}/og-image.png`}
+        content={ogImageUrl}
       />
 
       <meta
         name="twitter:image:alt"
         content={`${siteName} - Free Online Tools`}
       />
-
 
       {/* =========================
           WEBSITE / BROWSER
@@ -164,10 +167,8 @@ function SEO({
         name="theme-color"
         content="#6c5ce7"
       />
-
     </Helmet>
   );
 }
 
 export default SEO;
-

@@ -1,5 +1,4 @@
-
 User-agent: *
 Allow: /
 
-Sitemap: https://toolora.com/sitemap.xml
+Sitemap: https://toolora-inky.vercel.app/sitemap.xml

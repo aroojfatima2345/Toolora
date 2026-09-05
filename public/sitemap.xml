@@ -6,7 +6,7 @@
   ========================== -->
 
   <url>
-    <loc>https://toolora.com/</loc>
+    <loc>https://toolora-inky.vercel.app/</loc>
   </url>
 
 
@@ -15,11 +15,11 @@
   ========================== -->
 
   <url>
-    <loc>https://toolora.com/image-compressor</loc>
+    <loc>https://toolora-inky.vercel.app/image-compressor</loc>
   </url>
 
   <url>
-    <loc>https://toolora.com/image-resizer</loc>
+    <loc>https://toolora-inky.vercel.app/image-resizer</loc>
   </url>
 
 
@@ -28,11 +28,11 @@
   ========================== -->
 
   <url>
-    <loc>https://toolora.com/pdf-compressor</loc>
+    <loc>https://toolora-inky.vercel.app/pdf-compressor</loc>
   </url>
 
   <url>
-    <loc>https://toolora.com/pdf-to-jpg</loc>
+    <loc>https://toolora-inky.vercel.app/pdf-to-jpg</loc>
   </url>
 
 
@@ -41,11 +41,11 @@
   ========================== -->
 
   <url>
-    <loc>https://toolora.com/jpg-to-png</loc>
+    <loc>https://toolora-inky.vercel.app/jpg-to-png</loc>
   </url>
 
   <url>
-    <loc>https://toolora.com/jpg-to-pdf</loc>
+    <loc>https://toolora-inky.vercel.app/jpg-to-pdf</loc>
   </url>
 
 
@@ -54,7 +54,7 @@
   ========================== -->
 
   <url>
-    <loc>https://toolora.com/word-counter</loc>
+    <loc>https://toolora-inky.vercel.app/word-counter</loc>
   </url>
 
 
@@ -63,7 +63,7 @@
   ========================== -->
 
   <url>
-    <loc>https://toolora.com/qr-code-generator</loc>
+    <loc>https://toolora-inky.vercel.app/qr-code-generator</loc>
   </url>
 
 
@@ -72,15 +72,15 @@
   ========================== -->
 
   <url>
-    <loc>https://toolora.com/percentage-calculator</loc>
+    <loc>https://toolora-inky.vercel.app/percentage-calculator</loc>
   </url>
 
   <url>
-    <loc>https://toolora.com/age-calculator</loc>
+    <loc>https://toolora-inky.vercel.app/age-calculator</loc>
   </url>
 
   <url>
-    <loc>https://toolora.com/bmi-calculator</loc>
+    <loc>https://toolora-inky.vercel.app/bmi-calculator</loc>
   </url>
 
 
@@ -89,11 +89,11 @@
   ========================== -->
 
   <url>
-    <loc>https://toolora.com/about</loc>
+    <loc>https://toolora-inky.vercel.app/about</loc>
   </url>
 
   <url>
-    <loc>https://toolora.com/contact</loc>
+    <loc>https://toolora-inky.vercel.app/contact</loc>
   </url>
 
 
@@ -102,12 +102,11 @@
   ========================== -->
 
   <url>
-    <loc>https://toolora.com/privacy-policy</loc>
+    <loc>https://toolora-inky.vercel.app/privacy-policy</loc>
   </url>
 
   <url>
-    <loc>https://toolora.com/disclaimer</loc>
+    <loc>https://toolora-inky.vercel.app/disclaimer</loc>
   </url>
 
 </urlset>
-
