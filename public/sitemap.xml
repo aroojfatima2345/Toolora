@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- =========================
+       HOMEPAGE
+  ========================== -->
+
+  <url>
+    <loc>https://toolora.com/</loc>
+  </url>
+
+
+  <!-- =========================
+       IMAGE TOOLS
+  ========================== -->
+
+  <url>
+    <loc>https://toolora.com/image-compressor</loc>
+  </url>
+
+  <url>
+    <loc>https://toolora.com/image-resizer</loc>
+  </url>
+
+
+  <!-- =========================
+       PDF TOOLS
+  ========================== -->
+
+  <url>
+    <loc>https://toolora.com/pdf-compressor</loc>
+  </url>
+
+  <url>
+    <loc>https://toolora.com/pdf-to-jpg</loc>
+  </url>
+
+
+  <!-- =========================
+       CONVERTERS
+  ========================== -->
+
+  <url>
+    <loc>https://toolora.com/jpg-to-png</loc>
+  </url>
+
+  <url>
+    <loc>https://toolora.com/jpg-to-pdf</loc>
+  </url>
+
+
+  <!-- =========================
+       TEXT TOOLS
+  ========================== -->
+
+  <url>
+    <loc>https://toolora.com/word-counter</loc>
+  </url>
+
+
+  <!-- =========================
+       DEVELOPER TOOLS
+  ========================== -->
+
+  <url>
+    <loc>https://toolora.com/qr-code-generator</loc>
+  </url>
+
+
+  <!-- =========================
+       CALCULATORS
+  ========================== -->
+
+  <url>
+    <loc>https://toolora.com/percentage-calculator</loc>
+  </url>
+
+  <url>
+    <loc>https://toolora.com/age-calculator</loc>
+  </url>
+
+  <url>
+    <loc>https://toolora.com/bmi-calculator</loc>
+  </url>
+
+
+  <!-- =========================
+       COMPANY PAGES
+  ========================== -->
+
+  <url>
+    <loc>https://toolora.com/about</loc>
+  </url>
+
+  <url>
+    <loc>https://toolora.com/contact</loc>
+  </url>
+
+
+  <!-- =========================
+       LEGAL PAGES
+  ========================== -->
+
+  <url>
+    <loc>https://toolora.com/privacy-policy</loc>
+  </url>
+
+  <url>
+    <loc>https://toolora.com/disclaimer</loc>
+  </url>
+
+</urlset>
+
