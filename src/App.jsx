@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -14,26 +14,54 @@ import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./index.css";
 
 // ======================================================
-// PAGES
+// LAZY LOADED PAGES
 // ======================================================
 
-import ImageCompressor from "./pages/ImageCompressor";
-import ImageResizer from "./pages/ImageResizer";
-import JpgToPng from "./pages/JpgToPng";
-import WordCounter from "./pages/WordCounter";
-import PDFCompressor from "./pages/PdfCompressor";
-import QRCodeGenerator from "./pages/QRCodeGenerator";
-import JpgToPdf from "./pages/JpgToPdf";
-import PdfToJpg from "./pages/PdfToJpg";
-import PercentageCalculator from "./pages/PercentageCalculator";
-import AgeCalculator from "./pages/AgeCalculator";
-import BMICalculator from "./pages/BMICalculator";
+const ImageCompressor = lazy(() => import("./pages/ImageCompressor"));
+const ImageResizer = lazy(() => import("./pages/ImageResizer"));
+const JpgToPng = lazy(() => import("./pages/JpgToPng"));
+const WordCounter = lazy(() => import("./pages/WordCounter"));
+const PDFCompressor = lazy(() => import("./pages/PdfCompressor"));
+const QRCodeGenerator = lazy(() => import("./pages/QRCodeGenerator"));
+const JpgToPdf = lazy(() => import("./pages/JpgToPdf"));
+const PdfToJpg = lazy(() => import("./pages/PdfToJpg"));
+const PercentageCalculator = lazy(
+  () => import("./pages/PercentageCalculator")
+);
+const AgeCalculator = lazy(() => import("./pages/AgeCalculator"));
+const BMICalculator = lazy(() => import("./pages/BMICalculator"));
 
-import About from "./pages/About";
-import Contact from "./pages/Contact";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import Disclaimer from "./pages/Disclaimer";
+const About = lazy(() => import("./pages/About"));
+const Contact = lazy(() => import("./pages/Contact"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const Disclaimer = lazy(() => import("./pages/Disclaimer"));
 
+// ======================================================
+// LOADING SCREEN
+// ======================================================
+
+function PageLoader() {
+  return (
+    <main
+      className="container d-flex justify-content-center align-items-center"
+      style={{ minHeight: "60vh" }}
+      aria-live="polite"
+      aria-label="Loading page"
+    >
+      <div className="text-center">
+        <div
+          className="spinner-border text-primary mb-3"
+          role="status"
+          aria-hidden="true"
+        >
+          <span className="visually-hidden">Loading...</span>
+        </div>
+
+        <p className="text-muted mb-0">Loading...</p>
+      </div>
+    </main>
+  );
+}
 
 // ======================================================
 // HOME PAGE
@@ -45,7 +73,6 @@ function Home() {
 
   const navigate = useNavigate();
 
-
   // ======================================================
   // TOOLS
   // ======================================================
@@ -54,8 +81,7 @@ function Home() {
     {
       icon: "🖼️",
       title: "Image Compressor",
-      description:
-        "Compress JPG, PNG and WebP images online.",
+      description: "Compress JPG, PNG and WebP images online.",
       path: "/image-compressor",
       category: "Image Tools",
     },
@@ -63,8 +89,7 @@ function Home() {
     {
       icon: "📐",
       title: "Image Resizer",
-      description:
-        "Resize your images to any dimension.",
+      description: "Resize your images to any dimension.",
       path: "/image-resizer",
       category: "Image Tools",
     },
@@ -72,8 +97,7 @@ function Home() {
     {
       icon: "🔄",
       title: "JPG to PNG",
-      description:
-        "Convert JPG images to PNG format.",
+      description: "Convert JPG images to PNG format.",
       path: "/jpg-to-png",
       category: "Converters",
     },
@@ -81,8 +105,7 @@ function Home() {
     {
       icon: "📄",
       title: "PDF Compressor",
-      description:
-        "Reduce PDF file size quickly and easily.",
+      description: "Reduce PDF file size quickly and easily.",
       path: "/pdf-compressor",
       category: "PDF Tools",
     },
@@ -90,8 +113,7 @@ function Home() {
     {
       icon: "📝",
       title: "Word Counter",
-      description:
-        "Count words and characters instantly.",
+      description: "Count words and characters instantly.",
       path: "/word-counter",
       category: "Text Tools",
     },
@@ -99,8 +121,7 @@ function Home() {
     {
       icon: "🔗",
       title: "QR Code Generator",
-      description:
-        "Create QR codes for links and text.",
+      description: "Create QR codes for links and text.",
       path: "/qr-code-generator",
       category: "Developer Tools",
     },
@@ -108,8 +129,7 @@ function Home() {
     {
       icon: "📄",
       title: "JPG to PDF",
-      description:
-        "Convert JPG images into PDF documents.",
+      description: "Convert JPG images into PDF documents.",
       path: "/jpg-to-pdf",
       category: "Converters",
     },
@@ -117,8 +137,7 @@ function Home() {
     {
       icon: "🖼️",
       title: "PDF to JPG",
-      description:
-        "Convert PDF pages into JPG images.",
+      description: "Convert PDF pages into JPG images.",
       path: "/pdf-to-jpg",
       category: "Converters",
     },
@@ -126,8 +145,7 @@ function Home() {
     {
       icon: "🧮",
       title: "Percentage Calculator",
-      description:
-        "Calculate percentages quickly and easily.",
+      description: "Calculate percentages quickly and easily.",
       path: "/percentage-calculator",
       category: "Calculators",
     },
@@ -150,7 +168,6 @@ function Home() {
       category: "Calculators",
     },
   ];
-
 
   // ======================================================
   // CATEGORIES
@@ -188,7 +205,6 @@ function Home() {
     },
   ];
 
-
   // ======================================================
   // FILTER TOOLS
   // ======================================================
@@ -208,7 +224,6 @@ function Home() {
     return matchesSearch && matchesCategory;
   });
 
-
   // ======================================================
   // CLEAR FILTERS
   // ======================================================
@@ -217,7 +232,6 @@ function Home() {
     setSearch("");
     setSelectedCategory("All");
   };
-
 
   // ======================================================
   // SCROLL TO SECTION
@@ -234,20 +248,20 @@ function Home() {
     }, 50);
   };
 
-
   // ======================================================
   // HOME
   // ======================================================
 
   const goHome = () => {
     clearFilters();
+
     navigate("/");
+
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
   };
-
 
   // ======================================================
   // ALL TOOLS
@@ -260,7 +274,6 @@ function Home() {
 
     scrollToSection("tools");
   };
-
 
   // ======================================================
   // CATEGORY CLICK
@@ -275,7 +288,6 @@ function Home() {
     scrollToSection("tools");
   };
 
-
   return (
     <>
       {/* ==================================================
@@ -289,15 +301,12 @@ function Home() {
         canonical="/"
       />
 
-
       {/* ==================================================
           NAVBAR
       ================================================== */}
 
       <nav className="navbar navbar-expand-lg bg-white border-bottom">
-
         <div className="container py-2">
-
           <Link
             className="navbar-brand fw-bold fs-3 text-decoration-none"
             to="/"
@@ -306,7 +315,6 @@ function Home() {
           >
             Tool<span>ora</span>
           </Link>
-
 
           <button
             className="navbar-toggler"
@@ -320,18 +328,14 @@ function Home() {
             <span className="navbar-toggler-icon"></span>
           </button>
 
-
           <div
             className="collapse navbar-collapse"
             id="navbarNav"
           >
-
             <ul className="navbar-nav ms-auto align-items-lg-center gap-lg-3">
-
               {/* HOME */}
 
               <li className="nav-item">
-
                 <Link
                   className="nav-link"
                   to="/"
@@ -339,14 +343,11 @@ function Home() {
                 >
                   Home
                 </Link>
-
               </li>
-
 
               {/* ALL TOOLS */}
 
               <li className="nav-item">
-
                 <button
                   type="button"
                   className="nav-link btn btn-link border-0"
@@ -354,14 +355,11 @@ function Home() {
                 >
                   All Tools
                 </button>
-
               </li>
-
 
               {/* CATEGORIES */}
 
               <li className="nav-item">
-
                 <button
                   type="button"
                   className="nav-link btn btn-link border-0"
@@ -372,72 +370,48 @@ function Home() {
                 >
                   Categories
                 </button>
-
               </li>
-
 
               {/* BLOG */}
 
               <li className="nav-item">
-
                 <span
                   className="nav-link text-muted"
                   style={{ cursor: "default" }}
                 >
                   Blog
                 </span>
-
               </li>
-
             </ul>
-
           </div>
-
         </div>
-
       </nav>
-
 
       {/* ==================================================
           HERO
       ================================================== */}
 
       <section className="hero-section">
-
         <div className="container text-center">
-
           <div className="hero-badge mb-3">
             ✨ Simple. Fast. Free.
           </div>
 
-
           <h1 className="hero-title">
-
             Free Online Tools
-
             <br />
-
             <span>Made Simple</span>
-
           </h1>
 
-
           <p className="hero-text">
-
             Compress, convert, calculate and generate
             with our collection of simple online tools.
-
           </p>
-
 
           {/* SEARCH */}
 
           <div className="search-box mx-auto">
-
-            <span aria-hidden="true">
-              🔍
-            </span>
-
+            <span aria-hidden="true">🔍</span>
 
             <input
               type="text"
@@ -449,9 +423,7 @@ function Home() {
               aria-label="Search Toolora tools"
             />
 
-
             {search && (
-
               <button
                 type="button"
                 onClick={() => setSearch("")}
@@ -459,15 +431,10 @@ function Home() {
               >
                 Clear
               </button>
-
             )}
-
           </div>
-
         </div>
-
       </section>
-
 
       {/* ==================================================
           TOOLS
@@ -478,26 +445,18 @@ function Home() {
         id="tools"
         aria-labelledby="tools-heading"
       >
-
         <div className="container">
-
           <div className="section-heading">
-
             <div>
-
               <h2 id="tools-heading">
-
                 {selectedCategory !== "All"
                   ? selectedCategory
                   : search
                     ? "Search Results"
                     : "Popular Tools"}
-
               </h2>
 
-
               <p>
-
                 {selectedCategory !== "All"
                   ? `${filteredTools.length} tools available`
                   : search
@@ -507,46 +466,33 @@ function Home() {
                           : ""
                       } found`
                     : "Useful tools you can use for free."}
-
               </p>
-
             </div>
 
-
-            {(search ||
-              selectedCategory !== "All") && (
-
-                <button
-                  type="button"
-                  className="btn btn-outline-primary"
-                  onClick={clearFilters}
-                >
-                  View All Tools
-                </button>
-
-              )}
-
+            {(search || selectedCategory !== "All") && (
+              <button
+                type="button"
+                className="btn btn-outline-primary"
+                onClick={clearFilters}
+              >
+                View All Tools
+              </button>
+            )}
           </div>
-
 
           {/* TOOLS GRID */}
 
           {filteredTools.length > 0 ? (
-
             <div className="row g-4">
-
               {filteredTools.map((tool) => (
-
                 <div
                   className="col-md-6 col-lg-4"
                   key={tool.path}
                 >
-
                   <Link
                     to={tool.path}
                     className="tool-card text-decoration-none d-block"
                   >
-
                     <div
                       className="tool-icon"
                       aria-hidden="true"
@@ -554,33 +500,19 @@ function Home() {
                       {tool.icon}
                     </div>
 
+                    <h3>{tool.title}</h3>
 
-                    <h3>
-                      {tool.title}
-                    </h3>
-
-
-                    <p>
-                      {tool.description}
-                    </p>
-
+                    <p>{tool.description}</p>
 
                     <span className="use-tool-btn">
                       Use Tool →
                     </span>
-
                   </Link>
-
                 </div>
-
               ))}
-
             </div>
-
           ) : (
-
             <div className="text-center py-5">
-
               <div
                 style={{
                   fontSize: "50px",
@@ -591,17 +523,12 @@ function Home() {
                 🔍
               </div>
 
-
-              <h3>
-                No tools found
-              </h3>
-
+              <h3>No tools found</h3>
 
               <p className="text-muted">
-                We couldn't find any tools
-                matching your search.
+                We couldn't find any tools matching your
+                search.
               </p>
-
 
               <button
                 type="button"
@@ -610,15 +537,10 @@ function Home() {
               >
                 View All Tools
               </button>
-
             </div>
-
           )}
-
         </div>
-
       </section>
-
 
       {/* ==================================================
           CATEGORIES
@@ -629,31 +551,21 @@ function Home() {
         id="categories"
         aria-labelledby="categories-heading"
       >
-
         <div className="container">
-
           <div className="text-center mb-5">
-
             <h2 id="categories-heading">
               Explore Categories
             </h2>
 
-            <p>
-              Find the right tool for your task.
-            </p>
-
+            <p>Find the right tool for your task.</p>
           </div>
 
-
           <div className="row g-4">
-
             {categories.map((category) => (
-
               <div
                 className="col-6 col-md-4 col-lg-2"
                 key={category.title}
               >
-
                 <button
                   type="button"
                   className={`category-card w-100 border-0 ${
@@ -667,42 +579,29 @@ function Home() {
                     )
                   }
                 >
-
                   <div aria-hidden="true">
                     {category.icon}
                   </div>
 
-
-                  <h5>
-                    {category.title}
-                  </h5>
-
+                  <h5>{category.title}</h5>
 
                   <small>
-
-                    {tools.filter(
-                      (tool) =>
-                        tool.category ===
-                        category.title
-                    ).length}{" "}
-
+                    {
+                      tools.filter(
+                        (tool) =>
+                          tool.category ===
+                          category.title
+                      ).length
+                    }{" "}
                     Tools
-
                   </small>
-
                 </button>
-
               </div>
-
             ))}
-
           </div>
 
-
           {selectedCategory !== "All" && (
-
             <div className="text-center mt-4">
-
               <button
                 type="button"
                 className="btn btn-outline-primary"
@@ -710,19 +609,13 @@ function Home() {
               >
                 Show All Categories
               </button>
-
             </div>
-
           )}
-
         </div>
-
       </section>
-
     </>
   );
 }
-
 
 // ======================================================
 // GLOBAL FOOTER
@@ -731,18 +624,12 @@ function Home() {
 function Footer() {
   return (
     <footer className="footer">
-
       <div className="container">
-
         <div className="row g-4 text-center text-md-start">
-
           {/* BRAND */}
 
           <div className="col-md-5">
-
-            <h2>
-              Toolora
-            </h2>
+            <h2>Toolora</h2>
 
             <p>
               Free, simple and useful online tools for
@@ -750,20 +637,14 @@ function Footer() {
               calculate and generate without installing
               unnecessary software.
             </p>
-
           </div>
-
 
           {/* POPULAR TOOLS */}
 
           <div className="col-6 col-md-3">
-
-            <h3>
-              Popular Tools
-            </h3>
+            <h3>Popular Tools</h3>
 
             <ul className="list-unstyled footer-links">
-
               <li>
                 <Link to="/image-compressor">
                   Image Compressor
@@ -793,22 +674,15 @@ function Footer() {
                   QR Code Generator
                 </Link>
               </li>
-
             </ul>
-
           </div>
-
 
           {/* CALCULATORS */}
 
           <div className="col-6 col-md-2">
-
-            <h3>
-              Calculators
-            </h3>
+            <h3>Calculators</h3>
 
             <ul className="list-unstyled footer-links">
-
               <li>
                 <Link to="/percentage-calculator">
                   Percentage
@@ -826,32 +700,21 @@ function Footer() {
                   BMI Calculator
                 </Link>
               </li>
-
             </ul>
-
           </div>
-
 
           {/* COMPANY / LEGAL */}
 
           <div className="col-md-2">
-
-            <h3>
-              Company
-            </h3>
+            <h3>Company</h3>
 
             <ul className="list-unstyled footer-links">
-
               <li>
-                <Link to="/about">
-                  About
-                </Link>
+                <Link to="/about">About</Link>
               </li>
 
               <li>
-                <Link to="/contact">
-                  Contact
-                </Link>
+                <Link to="/contact">Contact</Link>
               </li>
 
               <li>
@@ -865,48 +728,32 @@ function Footer() {
                   Disclaimer
                 </Link>
               </li>
-
             </ul>
-
           </div>
-
         </div>
-
 
         {/* FOOTER BOTTOM */}
 
         <div className="border-top mt-4 pt-4">
-
           <div className="row align-items-center">
-
             <div className="col-md-6 text-center text-md-start">
-
               <small>
                 © {new Date().getFullYear()} Toolora.
                 All rights reserved.
               </small>
-
             </div>
 
-
             <div className="col-md-6 text-center text-md-end mt-2 mt-md-0">
-
               <small>
                 Free Tools, Made Simple.
               </small>
-
             </div>
-
           </div>
-
         </div>
-
       </div>
-
     </footer>
   );
 }
-
 
 // ======================================================
 // 404 PAGE
@@ -919,17 +766,13 @@ function NotFound() {
         title="Page Not Found"
         description="The page you are looking for could not be found on Toolora."
         canonical="/404"
+        noIndex={true}
       />
 
       <main className="container py-5 text-center">
+        <h1 className="fw-bold">404</h1>
 
-        <h1 className="fw-bold">
-          404
-        </h1>
-
-        <h2>
-          Page Not Found
-        </h2>
+        <h2>Page Not Found</h2>
 
         <p className="text-muted">
           The page you are looking for does not exist.
@@ -941,12 +784,10 @@ function NotFound() {
         >
           Back to Home
         </Link>
-
       </main>
     </>
   );
 }
-
 
 // ======================================================
 // APP ROUTES
@@ -955,112 +796,159 @@ function NotFound() {
 function App() {
   return (
     <BrowserRouter>
-
       <Routes>
-
         {/* HOME */}
 
-        <Route
-          path="/"
-          element={<Home />}
-        />
-
+        <Route path="/" element={<Home />} />
 
         {/* IMAGE TOOLS */}
 
         <Route
           path="/image-compressor"
-          element={<ImageCompressor />}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <ImageCompressor />
+            </Suspense>
+          }
         />
 
         <Route
           path="/image-resizer"
-          element={<ImageResizer />}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <ImageResizer />
+            </Suspense>
+          }
         />
-
 
         {/* CONVERTERS */}
 
         <Route
           path="/jpg-to-png"
-          element={<JpgToPng />}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <JpgToPng />
+            </Suspense>
+          }
         />
 
         <Route
           path="/jpg-to-pdf"
-          element={<JpgToPdf />}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <JpgToPdf />
+            </Suspense>
+          }
         />
 
         <Route
           path="/pdf-to-jpg"
-          element={<PdfToJpg />}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <PdfToJpg />
+            </Suspense>
+          }
         />
-
 
         {/* PDF */}
 
         <Route
           path="/pdf-compressor"
-          element={<PDFCompressor />}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <PDFCompressor />
+            </Suspense>
+          }
         />
-
 
         {/* TEXT */}
 
         <Route
           path="/word-counter"
-          element={<WordCounter />}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <WordCounter />
+            </Suspense>
+          }
         />
-
 
         {/* DEVELOPER */}
 
         <Route
           path="/qr-code-generator"
-          element={<QRCodeGenerator />}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <QRCodeGenerator />
+            </Suspense>
+          }
         />
-
 
         {/* CALCULATORS */}
 
         <Route
           path="/percentage-calculator"
-          element={<PercentageCalculator />}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <PercentageCalculator />
+            </Suspense>
+          }
         />
 
         <Route
           path="/age-calculator"
-          element={<AgeCalculator />}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <AgeCalculator />
+            </Suspense>
+          }
         />
 
         <Route
           path="/bmi-calculator"
-          element={<BMICalculator />}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <BMICalculator />
+            </Suspense>
+          }
         />
-
 
         {/* COMPANY / LEGAL */}
 
         <Route
           path="/about"
-          element={<About />}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <About />
+            </Suspense>
+          }
         />
 
         <Route
           path="/contact"
-          element={<Contact />}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <Contact />
+            </Suspense>
+          }
         />
 
         <Route
           path="/privacy-policy"
-          element={<PrivacyPolicy />}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <PrivacyPolicy />
+            </Suspense>
+          }
         />
 
         <Route
           path="/disclaimer"
-          element={<Disclaimer />}
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <Disclaimer />
+            </Suspense>
+          }
         />
-
 
         {/* 404 */}
 
@@ -1068,14 +956,11 @@ function App() {
           path="*"
           element={<NotFound />}
         />
-
       </Routes>
-
 
       {/* GLOBAL FOOTER */}
 
       <Footer />
-
     </BrowserRouter>
   );
 }
