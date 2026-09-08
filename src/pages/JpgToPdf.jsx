@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import jsPDF from "jspdf";
 import SEO from "../components/SEO";
@@ -7,6 +7,19 @@ function JpgToPdf() {
   const [images, setImages] = useState([]);
   const [pdfUrl, setPdfUrl] = useState("");
   const [isConverting, setIsConverting] = useState(false);
+
+  // Clean up generated object URLs when the component unmounts.
+  useEffect(() => {
+    return () => {
+      images.forEach((image) => {
+        URL.revokeObjectURL(image.url);
+      });
+
+      if (pdfUrl) {
+        URL.revokeObjectURL(pdfUrl);
+      }
+    };
+  }, [images, pdfUrl]);
 
   const faqSchema = {
     "@context": "https://schema.org",
@@ -55,6 +68,24 @@ function JpgToPdf() {
     ],
   };
 
+  const webAppSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: "Toolora JPG to PDF Converter",
+    url: "https://toolora-inky.vercel.app/jpg-to-pdf",
+    description:
+      "Free online JPG to PDF converter for combining JPG and JPEG images into PDF documents directly in your browser.",
+    applicationCategory: "UtilitiesApplication",
+    operatingSystem: "Any",
+    browserRequirements:
+      "Requires JavaScript and a modern web browser.",
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+    },
+  };
+
   const handleUpload = (event) => {
     const files = Array.from(event.target.files);
 
@@ -70,6 +101,7 @@ function JpgToPdf() {
 
     if (jpgFiles.length === 0) {
       alert("Please select JPG or JPEG images only.");
+      event.target.value = "";
       return;
     }
 
@@ -79,6 +111,15 @@ function JpgToPdf() {
       );
     }
 
+    // Revoke previous image URLs before replacing the selection.
+    images.forEach((image) => {
+      URL.revokeObjectURL(image.url);
+    });
+
+    if (pdfUrl) {
+      URL.revokeObjectURL(pdfUrl);
+    }
+
     const imageData = jpgFiles.map((file) => ({
       file,
       url: URL.createObjectURL(file),
@@ -86,6 +127,9 @@ function JpgToPdf() {
 
     setImages(imageData);
     setPdfUrl("");
+    setIsConverting(false);
+
+    event.target.value = "";
   };
 
   const convertToPdf = async () => {
@@ -95,6 +139,11 @@ function JpgToPdf() {
 
     try {
       setIsConverting(true);
+
+      if (pdfUrl) {
+        URL.revokeObjectURL(pdfUrl);
+        setPdfUrl("");
+      }
 
       const pdf = new jsPDF("p", "mm", "a4");
 
@@ -119,13 +168,17 @@ function JpgToPdf() {
         let imageWidth = img.width;
         let imageHeight = img.height;
 
+        if (!imageWidth || !imageHeight) {
+          throw new Error("Invalid image dimensions.");
+        }
+
         const ratio = Math.min(
           maxWidth / imageWidth,
           maxHeight / imageHeight
         );
 
-        imageWidth = imageWidth * ratio;
-        imageHeight = imageHeight * ratio;
+        imageWidth *= ratio;
+        imageHeight *= ratio;
 
         const x = (pageWidth - imageWidth) / 2;
         const y = (pageHeight - imageHeight) / 2;
@@ -148,12 +201,11 @@ function JpgToPdf() {
       const url = URL.createObjectURL(blob);
 
       setPdfUrl(url);
-      setIsConverting(false);
     } catch (error) {
       console.error(error);
 
       alert("Unable to create PDF. Please try again.");
-
+    } finally {
       setIsConverting(false);
     }
   };
@@ -196,8 +248,8 @@ function JpgToPdf() {
     <div className="compressor-page">
       <SEO
         title="JPG to PDF Converter Online - Convert Images to PDF Free"
-        description="Convert JPG and JPEG images to PDF online for free with Toolora. Combine one or multiple JPG images into a PDF and download it easily."
-        keywords="JPG to PDF, JPG to PDF converter, convert JPG to PDF, JPEG to PDF, image to PDF, JPG PDF converter, convert image to PDF, free JPG to PDF"
+        description="Convert JPG and JPEG images to PDF online for free with Toolora. Combine one or multiple JPG images into a PDF and download your document directly from your browser."
+        keywords="JPG to PDF, JPG to PDF converter, convert JPG to PDF, JPEG to PDF, image to PDF, JPG PDF converter, convert image to PDF, free JPG to PDF, online JPG to PDF converter"
         canonical="/jpg-to-pdf"
       />
 
@@ -205,9 +257,11 @@ function JpgToPdf() {
         {JSON.stringify(faqSchema)}
       </script>
 
-      <div className="container py-5">
-        {/* PAGE HEADING */}
+      <script type="application/ld+json">
+        {JSON.stringify(webAppSchema)}
+      </script>
 
+      <div className="container py-5">
         <header className="text-center mb-5">
           <div className="hero-badge mb-3">
             📄 Free Converter Tool
@@ -217,13 +271,15 @@ function JpgToPdf() {
             JPG to PDF Converter Online
           </h1>
 
-          <p className="text-muted">
-            Convert JPG and JPEG images to PDF online for free.
-            Combine multiple images into one PDF document.
+          <p
+            className="text-muted mx-auto"
+            style={{ maxWidth: "700px" }}
+          >
+            Convert JPG and JPEG images to PDF online for
+            free. Combine multiple images into one PDF
+            document and download it easily.
           </p>
         </header>
-
-        {/* CONVERTER TOOL */}
 
         <main>
           <section
@@ -235,7 +291,10 @@ function JpgToPdf() {
                 className="upload-area"
                 htmlFor="jpg-pdf-upload"
               >
-                <div className="upload-icon">
+                <div
+                  className="upload-icon"
+                  aria-hidden="true"
+                >
                   🖼️
                 </div>
 
@@ -257,6 +316,7 @@ function JpgToPdf() {
                   accept="image/jpeg,image/jpg"
                   multiple
                   onChange={handleUpload}
+                  aria-label="Choose JPG or JPEG images to convert to PDF"
                   hidden
                 />
               </label>
@@ -264,19 +324,22 @@ function JpgToPdf() {
 
             {images.length > 0 && (
               <div>
-                {/* IMAGE PREVIEWS */}
-
-                <div className="row g-3 mb-4">
+                <div
+                  className="row g-3 mb-4"
+                  aria-label={`Selected ${images.length} images`}
+                >
                   {images.map((image, index) => (
                     <div
                       className="col-6 col-md-4"
-                      key={index}
+                      key={`${image.file.name}-${index}`}
                     >
                       <div className="preview-area">
                         <img
                           src={image.url}
                           alt={`JPG image preview ${index + 1}`}
                           className="preview-image"
+                          loading="lazy"
+                          decoding="async"
                         />
                       </div>
 
@@ -286,8 +349,6 @@ function JpgToPdf() {
                     </div>
                   ))}
                 </div>
-
-                {/* FILE INFORMATION */}
 
                 <div className="file-info">
                   <p>
@@ -305,14 +366,20 @@ function JpgToPdf() {
                   </p>
                 </div>
 
-                {/* BUTTONS */}
-
-                <div className="d-flex gap-3 justify-content-center flex-wrap">
+                <div
+                  className="d-flex gap-3 justify-content-center flex-wrap"
+                  aria-live="polite"
+                >
                   <button
                     type="button"
                     className="btn btn-primary px-4"
                     onClick={convertToPdf}
                     disabled={isConverting}
+                    aria-label={
+                      isConverting
+                        ? "Creating PDF"
+                        : "Convert JPG images to PDF"
+                    }
                   >
                     {isConverting
                       ? "Creating PDF..."
@@ -324,6 +391,7 @@ function JpgToPdf() {
                       type="button"
                       className="btn btn-success px-4"
                       onClick={downloadPdf}
+                      aria-label="Download generated PDF"
                     >
                       Download PDF
                     </button>
@@ -333,260 +401,264 @@ function JpgToPdf() {
                     type="button"
                     className="btn btn-outline-danger px-4"
                     onClick={removeImages}
+                    disabled={isConverting}
                   >
                     Remove
                   </button>
                 </div>
+
+                {pdfUrl && (
+                  <p className="text-center text-muted mt-3 mb-0">
+                    Your PDF has been created successfully and
+                    is ready to download.
+                  </p>
+                )}
               </div>
             )}
           </section>
         </main>
 
-        {/* SEO CONTENT */}
+        <article className="tool-information mx-auto mt-5">
+          <section>
+            <h2>Free JPG to PDF Converter Online</h2>
 
-        <section className="tool-information mx-auto mt-5">
-          <h2>
-            Free JPG to PDF Converter Online
-          </h2>
+            <p>
+              Toolora's free JPG to PDF converter lets you
+              convert JPG and JPEG images into a PDF document
+              directly in your browser. You can select a single
+              image or multiple images and combine them into
+              one PDF file.
+            </p>
 
-          <p>
-            Toolora's free JPG to PDF converter lets you
-            convert JPG and JPEG images into a PDF document
-            directly in your browser. You can select a single
-            image or multiple images and combine them into
-            one PDF file.
-          </p>
+            <p>
+              This online image to PDF converter is useful for
+              photos, scanned documents, forms, receipts, and
+              other JPG images that you want to save or share
+              as a PDF document.
+            </p>
+          </section>
 
-          <p>
-            This online image to PDF converter is useful for
-            photos, scanned documents, forms, receipts and
-            other JPG images that you want to save or share
-            as a PDF document.
-          </p>
+          <section className="mt-4">
+            <h2>How to Convert JPG to PDF Online</h2>
 
-          <h2 className="mt-4">
-            How to Convert JPG to PDF Online
-          </h2>
+            <ol>
+              <li>
+                Click <strong>Choose Images</strong>.
+              </li>
 
-          <ol>
-            <li>
-              Click <strong>Choose Images</strong>.
-            </li>
+              <li>
+                Select one or multiple JPG/JPEG images.
+              </li>
 
-            <li>
-              Select one or multiple JPG/JPEG images.
-            </li>
+              <li>
+                Review the image previews.
+              </li>
 
-            <li>
-              Review the image previews.
-            </li>
+              <li>
+                Click <strong>Convert to PDF</strong>.
+              </li>
 
-            <li>
-              Click <strong>Convert to PDF</strong>.
-            </li>
+              <li>
+                Click <strong>Download PDF</strong> to save
+                your converted file.
+              </li>
+            </ol>
+          </section>
 
-            <li>
-              Click <strong>Download PDF</strong> to save
-              your converted file.
-            </li>
-          </ol>
+          <section className="mt-4">
+            <h2>Convert Multiple JPG Images to One PDF</h2>
 
-          <h2 className="mt-4">
-            Convert Multiple JPG Images to One PDF
-          </h2>
+            <p>
+              You can select multiple JPG or JPEG images at
+              once and combine them into a single PDF. Each
+              selected image is placed on its own A4 page,
+              making it easy to create a multi-page document
+              from several images.
+            </p>
+          </section>
 
-          <p>
-            You can select multiple JPG or JPEG images at
-            once and combine them into a single PDF. Each
-            selected image is placed on its own A4 page,
-            making it easy to create a multi-page document
-            from several images.
-          </p>
+          <section className="mt-4">
+            <h2>Why Convert JPG Images to PDF?</h2>
 
-          <h2 className="mt-4">
-            Why Convert JPG Images to PDF?
-          </h2>
+            <ul>
+              <li>
+                Combine multiple JPG images into one document.
+              </li>
 
-          <ul>
-            <li>
-              Combine multiple JPG images into one document.
-            </li>
+              <li>
+                Make images easier to share and store.
+              </li>
 
-            <li>
-              Make images easier to share and store.
-            </li>
+              <li>
+                Create PDF files from scanned documents.
+              </li>
 
-            <li>
-              Create PDF files from scanned documents.
-            </li>
+              <li>
+                Prepare images for document submission.
+              </li>
 
-            <li>
-              Prepare images for document submission.
-            </li>
+              <li>
+                Keep multiple related images together.
+              </li>
 
-            <li>
-              Keep multiple related images together.
-            </li>
+              <li>
+                Convert images without installing desktop
+                software.
+              </li>
+            </ul>
+          </section>
 
-            <li>
-              Convert images without installing desktop
-              software.
-            </li>
-          </ul>
+          <section className="mt-4">
+            <h2>JPG vs PDF: What's the Difference?</h2>
 
-          <h2 className="mt-4">
-            JPG vs PDF: What's the Difference?
-          </h2>
+            <p>
+              JPG is an image format commonly used for photos
+              and digital pictures. PDF is a document format
+              designed to preserve content and layout across
+              different devices and applications.
+            </p>
 
-          <p>
-            JPG is an image format commonly used for photos
-            and digital pictures. PDF is a document format
-            designed to preserve content and layout across
-            different devices and applications.
-          </p>
+            <p>
+              Converting JPG images to PDF can be useful when
+              you need to submit, share, or organize several
+              images as a single document.
+            </p>
+          </section>
 
-          <p>
-            Converting JPG images to PDF can be useful when
-            you need to submit, share or organize several
-            images as a single document.
-          </p>
+          <section className="mt-4">
+            <h2>Is the JPG to PDF Converter Safe to Use?</h2>
 
-          <h2 className="mt-4">
-            Is the JPG to PDF Converter Safe to Use?
-          </h2>
+            <p>
+              The conversion process is performed in your
+              browser using the web application. Your selected
+              images are used by the browser to create the PDF
+              file.
+            </p>
+          </section>
 
-          <p>
-            The conversion process is performed in your
-            browser using the web application. Your selected
-            images are used by the browser to create the PDF
-            file.
-          </p>
+          <section className="mt-4">
+            <h2>Does Each JPG Become a Separate PDF Page?</h2>
 
-          <h2 className="mt-4">
-            Does Each JPG Become a Separate PDF Page?
-          </h2>
+            <p>
+              Yes. When you select multiple JPG or JPEG images,
+              each image is placed on a separate A4 page in the
+              generated PDF.
+            </p>
+          </section>
 
-          <p>
-            Yes. When you select multiple JPG or JPEG images,
-            each image is placed on a separate A4 page in the
-            generated PDF.
-          </p>
+          <section className="mt-4">
+            <h2>Is Toolora JPG to PDF Converter Free?</h2>
 
-          <h2 className="mt-4">
-            Is Toolora JPG to PDF Converter Free?
-          </h2>
+            <p>
+              Yes. Toolora's JPG to PDF converter is free to
+              use online. You can convert JPG and JPEG images
+              without installing additional software.
+            </p>
+          </section>
 
-          <p>
-            Yes. Toolora's JPG to PDF converter is free to
-            use online. You can convert JPG and JPEG images
-            without installing additional software.
-          </p>
+          <section className="mt-5">
+            <h2>Frequently Asked Questions</h2>
 
-          {/* FAQ */}
+            <h3 className="mt-3">
+              What is a JPG to PDF converter?
+            </h3>
 
-          <h2 className="mt-5">
-            Frequently Asked Questions
-          </h2>
+            <p>
+              A JPG to PDF converter changes JPG or JPEG image
+              files into a PDF document. Multiple images can
+              also be combined into one PDF.
+            </p>
 
-          <h3 className="mt-3">
-            What is a JPG to PDF converter?
-          </h3>
+            <h3 className="mt-3">
+              Is the Toolora JPG to PDF converter free?
+            </h3>
 
-          <p>
-            A JPG to PDF converter changes JPG or JPEG image
-            files into a PDF document. Multiple images can
-            also be combined into one PDF.
-          </p>
+            <p>
+              Yes. Toolora's JPG to PDF converter is free to
+              use online.
+            </p>
 
-          <h3 className="mt-3">
-            Is the Toolora JPG to PDF converter free?
-          </h3>
+            <h3 className="mt-3">
+              Can I convert multiple JPG images to one PDF?
+            </h3>
 
-          <p>
-            Yes. Toolora's JPG to PDF converter is free to
-            use online.
-          </p>
+            <p>
+              Yes. You can select multiple JPG or JPEG images
+              and combine them into a single PDF file.
+            </p>
 
-          <h3 className="mt-3">
-            Can I convert multiple JPG images to one PDF?
-          </h3>
+            <h3 className="mt-3">
+              Does each JPG image get its own PDF page?
+            </h3>
 
-          <p>
-            Yes. You can select multiple JPG or JPEG images
-            and combine them into a single PDF file.
-          </p>
+            <p>
+              Yes. Each selected JPG image is placed on a
+              separate A4 page in the generated PDF.
+            </p>
 
-          <h3 className="mt-3">
-            Does each JPG image get its own PDF page?
-          </h3>
+            <h3 className="mt-3">
+              Are my JPG images uploaded to a server?
+            </h3>
 
-          <p>
-            Yes. Each selected JPG image is placed on a
-            separate A4 page in the generated PDF.
-          </p>
+            <p>
+              The conversion is performed in the browser using
+              the web application. The images are used locally
+              by the browser to create the PDF.
+            </p>
+          </section>
 
-          <h3 className="mt-3">
-            Are my JPG images uploaded to a server?
-          </h3>
+          <section className="mt-5">
+            <h2>Try Our Other Free Tools</h2>
 
-          <p>
-            The conversion is performed in the browser using
-            the web application. The images are used locally
-            by the browser to create the PDF.
-          </p>
+            <p>
+              Need to work with other image or PDF formats?
+              Try these free Toolora tools:
+            </p>
 
-          {/* RELATED TOOLS */}
+            <div className="d-flex flex-wrap gap-3 mt-3">
+              <Link
+                to="/pdf-to-jpg"
+                className="btn btn-outline-primary"
+              >
+                PDF to JPG →
+              </Link>
 
-          <h2 className="mt-5">
-            Try Our Other Free Tools
-          </h2>
+              <Link
+                to="/pdf-compressor"
+                className="btn btn-outline-primary"
+              >
+                PDF Compressor →
+              </Link>
 
-          <p>
-            Need to work with other image or PDF formats?
-            Try these free Toolora tools:
-          </p>
+              <Link
+                to="/image-compressor"
+                className="btn btn-outline-primary"
+              >
+                Image Compressor →
+              </Link>
 
-          <div className="d-flex flex-wrap gap-3 mt-3">
-            <Link
-              to="/pdf-to-jpg"
-              className="btn btn-outline-primary"
-            >
-              PDF to JPG →
-            </Link>
+              <Link
+                to="/image-resizer"
+                className="btn btn-outline-primary"
+              >
+                Image Resizer →
+              </Link>
 
-            <Link
-              to="/pdf-compressor"
-              className="btn btn-outline-primary"
-            >
-              PDF Compressor →
-            </Link>
-
-            <Link
-              to="/image-compressor"
-              className="btn btn-outline-primary"
-            >
-              Image Compressor →
-            </Link>
-
-            <Link
-              to="/image-resizer"
-              className="btn btn-outline-primary"
-            >
-              Image Resizer →
-            </Link>
-
-            <Link
-              to="/jpg-to-png"
-              className="btn btn-outline-primary"
-            >
-              JPG to PNG →
-            </Link>
-          </div>
-        </section>
+              <Link
+                to="/jpg-to-png"
+                className="btn btn-outline-primary"
+              >
+                JPG to PNG →
+              </Link>
+            </div>
+          </section>
+        </article>
       </div>
     </div>
   );
 }
 
 export default JpgToPdf;
+
+
 

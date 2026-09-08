@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { PDFDocument } from "pdf-lib";
 import SEO from "../components/SEO";
@@ -10,6 +10,16 @@ function PdfCompressor() {
   const [downloadUrl, setDownloadUrl] = useState("");
   const [isCompressing, setIsCompressing] = useState(false);
 
+  // Clean up generated object URLs when the component unmounts
+  // or when a new download URL replaces the old one.
+  useEffect(() => {
+    return () => {
+      if (downloadUrl) {
+        URL.revokeObjectURL(downloadUrl);
+      }
+    };
+  }, [downloadUrl]);
+
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
 
@@ -19,13 +29,19 @@ function PdfCompressor() {
 
     if (selectedFile.type !== "application/pdf") {
       alert("Please select a PDF file.");
+      event.target.value = "";
       return;
+    }
+
+    if (downloadUrl) {
+      URL.revokeObjectURL(downloadUrl);
     }
 
     setFile(selectedFile);
     setOriginalSize(selectedFile.size);
     setCompressedSize(0);
     setDownloadUrl("");
+    setIsCompressing(false);
   };
 
   const compressPDF = async () => {
@@ -44,26 +60,21 @@ function PdfCompressor() {
         useObjectStreams: true,
       });
 
-      const blob = new Blob(
-        [compressedPdf],
-        {
-          type: "application/pdf",
-        }
-      );
+      const blob = new Blob([compressedPdf], {
+        type: "application/pdf",
+      });
 
       const url = URL.createObjectURL(blob);
 
       setDownloadUrl(url);
       setCompressedSize(blob.size);
-      setIsCompressing(false);
-
     } catch (error) {
       console.error(error);
 
       alert(
         "Unable to process this PDF. Please try another PDF file."
       );
-
+    } finally {
       setIsCompressing(false);
     }
   };
@@ -84,6 +95,10 @@ function PdfCompressor() {
   };
 
   const removeFile = () => {
+    if (downloadUrl) {
+      URL.revokeObjectURL(downloadUrl);
+    }
+
     setFile(null);
     setOriginalSize(0);
     setCompressedSize(0);
@@ -94,8 +109,7 @@ function PdfCompressor() {
   const savedPercentage =
     originalSize > 0 && compressedSize > 0
       ? (
-          ((originalSize - compressedSize) /
-            originalSize) *
+          ((originalSize - compressedSize) / originalSize) *
           100
         ).toFixed(1)
       : 0;
@@ -147,13 +161,30 @@ function PdfCompressor() {
     ],
   };
 
+  const webAppSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: "Toolora PDF Compressor",
+    url: "https://toolora-inky.vercel.app/pdf-compressor",
+    description:
+      "Free online PDF compressor for optimizing PDF files and reducing file size where possible.",
+    applicationCategory: "UtilitiesApplication",
+    operatingSystem: "Any",
+    browserRequirements:
+      "Requires JavaScript and a modern web browser.",
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+    },
+  };
+
   return (
     <div className="compressor-page">
-
       <SEO
         title="PDF Compressor Online - Compress PDF Files Free"
-        description="Compress and optimize PDF files online for free. Reduce PDF file size with Toolora's simple browser-based PDF compressor."
-        keywords="PDF compressor, compress PDF, compress PDF online, PDF file compressor, reduce PDF size, PDF optimizer, free PDF compressor, compress PDF file"
+        description="Compress PDF files online for free with Toolora. Optimize PDF documents, reduce file size where possible, and download the processed PDF directly in your browser."
+        keywords="PDF compressor, compress PDF, compress PDF online, free PDF compressor, PDF file compressor, reduce PDF size, compress PDF file, PDF optimizer, online PDF compressor"
         canonical="/pdf-compressor"
       />
 
@@ -161,10 +192,12 @@ function PdfCompressor() {
         {JSON.stringify(faqSchema)}
       </script>
 
+      <script type="application/ld+json">
+        {JSON.stringify(webAppSchema)}
+      </script>
+
       <div className="container py-5">
-
         <header className="text-center mb-5">
-
           <div className="hero-badge mb-3">
             📄 Free PDF Tool
           </div>
@@ -178,23 +211,22 @@ function PdfCompressor() {
             style={{ maxWidth: "700px" }}
           >
             Compress and optimize PDF files online for free.
-            Reduce PDF file size when possible and download
+            Reduce PDF file size where possible and download
             the processed PDF directly from your browser.
           </p>
-
         </header>
 
         <main>
-
           <section
             className="compressor-box mx-auto"
             aria-label="PDF compressor tool"
           >
-
             {!file && (
-              <label className="upload-area">
-
-                <div className="upload-icon">
+              <label
+                className="upload-area"
+                htmlFor="pdf-upload"
+              >
+                <div className="upload-icon" aria-hidden="true">
                   📄
                 </div>
 
@@ -203,7 +235,8 @@ function PdfCompressor() {
                 </h2>
 
                 <p>
-                  Select a PDF file to optimize.
+                  Select a PDF file to optimize its structure
+                  and file size where possible.
                 </p>
 
                 <span className="upload-btn">
@@ -211,21 +244,19 @@ function PdfCompressor() {
                 </span>
 
                 <input
+                  id="pdf-upload"
                   type="file"
                   accept="application/pdf"
                   onChange={handleFileChange}
                   aria-label="Choose a PDF file to compress"
                   hidden
                 />
-
               </label>
             )}
 
             {file && (
               <div>
-
                 <div className="file-info">
-
                   <p>
                     <strong>File:</strong>{" "}
                     {file.name}
@@ -249,16 +280,22 @@ function PdfCompressor() {
                       </p>
                     </>
                   )}
-
                 </div>
 
-                <div className="d-flex gap-3 justify-content-center flex-wrap">
-
+                <div
+                  className="d-flex gap-3 justify-content-center flex-wrap"
+                  aria-live="polite"
+                >
                   <button
                     type="button"
                     className="btn btn-primary px-4"
                     onClick={compressPDF}
                     disabled={isCompressing}
+                    aria-label={
+                      isCompressing
+                        ? "Compressing PDF"
+                        : "Compress PDF"
+                    }
                   >
                     {isCompressing
                       ? "Compressing..."
@@ -270,6 +307,7 @@ function PdfCompressor() {
                       type="button"
                       className="btn btn-success px-4"
                       onClick={downloadPDF}
+                      aria-label="Download compressed PDF"
                     >
                       Download PDF
                     </button>
@@ -279,24 +317,24 @@ function PdfCompressor() {
                     type="button"
                     className="btn btn-outline-danger px-4"
                     onClick={removeFile}
+                    disabled={isCompressing}
                   >
                     Remove
                   </button>
-
                 </div>
 
+                {compressedSize > 0 && (
+                  <p className="text-center text-muted mt-3 mb-0">
+                    Your processed PDF is ready to download.
+                  </p>
+                )}
               </div>
             )}
-
           </section>
 
           <article className="tool-information mx-auto mt-5">
-
             <section>
-
-              <h2>
-                Free PDF Compressor Online
-              </h2>
+              <h2>Free PDF Compressor Online</h2>
 
               <p>
                 Toolora's free PDF compressor lets you process
@@ -307,24 +345,19 @@ function PdfCompressor() {
 
               <p>
                 Compressing a PDF can be useful when you need
-                to upload, email, share or store a document and
-                want to reduce its file size where possible.
+                to upload, email, share, or store a document
+                and want to reduce its file size where possible.
               </p>
-
             </section>
 
             <section className="mt-4">
-
-              <h2>
-                How to Compress a PDF Online
-              </h2>
+              <h2>How to Compress a PDF Online</h2>
 
               <p>
                 Follow these simple steps to compress a PDF:
               </p>
 
               <ol>
-
                 <li>
                   Click <strong>Choose PDF</strong> and select
                   your PDF document.
@@ -339,32 +372,27 @@ function PdfCompressor() {
                 </li>
 
                 <li>
-                  Check the original and processed file sizes.
+                  Compare the original and processed file
+                  sizes.
                 </li>
 
                 <li>
                   Click <strong>Download PDF</strong> to save
                   the processed document.
                 </li>
-
               </ol>
-
             </section>
 
             <section className="mt-4">
-
-              <h2>
-                Why Compress a PDF?
-              </h2>
+              <h2>Why Compress a PDF?</h2>
 
               <p>
                 Large PDF files can sometimes be difficult to
-                upload, send or store. Reducing the file size
+                upload, send, or store. Reducing the file size
                 can make a document more convenient to work with.
               </p>
 
               <ul>
-
                 <li>
                   Reduce PDF file size when possible.
                 </li>
@@ -386,16 +414,11 @@ function PdfCompressor() {
                   Reduce storage requirements when compression
                   is effective.
                 </li>
-
               </ul>
-
             </section>
 
             <section className="mt-4">
-
-              <h2>
-                Will Every PDF Become Smaller?
-              </h2>
+              <h2>Will Every PDF Become Smaller?</h2>
 
               <p>
                 Not necessarily. PDF documents can be created
@@ -410,14 +433,10 @@ function PdfCompressor() {
                 become significantly smaller using structural
                 PDF optimization alone.
               </p>
-
             </section>
 
             <section className="mt-4">
-
-              <h2>
-                How Does Toolora PDF Compression Work?
-              </h2>
+              <h2>How Does PDF Compression Work?</h2>
 
               <p>
                 Toolora uses browser-based PDF processing to
@@ -432,14 +451,10 @@ function PdfCompressor() {
                 document. Some files may show a noticeable
                 reduction while others may change very little.
               </p>
-
             </section>
 
             <section className="mt-4">
-
-              <h2>
-                PDF Compression and Image Quality
-              </h2>
+              <h2>PDF Compression and Image Quality</h2>
 
               <p>
                 PDF compression can work in different ways.
@@ -455,19 +470,15 @@ function PdfCompressor() {
                 image-heavy PDFs may not receive a large size
                 reduction.
               </p>
-
             </section>
 
             <section className="mt-4">
-
-              <h2>
-                Compress PDF Files in Your Browser
-              </h2>
+              <h2>Compress PDF Files in Your Browser</h2>
 
               <p>
                 Toolora provides a convenient browser-based
                 way to process PDF documents. You can select
-                your PDF, start the compression process and
+                your PDF, start the compression process, and
                 download the resulting file without installing
                 a separate PDF compression application.
               </p>
@@ -476,28 +487,20 @@ function PdfCompressor() {
                 A modern browser with JavaScript enabled is
                 required to use the online PDF compressor.
               </p>
-
             </section>
 
             <section className="mt-4">
-
-              <h2>
-                Is Toolora PDF Compressor Free?
-              </h2>
+              <h2>Is Toolora PDF Compressor Free?</h2>
 
               <p>
                 Yes. Toolora's PDF compressor is available as
-                a free online tool. Upload a PDF, process it
+                a free online tool. Upload a PDF, process it,
                 and download the resulting document.
               </p>
-
             </section>
 
             <section className="mt-5">
-
-              <h2>
-                Frequently Asked Questions
-              </h2>
+              <h2>Frequently Asked Questions</h2>
 
               <h3 className="mt-4">
                 What is a PDF compressor?
@@ -548,14 +551,10 @@ function PdfCompressor() {
                 so processing may result in little or no
                 reduction in file size.
               </p>
-
             </section>
 
             <section className="mt-5">
-
-              <h2>
-                Related PDF & Image Tools
-              </h2>
+              <h2>Related PDF & Image Tools</h2>
 
               <p>
                 Try these other free Toolora tools for working
@@ -563,7 +562,6 @@ function PdfCompressor() {
               </p>
 
               <div className="d-flex flex-wrap gap-3 mt-3">
-
                 <Link
                   to="/jpg-to-pdf"
                   className="btn btn-outline-primary"
@@ -591,20 +589,15 @@ function PdfCompressor() {
                 >
                   Image Resizer →
                 </Link>
-
               </div>
-
             </section>
-
           </article>
-
         </main>
-
       </div>
-
     </div>
   );
 }
 
 export default PdfCompressor;
+
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
 
@@ -10,11 +10,36 @@ function ImageResizer() {
   const [lockRatio, setLockRatio] = useState(true);
   const [resizedUrl, setResizedUrl] = useState("");
 
+  useEffect(() => {
+    return () => {
+      if (preview) {
+        URL.revokeObjectURL(preview);
+      }
+
+      if (resizedUrl) {
+        URL.revokeObjectURL(resizedUrl);
+      }
+    };
+  }, [preview, resizedUrl]);
+
   const handleUpload = (event) => {
     const file = event.target.files[0];
 
     if (!file) {
       return;
+    }
+
+    if (!file.type.match(/^image\/(jpeg|png|webp)$/)) {
+      alert("Please select a JPG, PNG or WebP image.");
+      return;
+    }
+
+    if (preview) {
+      URL.revokeObjectURL(preview);
+    }
+
+    if (resizedUrl) {
+      URL.revokeObjectURL(resizedUrl);
     }
 
     const url = URL.createObjectURL(file);
@@ -26,6 +51,11 @@ function ImageResizer() {
       setWidth(img.width);
       setHeight(img.height);
       setResizedUrl("");
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      alert("Unable to process this image.");
     };
 
     img.src = url;
@@ -97,6 +127,10 @@ function ImageResizer() {
             return;
           }
 
+          if (resizedUrl) {
+            URL.revokeObjectURL(resizedUrl);
+          }
+
           const url = URL.createObjectURL(blob);
           setResizedUrl(url);
         },
@@ -105,11 +139,15 @@ function ImageResizer() {
       );
     };
 
+    img.onerror = () => {
+      alert("Unable to resize this image.");
+    };
+
     img.src = preview;
   };
 
   const downloadImage = () => {
-    if (!resizedUrl) {
+    if (!resizedUrl || !image) {
       return;
     }
 
@@ -124,6 +162,14 @@ function ImageResizer() {
   };
 
   const removeImage = () => {
+    if (preview) {
+      URL.revokeObjectURL(preview);
+    }
+
+    if (resizedUrl) {
+      URL.revokeObjectURL(resizedUrl);
+    }
+
     setImage(null);
     setPreview("");
     setWidth(0);
@@ -179,30 +225,41 @@ function ImageResizer() {
     ],
   };
 
+  const webApplicationSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: "Toolora Image Resizer",
+    url: "https://toolora-inky.vercel.app/image-resizer",
+    applicationCategory: "MultimediaApplication",
+    operatingSystem: "Any",
+    description:
+      "Free online image resizer for changing JPG, PNG and WebP image dimensions.",
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+    },
+  };
+
   return (
     <div className="compressor-page">
-
       <SEO
         title="Image Resizer Online - Resize JPG, PNG & WebP"
         description="Resize JPG, PNG and WebP images online for free. Change image width and height while maintaining the aspect ratio with Toolora's image resizer."
-        keywords="image resizer, resize image online, image resize tool, JPG resizer, PNG resizer, WebP resizer, resize JPG, resize PNG, image dimensions, free image resizer"
+        keywords="image resizer, resize image online, image resize tool, JPG resizer, PNG resizer, WebP resizer, resize JPG, resize PNG, image dimensions, resize image to exact size, free image resizer"
         canonical="/image-resizer"
       />
 
       <script type="application/ld+json">
-        {JSON.stringify(faqSchema)}
+        {JSON.stringify([faqSchema, webApplicationSchema])}
       </script>
 
       <div className="container py-5">
-
-        {/* =========================
-            PAGE INTRO
-        ========================= */}
+        {/* PAGE INTRO */}
 
         <header className="text-center mb-5">
-
           <div className="hero-badge mb-3">
-            📐 Free Image Tool
+            📐 Free Image Resizing Tool
           </div>
 
           <h1 className="fw-bold">
@@ -218,34 +275,30 @@ function ImageResizer() {
             maintain the aspect ratio when needed, and download
             your resized image.
           </p>
-
         </header>
 
-
-        {/* =========================
-            IMAGE RESIZER TOOL
-        ========================= */}
+        {/* IMAGE RESIZER TOOL */}
 
         <main>
-
           <section
             className="compressor-box mx-auto"
-            aria-label="Image resizer tool"
+            aria-label="Free online image resizer"
           >
-
             {!image && (
-              <label className="upload-area">
-
+              <label
+                className="upload-area"
+                htmlFor="image-upload"
+              >
                 <div className="upload-icon">
                   📤
                 </div>
 
                 <h2 className="h4">
-                  Upload Your Image
+                  Upload an Image to Resize
                 </h2>
 
                 <p>
-                  JPG, PNG or WebP supported
+                  JPG, JPEG, PNG or WebP supported
                 </p>
 
                 <span className="upload-btn">
@@ -253,37 +306,32 @@ function ImageResizer() {
                 </span>
 
                 <input
+                  id="image-upload"
                   type="file"
                   accept="image/jpeg,image/png,image/webp"
                   onChange={handleUpload}
                   aria-label="Choose an image to resize"
                   hidden
                 />
-
               </label>
             )}
 
-
             {image && (
               <div>
-
-                {/* Preview */}
+                {/* IMAGE PREVIEW */}
 
                 <div className="preview-area">
-
                   <img
                     src={preview}
                     alt={`Preview of ${image.name}`}
                     className="preview-image"
+                    decoding="async"
                   />
-
                 </div>
 
-
-                {/* Dimensions */}
+                {/* IMAGE DIMENSIONS */}
 
                 <div className="mb-4">
-
                   <label
                     htmlFor="imageWidth"
                     className="form-label fw-semibold"
@@ -300,8 +348,8 @@ function ImageResizer() {
                     onChange={(e) =>
                       handleWidthChange(e.target.value)
                     }
+                    aria-label="Image width in pixels"
                   />
-
 
                   <label
                     htmlFor="imageHeight"
@@ -319,15 +367,13 @@ function ImageResizer() {
                     onChange={(e) =>
                       handleHeightChange(e.target.value)
                     }
+                    aria-label="Image height in pixels"
                   />
-
                 </div>
 
-
-                {/* Aspect Ratio */}
+                {/* ASPECT RATIO */}
 
                 <div className="form-check mb-4">
-
                   <input
                     type="checkbox"
                     className="form-check-input"
@@ -344,14 +390,11 @@ function ImageResizer() {
                   >
                     Lock aspect ratio
                   </label>
-
                 </div>
 
-
-                {/* Buttons */}
+                {/* BUTTONS */}
 
                 <div className="d-flex gap-3 justify-content-center flex-wrap">
-
                   <button
                     type="button"
                     className="btn btn-primary px-4"
@@ -360,83 +403,72 @@ function ImageResizer() {
                     Resize Image
                   </button>
 
-
                   {resizedUrl && (
                     <button
                       type="button"
                       className="btn btn-success px-4"
                       onClick={downloadImage}
                     >
-                      Download
+                      Download Resized Image
                     </button>
                   )}
-
 
                   <button
                     type="button"
                     className="btn btn-outline-danger px-4"
                     onClick={removeImage}
                   >
-                    Remove
+                    Remove Image
                   </button>
-
                 </div>
-
               </div>
             )}
-
           </section>
 
-
-          {/* =========================
-              SEO CONTENT
-          ========================= */}
+          {/* SEO CONTENT */}
 
           <article className="tool-information mx-auto mt-5">
-
-            {/* Introduction */}
+            {/* INTRODUCTION */}
 
             <section>
-
-              <h2>
-                Free Image Resizer Online
-              </h2>
+              <h2>Free Image Resizer Online</h2>
 
               <p>
                 Toolora's free image resizer lets you change
                 the width and height of JPG, PNG and WebP images
                 directly in your browser. Enter your desired
-                dimensions and resize your image quickly without
+                dimensions and resize an image quickly without
                 installing additional software.
               </p>
 
               <p>
-                An image resizer can be useful when a website,
+                An online image resizer is useful when a website,
                 social media platform, application, online form
                 or document requires an image with specific
                 dimensions.
               </p>
 
+              <p>
+                You can resize an image to exact pixel
+                dimensions and keep the original aspect ratio
+                when needed.
+              </p>
             </section>
 
-
-            {/* How To */}
+            {/* HOW TO */}
 
             <section className="mt-4">
-
-              <h2>
-                How to Resize an Image Online
-              </h2>
+              <h2>How to Resize an Image Online</h2>
 
               <p>
-                Follow these simple steps to resize an image:
+                Follow these simple steps to resize an image
+                with Toolora:
               </p>
 
               <ol>
-
                 <li>
-                  Click <strong>Choose Image</strong> and
-                  upload your JPG, PNG or WebP image.
+                  Click <strong>Choose Image</strong> and upload
+                  your JPG, PNG or WebP image.
                 </li>
 
                 <li>
@@ -444,9 +476,9 @@ function ImageResizer() {
                 </li>
 
                 <li>
-                  Keep <strong>Lock aspect ratio</strong>
-                  enabled if you want to maintain the
-                  original proportions.
+                  Keep <strong>Lock aspect ratio</strong> enabled
+                  if you want to maintain the original
+                  proportions.
                 </li>
 
                 <li>
@@ -454,73 +486,58 @@ function ImageResizer() {
                 </li>
 
                 <li>
-                  Click <strong>Download</strong> to save
-                  your resized image.
+                  Click <strong>Download Resized Image</strong>
+                  to save the result.
                 </li>
-
               </ol>
-
             </section>
 
-
-            {/* Exact Dimensions */}
+            {/* EXACT DIMENSIONS */}
 
             <section className="mt-4">
-
-              <h2>
-                Resize Images to Exact Dimensions
-              </h2>
+              <h2>Resize Images to Exact Dimensions</h2>
 
               <p>
-                Toolora allows you to enter the exact width
-                and height you need in pixels. This can help
-                when a website or platform requires a specific
-                image size.
+                Toolora allows you to enter the exact width and
+                height you need in pixels. This is useful when
+                a website, application or online form requires
+                a specific image size.
               </p>
 
               <p>
                 For example, you can resize an image for a
                 profile picture, website thumbnail, banner,
-                online form or other digital content.
+                online application, document or other digital
+                content.
               </p>
-
             </section>
 
-
-            {/* Aspect Ratio */}
+            {/* ASPECT RATIO */}
 
             <section className="mt-4">
-
-              <h2>
-                What Is Aspect Ratio?
-              </h2>
+              <h2>Resize Images Without Distortion</h2>
 
               <p>
-                Aspect ratio describes the relationship between
-                an image's width and height. Keeping the aspect
-                ratio locked helps maintain the original
-                proportions of an image when changing its size.
+                The aspect ratio describes the relationship
+                between an image's width and height. Keeping
+                the aspect ratio locked helps preserve the
+                original proportions of an image when changing
+                its dimensions.
               </p>
 
               <p>
                 If you need completely custom dimensions,
-                you can turn off the <strong>Lock aspect ratio</strong>
-                option and enter the width and height separately.
+                turn off <strong>Lock aspect ratio</strong> and
+                enter the width and height separately.
               </p>
-
             </section>
 
-
-            {/* Benefits */}
+            {/* BENEFITS */}
 
             <section className="mt-4">
-
-              <h2>
-                Benefits of Using an Image Resizer
-              </h2>
+              <h2>Benefits of Using an Image Resizer</h2>
 
               <ul>
-
                 <li>
                   Resize images to exact pixel dimensions.
                 </li>
@@ -538,51 +555,45 @@ function ImageResizer() {
                 </li>
 
                 <li>
-                  Helpful for social media images and
-                  profile pictures.
+                  Helpful for social media images and profile
+                  pictures.
                 </li>
 
                 <li>
                   Works directly in your browser.
                 </li>
 
+                <li>
+                  No additional image editing software is
+                  required.
+                </li>
               </ul>
-
             </section>
 
-
-            {/* Use Cases */}
+            {/* USE CASES */}
 
             <section className="mt-4">
-
-              <h2>
-                Common Uses for Image Resizing
-              </h2>
+              <h2>Common Uses for Image Resizing</h2>
 
               <p>
                 Image resizing is useful in many everyday
-                situations. You may need to resize an image
-                for a website, social media profile, blog
-                thumbnail, online application, document,
-                email or digital design.
+                situations. You may need to resize an image for
+                a website, social media profile, blog thumbnail,
+                online application, document, email or digital
+                design.
               </p>
 
               <p>
-                Using the correct dimensions can help an image
-                fit better within the space provided by a
-                website or application.
+                Using the correct image dimensions can help a
+                photo or graphic fit better within the space
+                provided by a website or application.
               </p>
-
             </section>
 
-
-            {/* Formats */}
+            {/* FORMATS */}
 
             <section className="mt-4">
-
-              <h2>
-                Supported Image Formats
-              </h2>
+              <h2>Supported Image Formats</h2>
 
               <h3 className="mt-3">
                 JPG and JPEG
@@ -591,7 +602,7 @@ function ImageResizer() {
               <p>
                 JPG and JPEG are commonly used for photographs
                 and web images. Toolora can resize these image
-                formats directly in the browser.
+                formats directly in your browser.
               </p>
 
               <h3 className="mt-3">
@@ -612,46 +623,48 @@ function ImageResizer() {
                 WebP images can be uploaded and resized using
                 the same simple process.
               </p>
-
             </section>
 
-
-            {/* Free Tool */}
+            {/* PRIVACY */}
 
             <section className="mt-4">
-
-              <h2>
-                Is Toolora Image Resizer Free?
-              </h2>
+              <h2>Are My Images Uploaded to Toolora?</h2>
 
               <p>
-                Yes. Toolora's image resizer is available as
-                a free online tool. Upload an image, enter the
+                No. The image resizing process is performed
+                directly in your browser using local browser
+                processing. Your image does not need to be
+                uploaded to a Toolora server to resize it.
+              </p>
+            </section>
+
+            {/* FREE TOOL */}
+
+            <section className="mt-4">
+              <h2>Is Toolora Image Resizer Free?</h2>
+
+              <p>
+                Yes. Toolora's image resizer is available as a
+                free online tool. Upload an image, enter the
                 dimensions you need and download the resized
                 result.
               </p>
-
             </section>
-
 
             {/* FAQ */}
 
             <section className="mt-5">
-
-              <h2>
-                Frequently Asked Questions
-              </h2>
-
+              <h2>Frequently Asked Questions</h2>
 
               <h3 className="mt-4">
-                What image formats does Toolora Image Resizer support?
+                What image formats does Toolora Image Resizer
+                support?
               </h3>
 
               <p>
                 Toolora Image Resizer supports JPG, JPEG, PNG
                 and WebP image files.
               </p>
-
 
               <h3 className="mt-4">
                 Can I resize an image to exact dimensions?
@@ -661,7 +674,6 @@ function ImageResizer() {
                 Yes. You can enter the exact width and height
                 you need in pixels.
               </p>
-
 
               <h3 className="mt-4">
                 What does Lock aspect ratio mean?
@@ -673,7 +685,6 @@ function ImageResizer() {
                 the image from looking stretched or distorted.
               </p>
 
-
               <h3 className="mt-4">
                 Can I resize JPG, PNG and WebP images online?
               </h3>
@@ -683,7 +694,6 @@ function ImageResizer() {
                 resize them directly through the Toolora website.
               </p>
 
-
               <h3 className="mt-4">
                 Is Toolora Image Resizer free?
               </h3>
@@ -692,24 +702,18 @@ function ImageResizer() {
                 Yes. Toolora Image Resizer is available as a
                 free online image resizing tool.
               </p>
-
             </section>
 
-
-            {/* Related Tools */}
+            {/* RELATED TOOLS */}
 
             <section className="mt-5">
-
-              <h2>
-                Related Image Tools
-              </h2>
+              <h2>Related Image Tools</h2>
 
               <p>
                 Try these other free Toolora image tools:
               </p>
 
               <div className="d-flex flex-wrap gap-3 mt-3">
-
                 <Link
                   to="/image-compressor"
                   className="btn btn-outline-primary"
@@ -730,19 +734,13 @@ function ImageResizer() {
                 >
                   JPG to PDF →
                 </Link>
-
               </div>
-
             </section>
-
           </article>
-
         </main>
-
       </div>
     </div>
   );
 }
 
 export default ImageResizer;
-

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
 
@@ -11,11 +11,36 @@ function ImageCompressor() {
   const [quality, setQuality] = useState(70);
   const [compressing, setCompressing] = useState(false);
 
+  useEffect(() => {
+    return () => {
+      if (preview) {
+        URL.revokeObjectURL(preview);
+      }
+
+      if (compressedUrl) {
+        URL.revokeObjectURL(compressedUrl);
+      }
+    };
+  }, [preview, compressedUrl]);
+
   const handleUpload = (event) => {
     const file = event.target.files[0];
 
     if (!file) {
       return;
+    }
+
+    if (!file.type.match(/^image\/(jpeg|png|webp)$/)) {
+      alert("Please select a JPG, PNG or WebP image.");
+      return;
+    }
+
+    if (preview) {
+      URL.revokeObjectURL(preview);
+    }
+
+    if (compressedUrl) {
+      URL.revokeObjectURL(compressedUrl);
     }
 
     setImage(file);
@@ -55,8 +80,7 @@ function ImageCompressor() {
       const targetBytes = targetSize * 1024;
 
       const tryCompression = () => {
-        const currentQuality =
-          (minQuality + maxQuality) / 2;
+        const currentQuality = (minQuality + maxQuality) / 2;
 
         canvas.toBlob(
           (blob) => {
@@ -77,14 +101,16 @@ function ImageCompressor() {
                 bestBlob = blob;
               }
 
+              if (compressedUrl) {
+                URL.revokeObjectURL(compressedUrl);
+              }
+
               const url = URL.createObjectURL(bestBlob);
 
               setCompressedUrl(url);
               setCompressedSize(bestBlob.size);
 
-              const finalQuality = Math.round(
-                minQuality * 100
-              );
+              const finalQuality = Math.round(minQuality * 100);
 
               setQuality(finalQuality);
               setCompressing(false);
@@ -126,6 +152,14 @@ function ImageCompressor() {
   };
 
   const removeImage = () => {
+    if (preview) {
+      URL.revokeObjectURL(preview);
+    }
+
+    if (compressedUrl) {
+      URL.revokeObjectURL(compressedUrl);
+    }
+
     setImage(null);
     setPreview("");
     setCompressedUrl("");
@@ -188,6 +222,22 @@ function ImageCompressor() {
     ],
   };
 
+  const webApplicationSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: "Toolora Image Compressor",
+    url: "https://toolora-inky.vercel.app/image-compressor",
+    applicationCategory: "MultimediaApplication",
+    operatingSystem: "Any",
+    description:
+      "Free online image compressor for reducing JPG, PNG and WebP image file sizes.",
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+    },
+  };
+
   return (
     <div className="compressor-page">
       <SEO
@@ -198,52 +248,49 @@ function ImageCompressor() {
       />
 
       <script type="application/ld+json">
-        {JSON.stringify(faqSchema)}
+        {JSON.stringify([faqSchema, webApplicationSchema])}
       </script>
 
       <div className="container py-5">
-
-        {/* =========================
-            PAGE INTRO
-        ========================= */}
+        {/* PAGE INTRO */}
 
         <header className="text-center mb-5">
           <div className="hero-badge mb-3">
-            🖼️ Free Image Tool
+            🖼️ Free Image Compression Tool
           </div>
 
-          <h1 className="fw-bold">
-            Image Compressor Online
-          </h1>
+          <h1 className="fw-bold">Image Compressor Online</h1>
 
-          <p className="text-muted mx-auto" style={{ maxWidth: "700px" }}>
+          <p
+            className="text-muted mx-auto"
+            style={{ maxWidth: "700px" }}
+          >
             Compress JPG, PNG and WebP images online for free.
             Reduce image file size to a target size and download
             your compressed image quickly and easily.
           </p>
         </header>
 
-        {/* =========================
-            COMPRESSOR TOOL
-        ========================= */}
+        {/* COMPRESSOR TOOL */}
 
         <main>
           <section
             className="compressor-box mx-auto"
-            aria-label="Image compressor tool"
+            aria-label="Free online image compressor"
           >
             {!image && (
-              <label className="upload-area">
-                <div className="upload-icon">
-                  📤
-                </div>
+              <label
+                className="upload-area"
+                htmlFor="image-upload"
+              >
+                <div className="upload-icon">📤</div>
 
                 <h2 className="h4">
-                  Upload Your Image
+                  Upload an Image to Compress
                 </h2>
 
                 <p>
-                  JPG, PNG or WebP supported
+                  JPG, JPEG, PNG or WebP supported
                 </p>
 
                 <span className="upload-btn">
@@ -251,6 +298,7 @@ function ImageCompressor() {
                 </span>
 
                 <input
+                  id="image-upload"
                   type="file"
                   accept="image/jpeg,image/png,image/webp"
                   onChange={handleUpload}
@@ -262,20 +310,23 @@ function ImageCompressor() {
 
             {image && (
               <div>
-
-                {/* Preview */}
+                {/* IMAGE PREVIEW */}
 
                 <div className="preview-area">
                   <img
                     src={preview}
                     alt={`Preview of ${image.name}`}
                     className="preview-image"
+                    decoding="async"
                   />
                 </div>
 
-                {/* File Information */}
+                {/* FILE INFORMATION */}
 
-                <div className="file-info">
+                <div
+                  className="file-info"
+                  aria-live="polite"
+                >
                   <p>
                     <strong>File:</strong>{" "}
                     {image.name}
@@ -301,7 +352,7 @@ function ImageCompressor() {
                   )}
                 </div>
 
-                {/* Target Size */}
+                {/* TARGET SIZE */}
 
                 <div className="mb-4">
                   <label
@@ -321,49 +372,36 @@ function ImageCompressor() {
                       )
                     }
                   >
-                    <option value="20">
-                      20 KB
-                    </option>
-
-                    <option value="50">
-                      50 KB
-                    </option>
-
-                    <option value="100">
-                      100 KB
-                    </option>
-
-                    <option value="200">
-                      200 KB
-                    </option>
-
-                    <option value="500">
-                      500 KB
-                    </option>
-
-                    <option value="1000">
-                      1 MB
-                    </option>
+                    <option value="20">20 KB</option>
+                    <option value="50">50 KB</option>
+                    <option value="100">100 KB</option>
+                    <option value="200">200 KB</option>
+                    <option value="500">500 KB</option>
+                    <option value="1000">1 MB</option>
                   </select>
+
+                  <small className="text-muted d-block mt-2">
+                    Choose the maximum target size for your
+                    compressed image.
+                  </small>
                 </div>
 
-                {/* Compression Quality */}
+                {/* COMPRESSION QUALITY */}
 
                 {compressedSize > 0 && (
-                  <div className="mb-4">
+                  <div
+                    className="mb-4"
+                    aria-live="polite"
+                  >
                     <div className="d-flex justify-content-between">
-                      <span>
-                        Compression Quality
-                      </span>
+                      <span>Compression Quality</span>
 
-                      <strong>
-                        {quality}%
-                      </strong>
+                      <strong>{quality}%</strong>
                     </div>
                   </div>
                 )}
 
-                {/* Buttons */}
+                {/* BUTTONS */}
 
                 <div className="d-flex gap-3 justify-content-center flex-wrap">
                   <button
@@ -371,6 +409,7 @@ function ImageCompressor() {
                     className="btn btn-primary px-4"
                     onClick={compressToTarget}
                     disabled={compressing}
+                    aria-busy={compressing}
                   >
                     {compressing
                       ? "Compressing..."
@@ -383,7 +422,7 @@ function ImageCompressor() {
                       className="btn btn-success px-4"
                       onClick={downloadImage}
                     >
-                      Download
+                      Download Compressed Image
                     </button>
                   )}
 
@@ -392,60 +431,58 @@ function ImageCompressor() {
                     className="btn btn-outline-danger px-4"
                     onClick={removeImage}
                   >
-                    Remove
+                    Remove Image
                   </button>
                 </div>
               </div>
             )}
           </section>
 
-          {/* =========================
-              SEO CONTENT
-          ========================= */}
+          {/* SEO CONTENT */}
 
           <article className="tool-information mx-auto mt-5">
-
             <section>
-              <h2>
-                Free Image Compressor Online
-              </h2>
+              <h2>Free Image Compressor Online</h2>
 
               <p>
-                Toolora's free image compressor lets you
+                Toolora's free image compressor helps you
                 reduce the file size of JPG, PNG and WebP
-                images directly from your browser. Choose a
+                images directly in your browser. Select a
                 target file size and the tool automatically
-                adjusts the JPEG compression quality to
-                create a smaller image.
+                adjusts JPEG compression to create a smaller
+                image.
               </p>
 
               <p>
-                Compressing images can be useful when you need
-                to upload photos to websites, online forms,
-                applications or email services that have
-                file-size limits. Smaller image files can also
-                make images easier to store, share and upload.
+                An image compressor can be useful when you need
+                to upload a photo to a website, online form,
+                application or email service with a file-size
+                limit. Smaller images are also easier to store,
+                share and upload.
+              </p>
+
+              <p>
+                Because the compression process runs in your
+                browser, your selected image is processed
+                locally by the tool rather than being uploaded
+                to a Toolora server.
               </p>
             </section>
 
-            {/* =========================
-                HOW IT WORKS
-            ========================= */}
+            {/* HOW IT WORKS */}
 
             <section className="mt-4">
-              <h2>
-                How to Compress an Image Online
-              </h2>
+              <h2>How to Compress an Image Online</h2>
 
               <p>
-                Compressing an image with Toolora takes only
-                a few simple steps:
+                You can compress an image with Toolora in a few
+                simple steps:
               </p>
 
               <ol>
                 <li>
-                  Click <strong>Choose Image</strong> and
-                  select a JPG, PNG or WebP image.
+                  Click <strong>Choose Image</strong> and select
+                  a JPG, PNG or WebP image.
                 </li>
 
                 <li>
@@ -457,164 +494,141 @@ function ImageCompressor() {
                 </li>
 
                 <li>
-                  Wait while the image is processed.
+                  Wait while the image is compressed.
                 </li>
 
                 <li>
-                  Click <strong>Download</strong> to save
-                  your compressed image.
+                  Click <strong>Download Compressed Image</strong>
+                  to save the result.
                 </li>
               </ol>
             </section>
 
-            {/* =========================
-                IMAGE COMPRESSION USE CASES
-            ========================= */}
+            {/* WHY COMPRESS IMAGES */}
 
             <section className="mt-4">
-              <h2>
-                Why Compress Images?
-              </h2>
+              <h2>Why Compress Images?</h2>
 
               <p>
-                Large image files can be difficult to upload,
-                share or store. Image compression reduces the
-                amount of data in an image so that the resulting
-                file can be easier to handle.
+                Large image files can take longer to upload,
+                share and store. Image compression reduces the
+                amount of data in an image and can make the
+                resulting file easier to handle.
               </p>
 
               <ul>
-                <li>
-                  Reduce image file size.
-                </li>
-
+                <li>Reduce image file size.</li>
                 <li>
                   Meet website and online form upload limits.
                 </li>
-
-                <li>
-                  Make images easier to share.
-                </li>
-
-                <li>
-                  Reduce storage requirements.
-                </li>
-
+                <li>Make images easier to share.</li>
+                <li>Reduce storage requirements.</li>
                 <li>
                   Prepare images for websites and applications.
                 </li>
               </ul>
             </section>
 
-            {/* =========================
-                FORMATS
-            ========================= */}
+            {/* SUPPORTED FORMATS */}
 
             <section className="mt-4">
-              <h2>
-                Supported Image Formats
-              </h2>
+              <h2>Supported Image Formats</h2>
 
-              <h3 className="mt-3">
-                JPG and JPEG
-              </h3>
+              <h3 className="mt-3">JPG and JPEG</h3>
 
               <p>
-                JPG and JPEG are commonly used image formats
-                for photographs and web images. Toolora can
-                compress JPG and JPEG images and generate a
-                compressed JPEG result.
+                JPG and JPEG are widely used formats for
+                photographs and web images. Toolora can accept
+                JPG and JPEG files and create a compressed JPEG
+                result.
               </p>
 
-              <h3 className="mt-3">
-                PNG
-              </h3>
+              <h3 className="mt-3">PNG</h3>
 
               <p>
-                PNG images can also be uploaded to the
-                compressor. The resulting compressed image is
-                generated in JPEG format.
+                PNG images can be uploaded to the compressor.
+                The image is processed and the compressed result
+                is generated in JPEG format.
               </p>
 
-              <h3 className="mt-3">
-                WebP
-              </h3>
+              <h3 className="mt-3">WebP</h3>
 
               <p>
-                WebP images are supported as input files.
-                Toolora processes the uploaded image and
-                generates a compressed JPEG result.
+                WebP images are also supported as input files.
+                Toolora processes the uploaded image and creates
+                a compressed JPEG result.
               </p>
             </section>
 
-            {/* =========================
-                TARGET SIZE
-            ========================= */}
+            {/* TARGET SIZE */}
 
             <section className="mt-4">
-              <h2>
-                Compress Images to a Target File Size
-              </h2>
+              <h2>Compress Images to a Target File Size</h2>
 
               <p>
-                Toolora allows you to select a target file size
+                Toolora lets you choose a target file size
                 before compression. Available options include
                 20 KB, 50 KB, 100 KB, 200 KB, 500 KB and 1 MB.
               </p>
 
               <p>
-                If you need to meet a specific upload limit,
-                selecting a suitable target size can make it
-                easier to prepare your image for that service.
+                If a website, application or online form has a
+                file-size restriction, choosing an appropriate
+                target size can make it easier to prepare your
+                image for upload.
               </p>
             </section>
 
-            {/* =========================
-                QUALITY
-            ========================= */}
+            {/* QUALITY */}
 
             <section className="mt-4">
-              <h2>
-                Does Compressing an Image Reduce Quality?
-              </h2>
+              <h2>Does Compressing an Image Reduce Quality?</h2>
 
               <p>
                 Image compression can affect visual quality.
                 When a smaller target size is selected, stronger
-                JPEG compression may be required. The ideal
-                balance between file size and image quality
+                JPEG compression may be required. The best
+                balance between image quality and file size
                 depends on how the image will be used.
               </p>
             </section>
 
-            {/* =========================
-                FREE TOOL
-            ========================= */}
+            {/* PRIVACY */}
 
             <section className="mt-4">
-              <h2>
-                Is Toolora Image Compressor Free?
-              </h2>
+              <h2>Are My Images Uploaded to Toolora?</h2>
 
               <p>
-                Yes. Toolora's image compressor is available
-                as a free online tool. You can upload a supported
-                image, choose a target size, compress the image
-                and download the result.
+                No. The image compression process is performed
+                directly in your browser using your device's
+                local processing capabilities. Your selected
+                image does not need to be uploaded to a Toolora
+                server for compression.
               </p>
             </section>
 
-            {/* =========================
-                FAQ
-            ========================= */}
+            {/* FREE TOOL */}
+
+            <section className="mt-4">
+              <h2>Is Toolora Image Compressor Free?</h2>
+
+              <p>
+                Yes. Toolora's image compressor is available as
+                a free online tool. You can upload a supported
+                image, choose a target size, compress the image
+                and download the result without installing
+                additional software.
+              </p>
+            </section>
+
+            {/* FAQ */}
 
             <section className="mt-5">
-              <h2>
-                Frequently Asked Questions
-              </h2>
+              <h2>Frequently Asked Questions</h2>
 
               <h3 className="mt-4">
-                What image formats does Toolora Image Compressor support?
+                What image formats does Toolora Image Compressor
+                support?
               </h3>
 
               <p>
@@ -648,8 +662,8 @@ function ImageCompressor() {
               </h3>
 
               <p>
-                Yes. Toolora Image Compressor is available
-                as a free online image compression tool.
+                Yes. Toolora Image Compressor is available as a
+                free online image compression tool.
               </p>
 
               <h3 className="mt-4">
@@ -657,24 +671,20 @@ function ImageCompressor() {
               </h3>
 
               <p>
-                Yes. You can upload JPG, PNG or WebP images
-                and compress them directly through the
-                Toolora website.
+                Yes. You can upload JPG, PNG or WebP images and
+                compress them directly through the Toolora
+                website.
               </p>
             </section>
 
-            {/* =========================
-                RELATED TOOLS
-            ========================= */}
+            {/* RELATED TOOLS */}
 
             <section className="mt-5">
-              <h2>
-                Related Image Tools
-              </h2>
+              <h2>Related Image Tools</h2>
 
               <p>
-                Looking for another image tool? Try these
-                free Toolora tools:
+                Looking for another free image tool? Try these
+                Toolora tools:
               </p>
 
               <div className="d-flex flex-wrap gap-3 mt-3">
@@ -700,7 +710,6 @@ function ImageCompressor() {
                 </Link>
               </div>
             </section>
-
           </article>
         </main>
       </div>
@@ -709,4 +718,3 @@ function ImageCompressor() {
 }
 
 export default ImageCompressor;
-
