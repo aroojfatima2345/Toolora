@@ -1,3 +1,4 @@
+
 /* =========================
    GLOBAL
 ========================= */
@@ -8,7 +9,6 @@ body {
   color: #172033;
   background: #ffffff;
 }
-
 
 /* =========================
    NAVBAR
@@ -34,7 +34,7 @@ body {
 }
 
 .nav-link {
-  color: #555 !important;
+  color: #4b5563 !important;
   font-weight: 500;
   padding: 10px 8px !important;
   transition: 0.2s ease;
@@ -42,9 +42,8 @@ body {
 
 .nav-link:hover,
 .nav-link.active {
-  color: #6c5ce7 !important;
+  color: #5a4bd6 !important;
 }
-
 
 /* =========================
    HERO
@@ -60,7 +59,7 @@ body {
   padding: 8px 16px;
   border-radius: 50px;
   background: #ebe8ff;
-  color: #5b4bd8;
+  color: #4f42b8;
   font-size: 14px;
   font-weight: 600;
 }
@@ -74,17 +73,16 @@ body {
 }
 
 .hero-title span {
-  color: #6c5ce7;
+  color: #5a4bd6;
 }
 
 .hero-text {
   max-width: 650px;
   margin: 0 auto 35px;
-  color: #697386;
+  color: #596273;
   font-size: 18px;
   line-height: 1.7;
 }
-
 
 /* =========================
    SEARCH BAR
@@ -94,7 +92,7 @@ body {
   max-width: 650px;
   background: #ffffff;
   padding: 7px;
-  border: 1px solid #e1e1e8;
+  border: 1px solid #d9dce5;
   border-radius: 50px;
   display: flex;
   align-items: center;
@@ -124,7 +122,7 @@ body {
 }
 
 .search-box input::placeholder {
-  color: #9a9fad;
+  color: #687181;
 }
 
 .search-box button {
@@ -141,7 +139,6 @@ body {
   background: #5848d6;
 }
 
-
 /* =========================
    GENERAL BUTTONS
 ========================= */
@@ -157,8 +154,8 @@ body {
 }
 
 .btn-outline-primary {
-  color: #6c5ce7;
-  border-color: #6c5ce7;
+  color: #5547c7;
+  border-color: #5547c7;
 }
 
 .btn-outline-primary:hover {
@@ -166,7 +163,6 @@ body {
   border-color: #6c5ce7;
   color: #ffffff;
 }
-
 
 /* =========================
    SECTIONS
@@ -187,20 +183,19 @@ body {
 
 .section-heading p,
 .categories-section p {
-  color: #737b8c;
+  color: #5f6878;
 }
 
 .section-heading a {
   text-decoration: none;
-  color: #6c5ce7;
+  color: #5547c7;
   font-weight: 600;
   transition: 0.2s ease;
 }
 
 .section-heading a:hover {
-  color: #5848d6;
+  color: #4b3db8;
 }
-
 
 /* =========================
    TOOL CARDS
@@ -209,7 +204,7 @@ body {
 .tool-card {
   height: 100%;
   padding: 28px;
-  border: 1px solid #e8e8ee;
+  border: 1px solid #e1e3ea;
   border-radius: 18px;
   background: #ffffff;
   color: #172033;
@@ -254,7 +249,7 @@ body {
 }
 
 .tool-card p {
-  color: #737b8c;
+  color: #5f6878;
   min-height: 48px;
   line-height: 1.6;
   margin-bottom: 0;
@@ -265,16 +260,15 @@ body {
   margin-top: 15px;
   border: none;
   background: transparent;
-  color: #6c5ce7;
+  color: #5547c7;
   font-weight: 700;
   padding: 0;
   transition: 0.2s ease;
 }
 
 .tool-card:hover .use-tool-btn {
-  color: #5848d6;
+  color: #4b3db8;
 }
-
 
 /* =========================
    CATEGORIES
@@ -288,7 +282,7 @@ body {
   width: 100%;
   min-height: 165px;
   background: #ffffff;
-  border: 1px solid #e8e8ee !important;
+  border: 1px solid #e1e3ea !important;
   border-radius: 16px;
   padding: 25px 10px;
   text-align: center;
@@ -308,7 +302,7 @@ body {
 .category-card.active {
   border-color: #6c5ce7 !important;
   background: #faf9ff;
-  box-shadow: 0 8px 25px rgba(108, 92, 231, 0.10);
+  box-shadow: 0 8px 25px rgba(108, 92, 231, 0.1);
 }
 
 .category-card div {
@@ -316,16 +310,17 @@ body {
   margin-bottom: 12px;
 }
 
-.category-card h5 {
+/* Fixed for new h3 heading */
+.category-card h3 {
   font-size: 15px;
   font-weight: 700;
   margin-bottom: 6px;
+  color: #172033;
 }
 
 .category-card small {
-  color: #858b99;
+  color: #626b7a;
 }
-
 
 /* =========================
    FOOTER
@@ -351,11 +346,10 @@ body {
 
 .footer p {
   max-width: 430px;
-  color: #b5bac7;
+  color: #b9bfcc;
   line-height: 1.7;
   margin-bottom: 0;
 }
-
 
 /* Footer Links */
 
@@ -370,16 +364,15 @@ body {
 }
 
 .footer-links a {
-  color: #b5bac7 !important;
+  color: #b9bfcc !important;
   text-decoration: none !important;
   font-size: 14px;
   transition: color 0.2s ease;
 }
 
 .footer-links a:hover {
-  color: #8b7cf6 !important;
+  color: #a99eff !important;
 }
-
 
 /* Footer Bottom */
 
@@ -388,9 +381,8 @@ body {
 }
 
 .footer small {
-  color: #858b99;
+  color: #aeb5c3;
 }
-
 
 /* =========================
    IMAGE COMPRESSOR
@@ -406,16 +398,15 @@ body {
   background: #ffffff;
   padding: 35px;
   border-radius: 24px;
-  border: 1px solid #e6e8ef;
+  border: 1px solid #e1e4eb;
   box-shadow: 0 15px 45px rgba(0, 0, 0, 0.06);
 }
-
 
 /* Upload Area */
 
 .upload-area {
   min-height: 330px;
-  border: 2px dashed #cfd3df;
+  border: 2px dashed #bfc5d2;
   border-radius: 20px;
   display: flex;
   flex-direction: column;
@@ -442,7 +433,7 @@ body {
 }
 
 .upload-area p {
-  color: #777;
+  color: #626b7a;
   margin-bottom: 20px;
 }
 
@@ -459,7 +450,6 @@ body {
 .upload-btn:hover {
   background: #5848d6;
 }
-
 
 /* Preview */
 
@@ -482,7 +472,6 @@ body {
   border-radius: 12px;
 }
 
-
 /* File Information */
 
 .file-info {
@@ -494,13 +483,12 @@ body {
 
 .file-info p {
   margin-bottom: 7px;
-  color: #555;
+  color: #555f70;
 }
 
 .file-info p:last-child {
   margin-bottom: 0;
 }
-
 
 /* Select */
 
@@ -515,7 +503,6 @@ body {
   border-color: #6c5ce7;
   box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
 }
-
 
 /* Buttons */
 
@@ -534,7 +521,6 @@ body {
   background: #5848d6;
   border-color: #5848d6;
 }
-
 
 /* Tool Information */
 
@@ -557,10 +543,9 @@ body {
 
 .tool-information p,
 .tool-information li {
-  color: #666;
+  color: #5f6878;
   line-height: 1.8;
 }
-
 
 /* =========================
    WORD COUNTER
@@ -583,7 +568,7 @@ body {
 
 .counter-card {
   background: #f7f8fb;
-  border: 1px solid #e8e9ef;
+  border: 1px solid #e1e3ea;
   border-radius: 15px;
   padding: 20px 10px;
   text-align: center;
@@ -598,10 +583,9 @@ body {
 }
 
 .counter-card span {
-  color: #777;
+  color: #626b7a;
   font-size: 14px;
 }
-
 
 /* =========================
    QR CODE GENERATOR
@@ -634,13 +618,11 @@ body {
   border-radius: 10px;
 }
 
-
 /* =========================
    MOBILE
 ========================= */
 
 @media (max-width: 576px) {
-
   .hero-section {
     padding: 80px 20px 70px;
   }
@@ -711,3 +693,4 @@ body {
     width: 100%;
   }
 }
+

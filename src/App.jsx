@@ -1,3 +1,4 @@
+
 import { lazy, Suspense, useState } from "react";
 import {
   BrowserRouter,
@@ -25,9 +26,11 @@ const PDFCompressor = lazy(() => import("./pages/PdfCompressor"));
 const QRCodeGenerator = lazy(() => import("./pages/QRCodeGenerator"));
 const JpgToPdf = lazy(() => import("./pages/JpgToPdf"));
 const PdfToJpg = lazy(() => import("./pages/PdfToJpg"));
+
 const PercentageCalculator = lazy(
   () => import("./pages/PercentageCalculator")
 );
+
 const AgeCalculator = lazy(() => import("./pages/AgeCalculator"));
 const BMICalculator = lazy(() => import("./pages/BMICalculator"));
 
@@ -85,7 +88,6 @@ function Home() {
       path: "/image-compressor",
       category: "Image Tools",
     },
-
     {
       icon: "📐",
       title: "Image Resizer",
@@ -93,7 +95,6 @@ function Home() {
       path: "/image-resizer",
       category: "Image Tools",
     },
-
     {
       icon: "🔄",
       title: "JPG to PNG",
@@ -101,7 +102,6 @@ function Home() {
       path: "/jpg-to-png",
       category: "Converters",
     },
-
     {
       icon: "📄",
       title: "PDF Compressor",
@@ -109,7 +109,6 @@ function Home() {
       path: "/pdf-compressor",
       category: "PDF Tools",
     },
-
     {
       icon: "📝",
       title: "Word Counter",
@@ -117,7 +116,6 @@ function Home() {
       path: "/word-counter",
       category: "Text Tools",
     },
-
     {
       icon: "🔗",
       title: "QR Code Generator",
@@ -125,7 +123,6 @@ function Home() {
       path: "/qr-code-generator",
       category: "Developer Tools",
     },
-
     {
       icon: "📄",
       title: "JPG to PDF",
@@ -133,7 +130,6 @@ function Home() {
       path: "/jpg-to-pdf",
       category: "Converters",
     },
-
     {
       icon: "🖼️",
       title: "PDF to JPG",
@@ -141,7 +137,6 @@ function Home() {
       path: "/pdf-to-jpg",
       category: "Converters",
     },
-
     {
       icon: "🧮",
       title: "Percentage Calculator",
@@ -149,7 +144,6 @@ function Home() {
       path: "/percentage-calculator",
       category: "Calculators",
     },
-
     {
       icon: "🎂",
       title: "Age Calculator",
@@ -158,7 +152,6 @@ function Home() {
       path: "/age-calculator",
       category: "Calculators",
     },
-
     {
       icon: "⚖️",
       title: "BMI Calculator",
@@ -178,27 +171,22 @@ function Home() {
       icon: "🖼️",
       title: "Image Tools",
     },
-
     {
       icon: "📄",
       title: "PDF Tools",
     },
-
     {
       icon: "📝",
       title: "Text Tools",
     },
-
     {
       icon: "🧮",
       title: "Calculators",
     },
-
     {
       icon: "💻",
       title: "Developer Tools",
     },
-
     {
       icon: "🔄",
       title: "Converters",
@@ -239,12 +227,10 @@ function Home() {
 
   const scrollToSection = (id) => {
     setTimeout(() => {
-      document
-        .getElementById(id)
-        ?.scrollIntoView({
-          behavior: "smooth",
-          block: "start",
-        });
+      document.getElementById(id)?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     }, 50);
   };
 
@@ -305,7 +291,10 @@ function Home() {
           NAVBAR
       ================================================== */}
 
-      <nav className="navbar navbar-expand-lg bg-white border-bottom">
+      <nav
+        className="navbar navbar-expand-lg bg-white border-bottom"
+        aria-label="Main navigation"
+      >
         <div className="container py-2">
           <Link
             className="navbar-brand fw-bold fs-3 text-decoration-none"
@@ -388,231 +377,261 @@ function Home() {
       </nav>
 
       {/* ==================================================
-          HERO
+          MAIN CONTENT
       ================================================== */}
 
-      <section className="hero-section">
-        <div className="container text-center">
-          <div className="hero-badge mb-3">
-            ✨ Simple. Fast. Free.
-          </div>
+      <main>
+        {/* ==================================================
+            HERO
+        ================================================== */}
 
-          <h1 className="hero-title">
-            Free Online Tools
-            <br />
-            <span>Made Simple</span>
-          </h1>
-
-          <p className="hero-text">
-            Compress, convert, calculate and generate
-            with our collection of simple online tools.
-          </p>
-
-          {/* SEARCH */}
-
-          <div className="search-box mx-auto">
-            <span aria-hidden="true">🔍</span>
-
-            <input
-              type="text"
-              placeholder="Search for a tool..."
-              value={search}
-              onChange={(event) =>
-                setSearch(event.target.value)
-              }
-              aria-label="Search Toolora tools"
-            />
-
-            {search && (
-              <button
-                type="button"
-                onClick={() => setSearch("")}
-                aria-label="Clear tool search"
-              >
-                Clear
-              </button>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* ==================================================
-          TOOLS
-      ================================================== */}
-
-      <section
-        className="py-5"
-        id="tools"
-        aria-labelledby="tools-heading"
-      >
-        <div className="container">
-          <div className="section-heading">
-            <div>
-              <h2 id="tools-heading">
-                {selectedCategory !== "All"
-                  ? selectedCategory
-                  : search
-                    ? "Search Results"
-                    : "Popular Tools"}
-              </h2>
-
-              <p>
-                {selectedCategory !== "All"
-                  ? `${filteredTools.length} tools available`
-                  : search
-                    ? `${filteredTools.length} tool${
-                        filteredTools.length !== 1
-                          ? "s"
-                          : ""
-                      } found`
-                    : "Useful tools you can use for free."}
-              </p>
+        <section
+          className="hero-section"
+          aria-labelledby="hero-heading"
+        >
+          <div className="container text-center">
+            <div
+              className="hero-badge mb-3"
+              aria-hidden="true"
+            >
+              ✨ Simple. Fast. Free.
             </div>
 
-            {(search || selectedCategory !== "All") && (
-              <button
-                type="button"
-                className="btn btn-outline-primary"
-                onClick={clearFilters}
+            <h1
+              id="hero-heading"
+              className="hero-title"
+            >
+              Free Online Tools
+              <br />
+              <span>Made Simple</span>
+            </h1>
+
+            <p className="hero-text">
+              Compress, convert, calculate and generate
+              with our collection of simple online tools.
+            </p>
+
+            {/* SEARCH */}
+
+            <div className="search-box mx-auto">
+              <span aria-hidden="true">🔍</span>
+
+              <label
+                htmlFor="tool-search"
+                className="visually-hidden"
               >
-                View All Tools
-              </button>
+                Search Toolora tools
+              </label>
+
+              <input
+                id="tool-search"
+                type="text"
+                placeholder="Search for a tool..."
+                value={search}
+                onChange={(event) =>
+                  setSearch(event.target.value)
+                }
+                autoComplete="off"
+              />
+
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => setSearch("")}
+                  aria-label="Clear tool search"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+          </div>
+        </section>
+
+        {/* ==================================================
+            TOOLS
+        ================================================== */}
+
+        <section
+          className="py-5"
+          id="tools"
+          aria-labelledby="tools-heading"
+        >
+          <div className="container">
+            <div className="section-heading">
+              <div>
+                <h2 id="tools-heading">
+                  {selectedCategory !== "All"
+                    ? selectedCategory
+                    : search
+                      ? "Search Results"
+                      : "Popular Tools"}
+                </h2>
+
+                <p>
+                  {selectedCategory !== "All"
+                    ? `${filteredTools.length} tools available`
+                    : search
+                      ? `${filteredTools.length} tool${
+                          filteredTools.length !== 1
+                            ? "s"
+                            : ""
+                        } found`
+                      : "Useful tools you can use for free."}
+                </p>
+              </div>
+
+              {(search || selectedCategory !== "All") && (
+                <button
+                  type="button"
+                  className="btn btn-outline-primary"
+                  onClick={clearFilters}
+                >
+                  View All Tools
+                </button>
+              )}
+            </div>
+
+            {/* TOOLS GRID */}
+
+            {filteredTools.length > 0 ? (
+              <div className="row g-4">
+                {filteredTools.map((tool) => (
+                  <div
+                    className="col-md-6 col-lg-4"
+                    key={tool.path}
+                  >
+                    <Link
+                      to={tool.path}
+                      className="tool-card text-decoration-none d-block"
+                    >
+                      <div
+                        className="tool-icon"
+                        aria-hidden="true"
+                      >
+                        {tool.icon}
+                      </div>
+
+                      <h3>{tool.title}</h3>
+
+                      <p>{tool.description}</p>
+
+                      <span className="use-tool-btn">
+                        Use Tool →
+                      </span>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-5">
+                <div
+                  style={{
+                    fontSize: "50px",
+                    marginBottom: "15px",
+                  }}
+                  aria-hidden="true"
+                >
+                  🔍
+                </div>
+
+                <h3>No tools found</h3>
+
+                <p className="text-muted">
+                  We couldn't find any tools matching your
+                  search.
+                </p>
+
+                <button
+                  type="button"
+                  className="btn btn-primary px-4"
+                  onClick={clearFilters}
+                >
+                  View All Tools
+                </button>
+              </div>
             )}
           </div>
+        </section>
 
-          {/* TOOLS GRID */}
+        {/* ==================================================
+            CATEGORIES
+        ================================================== */}
 
-          {filteredTools.length > 0 ? (
+        <section
+          className="categories-section py-5"
+          id="categories"
+          aria-labelledby="categories-heading"
+        >
+          <div className="container">
+            <div className="text-center mb-5">
+              <h2 id="categories-heading">
+                Explore Categories
+              </h2>
+
+              <p>Find the right tool for your task.</p>
+            </div>
+
             <div className="row g-4">
-              {filteredTools.map((tool) => (
+              {categories.map((category) => (
                 <div
-                  className="col-md-6 col-lg-4"
-                  key={tool.path}
+                  className="col-6 col-md-4 col-lg-2"
+                  key={category.title}
                 >
-                  <Link
-                    to={tool.path}
-                    className="tool-card text-decoration-none d-block"
+                  <button
+                    type="button"
+                    className={`category-card w-100 border-0 ${
+                      selectedCategory === category.title
+                        ? "active"
+                        : ""
+                    }`}
+                    onClick={() =>
+                      handleCategoryClick(
+                        category.title
+                      )
+                    }
+                    aria-pressed={
+                      selectedCategory === category.title
+                    }
+                    aria-label={`Show ${category.title}`}
                   >
-                    <div
-                      className="tool-icon"
-                      aria-hidden="true"
-                    >
-                      {tool.icon}
+                    <div aria-hidden="true">
+                      {category.icon}
                     </div>
 
-                    <h3>{tool.title}</h3>
+                    {/* FIXED HEADING HIERARCHY */}
+                    <h3 className="h6 mb-1">
+                      {category.title}
+                    </h3>
 
-                    <p>{tool.description}</p>
-
-                    <span className="use-tool-btn">
-                      Use Tool →
-                    </span>
-                  </Link>
+                    <small>
+                      {
+                        tools.filter(
+                          (tool) =>
+                            tool.category ===
+                            category.title
+                        ).length
+                      }{" "}
+                      Tools
+                    </small>
+                  </button>
                 </div>
               ))}
             </div>
-          ) : (
-            <div className="text-center py-5">
-              <div
-                style={{
-                  fontSize: "50px",
-                  marginBottom: "15px",
-                }}
-                aria-hidden="true"
-              >
-                🔍
-              </div>
 
-              <h3>No tools found</h3>
-
-              <p className="text-muted">
-                We couldn't find any tools matching your
-                search.
-              </p>
-
-              <button
-                type="button"
-                className="btn btn-primary px-4"
-                onClick={clearFilters}
-              >
-                View All Tools
-              </button>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* ==================================================
-          CATEGORIES
-      ================================================== */}
-
-      <section
-        className="categories-section py-5"
-        id="categories"
-        aria-labelledby="categories-heading"
-      >
-        <div className="container">
-          <div className="text-center mb-5">
-            <h2 id="categories-heading">
-              Explore Categories
-            </h2>
-
-            <p>Find the right tool for your task.</p>
-          </div>
-
-          <div className="row g-4">
-            {categories.map((category) => (
-              <div
-                className="col-6 col-md-4 col-lg-2"
-                key={category.title}
-              >
+            {selectedCategory !== "All" && (
+              <div className="text-center mt-4">
                 <button
                   type="button"
-                  className={`category-card w-100 border-0 ${
-                    selectedCategory === category.title
-                      ? "active"
-                      : ""
-                  }`}
-                  onClick={() =>
-                    handleCategoryClick(
-                      category.title
-                    )
-                  }
+                  className="btn btn-outline-primary"
+                  onClick={clearFilters}
                 >
-                  <div aria-hidden="true">
-                    {category.icon}
-                  </div>
-
-                  <h5>{category.title}</h5>
-
-                  <small>
-                    {
-                      tools.filter(
-                        (tool) =>
-                          tool.category ===
-                          category.title
-                      ).length
-                    }{" "}
-                    Tools
-                  </small>
+                  Show All Categories
                 </button>
               </div>
-            ))}
+            )}
           </div>
-
-          {selectedCategory !== "All" && (
-            <div className="text-center mt-4">
-              <button
-                type="button"
-                className="btn btn-outline-primary"
-                onClick={clearFilters}
-              >
-                Show All Categories
-              </button>
-            </div>
-          )}
-        </div>
-      </section>
+        </section>
+      </main>
     </>
   );
 }
@@ -744,9 +763,7 @@ function Footer() {
             </div>
 
             <div className="col-md-6 text-center text-md-end mt-2 mt-md-0">
-              <small>
-                Free Tools, Made Simple.
-              </small>
+              <small>Free Tools, Made Simple.</small>
             </div>
           </div>
         </div>
@@ -966,3 +983,4 @@ function App() {
 }
 
 export default App;
+
