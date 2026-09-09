@@ -1,0 +1,41 @@
+# Toolora
+
+Toolora is a free online tools website offering browser-based tools for images, PDFs, text, calculators, QR codes, and file conversion.
+
+## Image Tools
+
+* [Image Compressor](https://toolora-inky.vercel.app/image-compressor)
+* [Image Resizer](https://toolora-inky.vercel.app/image-resizer)
+* [JPG to PNG](https://toolora-inky.vercel.app/jpg-to-png)
+
+## PDF Tools
+
+* [PDF Compressor](https://toolora-inky.vercel.app/pdf-compressor)
+* [JPG to PDF](https://toolora-inky.vercel.app/jpg-to-pdf)
+* [PDF to JPG](https://toolora-inky.vercel.app/pdf-to-jpg)
+
+## Text Tools
+
+* [Word Counter](https://toolora-inky.vercel.app/word-counter)
+
+## Calculators
+
+* [Percentage Calculator](https://toolora-inky.vercel.app/percentage-calculator)
+* [Age Calculator](https://toolora-inky.vercel.app/age-calculator)
+* [BMI Calculator](https://toolora-inky.vercel.app/bmi-calculator)
+
+## Other Tools
+
+* [QR Code Generator](https://toolora-inky.vercel.app/qr-code-generator)
+
+## Website Information
+
+* [Home](https://toolora-inky.vercel.app/)
+* [About Toolora](https://toolora-inky.vercel.app/about)
+* [Contact](https://toolora-inky.vercel.app/contact)
+* [Privacy Policy](https://toolora-inky.vercel.app/privacy-policy)
+* [Disclaimer](https://toolora-inky.vercel.app/disclaimer)
+
+## Usage
+
+Toolora's online tools are designed to be simple and accessible through a web browser. Users can access the available tools directly from their respective pages.
