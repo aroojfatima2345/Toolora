@@ -14,6 +14,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./index.css";
 
+
 // ======================================================
 // LAZY LOADED PAGES
 // ======================================================
@@ -290,7 +291,7 @@ function Home() {
       {/* ==================================================
           NAVBAR
       ================================================== */}
-
+        
       <nav
         className="navbar navbar-expand-lg bg-white border-bottom"
         aria-label="Main navigation"
