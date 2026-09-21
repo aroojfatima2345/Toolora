@@ -1,4 +1,3 @@
-
 import { lazy, Suspense, useState } from "react";
 import {
   BrowserRouter,
@@ -14,7 +13,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import "./index.css";
 
-
 // ======================================================
 // LAZY LOADED PAGES
 // ======================================================
@@ -27,6 +25,14 @@ const PDFCompressor = lazy(() => import("./pages/PdfCompressor"));
 const QRCodeGenerator = lazy(() => import("./pages/QRCodeGenerator"));
 const JpgToPdf = lazy(() => import("./pages/JpgToPdf"));
 const PdfToJpg = lazy(() => import("./pages/PdfToJpg"));
+
+const BackgroundRemover = lazy(
+  () => import("./pages/BackgroundRemover")
+);
+
+const WatermarkRemover = lazy(
+  () => import("./pages/WatermarkRemover")
+);
 
 const PercentageCalculator = lazy(
   () => import("./pages/PercentageCalculator")
@@ -94,6 +100,22 @@ function Home() {
       title: "Image Resizer",
       description: "Resize your images to any dimension.",
       path: "/image-resizer",
+      category: "Image Tools",
+    },
+    {
+      icon: "✂️",
+      title: "Background Remover",
+      description:
+        "Remove image backgrounds and download transparent PNGs.",
+      path: "/background-remover",
+      category: "Image Tools",
+    },
+    {
+      icon: "🧹",
+      title: "Watermark Remover",
+      description:
+        "Remove unwanted marks from images you own or have permission to edit.",
+      path: "/watermark-remover",
       category: "Image Tools",
     },
     {
@@ -284,14 +306,14 @@ function Home() {
       <SEO
         title="Free Online Tools"
         description="Toolora provides free online tools for image compression, PDF tools, image conversion, calculators, QR codes, word counting and more."
-        keywords="free online tools, image compressor, image resizer, PDF compressor, JPG to PNG, JPG to PDF, PDF to JPG, QR code generator, word counter, percentage calculator, age calculator, BMI calculator"
+        keywords="free online tools, image compressor, image resizer, background remover, watermark remover, PDF compressor, JPG to PNG, JPG to PDF, PDF to JPG, QR code generator, word counter, percentage calculator, age calculator, BMI calculator"
         canonical="/"
       />
 
       {/* ==================================================
           NAVBAR
       ================================================== */}
-        
+
       <nav
         className="navbar navbar-expand-lg bg-white border-bottom"
         aria-label="Main navigation"
@@ -323,8 +345,6 @@ function Home() {
             id="navbarNav"
           >
             <ul className="navbar-nav ms-auto align-items-lg-center gap-lg-3">
-              {/* HOME */}
-
               <li className="nav-item">
                 <Link
                   className="nav-link"
@@ -335,8 +355,6 @@ function Home() {
                 </Link>
               </li>
 
-              {/* ALL TOOLS */}
-
               <li className="nav-item">
                 <button
                   type="button"
@@ -346,8 +364,6 @@ function Home() {
                   All Tools
                 </button>
               </li>
-
-              {/* CATEGORIES */}
 
               <li className="nav-item">
                 <button
@@ -361,8 +377,6 @@ function Home() {
                   Categories
                 </button>
               </li>
-
-              {/* BLOG */}
 
               <li className="nav-item">
                 <span
@@ -411,8 +425,6 @@ function Home() {
               Compress, convert, calculate and generate
               with our collection of simple online tools.
             </p>
-
-            {/* SEARCH */}
 
             <div className="search-box mx-auto">
               <span aria-hidden="true">🔍</span>
@@ -491,8 +503,6 @@ function Home() {
                 </button>
               )}
             </div>
-
-            {/* TOOLS GRID */}
 
             {filteredTools.length > 0 ? (
               <div className="row g-4">
@@ -599,7 +609,6 @@ function Home() {
                       {category.icon}
                     </div>
 
-                    {/* FIXED HEADING HIERARCHY */}
                     <h3 className="h6 mb-1">
                       {category.title}
                     </h3>
@@ -668,6 +677,24 @@ function Footer() {
               <li>
                 <Link to="/image-compressor">
                   Image Compressor
+                </Link>
+              </li>
+
+              <li>
+                <Link to="/image-resizer">
+                  Image Resizer
+                </Link>
+              </li>
+
+              <li>
+                <Link to="/background-remover">
+                  Background Remover
+                </Link>
+              </li>
+
+              <li>
+                <Link to="/watermark-remover">
+                  Watermark Remover
                 </Link>
               </li>
 
@@ -839,6 +866,24 @@ function App() {
           }
         />
 
+        <Route
+          path="/background-remover"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <BackgroundRemover />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/watermark-remover"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <WatermarkRemover />
+            </Suspense>
+          }
+        />
+
         {/* CONVERTERS */}
 
         <Route
@@ -984,4 +1029,3 @@ function App() {
 }
 
 export default App;
-
