@@ -69,5 +69,35 @@
     <loc>https://www.toolora.click/disclaimer</loc>
   </url>
 
+  <!-- Blog -->
+
+  <url>
+    <loc>https://www.toolora.click/blog</loc>
+  </url>
+
+  <url>
+    <loc>https://www.toolora.click/blog/how-to-compress-an-image</loc>
+  </url>
+
+  <url>
+    <loc>https://www.toolora.click/blog/jpg-vs-png</loc>
+  </url>
+
+  <url>
+    <loc>https://www.toolora.click/blog/how-to-reduce-pdf-file-size</loc>
+  </url>
+
+  <url>
+    <loc>https://www.toolora.click/blog/how-to-remove-image-background</loc>
+  </url>
+
+  <url>
+    <loc>https://www.toolora.click/blog/how-to-calculate-percentage</loc>
+  </url>
+
+  <url>
+    <loc>https://www.toolora.click/blog/what-is-bmi</loc>
+  </url>
+
 </urlset>
 

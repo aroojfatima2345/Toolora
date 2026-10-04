@@ -41,6 +41,21 @@ const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const Disclaimer = lazy(() => import("./pages/Disclaimer"));
+const Blog = lazy(() => import("./pages/Blog"));
+const BlogHowToCompressImage = lazy(
+  () => import("./pages/BlogHowToCompressImage")
+);
+const BlogJpgVsPng = lazy(() => import("./pages/BlogJpgVsPng"));
+const BlogReducePdfSize = lazy(
+  () => import("./pages/BlogReducePdfSize")
+);
+const BlogRemoveImageBackground = lazy(
+  () => import("./pages/BlogRemoveImageBackground")
+);
+const BlogCalculatePercentage = lazy(
+  () => import("./pages/BlogCalculatePercentage")
+);
+const BlogWhatIsBmi = lazy(() => import("./pages/BlogWhatIsBmi"));
 
 // ======================================================
 // REUSABLE AD PLACEHOLDER
@@ -424,12 +439,9 @@ function Home() {
               </li>
 
               <li className="nav-item">
-                <span
-                  className="nav-link text-muted"
-                  style={{ cursor: "default" }}
-                >
+                <Link className="nav-link" to="/blog" >
                   Blog
-                </span>
+                </Link>
               </li>
             </ul>
           </div>
@@ -539,11 +551,10 @@ function Home() {
                   {selectedCategory !== "All"
                     ? `${filteredTools.length} tools available`
                     : search
-                      ? `${filteredTools.length} tool${
-                          filteredTools.length !== 1
-                            ? "s"
-                            : ""
-                        } found`
+                      ? `${filteredTools.length} tool${filteredTools.length !== 1
+                        ? "s"
+                        : ""
+                      } found`
                       : "Useful tools you can use for free."}
                 </p>
               </div>
@@ -694,11 +705,10 @@ function Home() {
                 >
                   <button
                     type="button"
-                    className={`category-card w-100 border-0 ${
-                      selectedCategory === category.title
-                        ? "active"
-                        : ""
-                    }`}
+                    className={`category-card w-100 border-0 ${selectedCategory === category.title
+                      ? "active"
+                      : ""
+                      }`}
                     onClick={() =>
                       handleCategoryClick(
                         category.title
@@ -911,6 +921,12 @@ function Footer() {
               <li>
                 <Link to="/disclaimer">
                   Disclaimer
+                </Link>
+              </li>
+
+              <li>
+                <Link to="/blog">
+                  Blog
                 </Link>
               </li>
             </ul>
@@ -1144,6 +1160,72 @@ function App() {
             </Suspense>
           }
         />
+
+        <Route
+          path="/blog"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <Blog />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/blog/how-to-compress-an-image"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <BlogHowToCompressImage />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/blog/jpg-vs-png"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <BlogJpgVsPng />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/blog/how-to-reduce-pdf-file-size"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <BlogReducePdfSize />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/blog/how-to-remove-image-background"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <BlogRemoveImageBackground />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/blog/how-to-calculate-percentage"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <BlogCalculatePercentage />
+            </Suspense>
+          }
+        />
+
+        
+        <Route
+          path="/blog/what-is-bmi"
+          element={
+            <Suspense fallback={<PageLoader />}>
+              <BlogWhatIsBmi />
+            </Suspense>
+          }
+        />
+        
+
 
         {/* 404 */}
 
