@@ -2,12 +2,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <!-- Homepage -->
   <url>
     <loc>https://www.toolora.click/</loc>
   </url>
 
-  <!-- Image Tools -->
   <url>
     <loc>https://www.toolora.click/image-compressor</loc>
   </url>
@@ -20,7 +18,6 @@
     <loc>https://www.toolora.click/background-remover</loc>
   </url>
 
-  <!-- PDF Tools -->
   <url>
     <loc>https://www.toolora.click/pdf-compressor</loc>
   </url>
@@ -29,7 +26,6 @@
     <loc>https://www.toolora.click/pdf-to-jpg</loc>
   </url>
 
-  <!-- Converters -->
   <url>
     <loc>https://www.toolora.click/jpg-to-png</loc>
   </url>
@@ -38,17 +34,14 @@
     <loc>https://www.toolora.click/jpg-to-pdf</loc>
   </url>
 
-  <!-- Text Tools -->
   <url>
     <loc>https://www.toolora.click/word-counter</loc>
   </url>
 
-  <!-- QR Tools -->
   <url>
     <loc>https://www.toolora.click/qr-code-generator</loc>
   </url>
 
-  <!-- Calculators -->
   <url>
     <loc>https://www.toolora.click/percentage-calculator</loc>
   </url>
@@ -61,7 +54,6 @@
     <loc>https://www.toolora.click/bmi-calculator</loc>
   </url>
 
-  <!-- Company Pages -->
   <url>
     <loc>https://www.toolora.click/about</loc>
   </url>
@@ -70,7 +62,6 @@
     <loc>https://www.toolora.click/contact</loc>
   </url>
 
-  <!-- Legal Pages -->
   <url>
     <loc>https://www.toolora.click/privacy-policy</loc>
   </url>
