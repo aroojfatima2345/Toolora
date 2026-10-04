@@ -1,6 +1,33 @@
+
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
+
+function AdPlaceholder({ label = "Advertisement" }) {
+  return (
+    <div
+      className="mx-auto my-4"
+      style={{
+        width: "100%",
+        maxWidth: "970px",
+        minHeight: "90px",
+        border: "1px dashed #d8d5e8",
+        borderRadius: "12px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#faf9ff",
+        color: "#999",
+        fontSize: "13px",
+        textAlign: "center",
+        padding: "15px",
+      }}
+      aria-label="Advertisement"
+    >
+      {label}
+    </div>
+  );
+}
 
 function JpgToPng() {
   const [image, setImage] = useState(null);
@@ -26,8 +53,14 @@ function JpgToPng() {
       return;
     }
 
-    if (file.type !== "image/jpeg") {
+    const isJpg =
+      file.type === "image/jpeg" ||
+      file.type === "image/jpg" ||
+      /\.jpe?g$/i.test(file.name);
+
+    if (!isJpg) {
       alert("Please select a JPG/JPEG image.");
+      event.target.value = "";
       return;
     }
 
@@ -44,6 +77,8 @@ function JpgToPng() {
     setImage(file);
     setPreview(url);
     setPngUrl("");
+
+    event.target.value = "";
   };
 
   const convertToPng = () => {
@@ -58,6 +93,7 @@ function JpgToPng() {
       const context = canvas.getContext("2d");
 
       if (!context) {
+        alert("Unable to process this image.");
         return;
       }
 
@@ -69,6 +105,7 @@ function JpgToPng() {
       canvas.toBlob(
         (blob) => {
           if (!blob) {
+            alert("Unable to create the PNG image.");
             return;
           }
 
@@ -170,11 +207,13 @@ function JpgToPng() {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "Toolora JPG to PNG Converter",
-    url: "https://toolora-inky.vercel.app/jpg-to-png",
+    url: "https://www.toolora.click/jpg-to-png",
     applicationCategory: "MultimediaApplication",
     operatingSystem: "Any",
     description:
-      "Free online JPG to PNG converter for converting JPG and JPEG images to PNG format.",
+      "Free online JPG to PNG converter for converting JPG and JPEG images to PNG format directly in your browser.",
+    browserRequirements:
+      "Requires JavaScript and a modern web browser.",
     offers: {
       "@type": "Offer",
       price: "0",
@@ -182,22 +221,70 @@ function JpgToPng() {
     },
   };
 
+  const howToSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: "How to Convert JPG to PNG Online",
+    description:
+      "Learn how to convert JPG and JPEG images to PNG format using Toolora's free online JPG to PNG converter.",
+    totalTime: "PT1M",
+    tool: [
+      {
+        "@type": "HowToTool",
+        name: "Web browser",
+      },
+    ],
+    step: [
+      {
+        "@type": "HowToStep",
+        position: 1,
+        name: "Upload a JPG image",
+        text: "Click Choose JPG and select a JPG or JPEG image from your device.",
+      },
+      {
+        "@type": "HowToStep",
+        position: 2,
+        name: "Preview the image",
+        text: "Review the uploaded JPG image before starting the conversion.",
+      },
+      {
+        "@type": "HowToStep",
+        position: 3,
+        name: "Convert JPG to PNG",
+        text: "Click Convert to PNG to create a PNG version of the uploaded image.",
+      },
+      {
+        "@type": "HowToStep",
+        position: 4,
+        name: "Download the PNG image",
+        text: "Click Download PNG to save the converted PNG image to your device.",
+      },
+    ],
+  };
+
+  const structuredData = [
+    faqSchema,
+    webApplicationSchema,
+    howToSchema,
+  ];
+
   return (
     <div className="compressor-page">
       <SEO
         title="JPG to PNG Converter Online - Convert JPG to PNG Free"
-        description="Convert JPG and JPEG images to PNG online for free. Easily convert JPG to PNG and download your converted image with Toolora."
-        keywords="JPG to PNG, JPG to PNG converter, convert JPG to PNG, JPEG to PNG, JPG converter, image converter, JPG PNG converter online, free JPG to PNG"
+        description="Convert JPG and JPEG images to PNG online for free with Toolora. Upload a JPG image, convert it to PNG in your browser, and download the converted file easily."
+        keywords="JPG to PNG, JPG to PNG converter, convert JPG to PNG, JPEG to PNG, JPG converter, image converter, JPG PNG converter online, free JPG to PNG, JPG to PNG online"
         canonical="/jpg-to-png"
       />
 
-      <script type="application/ld+json">
-        {JSON.stringify([faqSchema, webApplicationSchema])}
-      </script>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData),
+        }}
+      />
 
       <div className="container py-5">
-        {/* PAGE INTRO */}
-
         <header className="text-center mb-5">
           <div className="hero-badge mb-3">
             🔄 Free Image Converter
@@ -217,7 +304,7 @@ function JpgToPng() {
           </p>
         </header>
 
-        {/* JPG TO PNG TOOL */}
+        <AdPlaceholder label="Advertisement" />
 
         <main>
           <section
@@ -229,7 +316,10 @@ function JpgToPng() {
                 className="upload-area"
                 htmlFor="jpg-upload"
               >
-                <div className="upload-icon">
+                <div
+                  className="upload-icon"
+                  aria-hidden="true"
+                >
                   🖼️
                 </div>
 
@@ -248,7 +338,7 @@ function JpgToPng() {
                 <input
                   id="jpg-upload"
                   type="file"
-                  accept="image/jpeg"
+                  accept="image/jpeg,.jpg,.jpeg"
                   onChange={handleUpload}
                   aria-label="Choose a JPG or JPEG image to convert"
                   hidden
@@ -258,8 +348,6 @@ function JpgToPng() {
 
             {image && (
               <div>
-                {/* IMAGE PREVIEW */}
-
                 <div className="preview-area">
                   <img
                     src={preview}
@@ -268,8 +356,6 @@ function JpgToPng() {
                     decoding="async"
                   />
                 </div>
-
-                {/* FILE INFORMATION */}
 
                 <div
                   className="file-info"
@@ -292,8 +378,6 @@ function JpgToPng() {
                     </p>
                   )}
                 </div>
-
-                {/* BUTTONS */}
 
                 <div className="d-flex gap-3 justify-content-center flex-wrap">
                   <button
@@ -326,11 +410,9 @@ function JpgToPng() {
             )}
           </section>
 
-          {/* SEO CONTENT */}
+          <AdPlaceholder label="Advertisement" />
 
           <article className="tool-information mx-auto mt-5">
-            {/* INTRODUCTION */}
-
             <section>
               <h2>Free JPG to PNG Converter Online</h2>
 
@@ -356,8 +438,6 @@ function JpgToPng() {
                 quick image format conversion.
               </p>
             </section>
-
-            {/* HOW TO */}
 
             <section className="mt-4">
               <h2>How to Convert JPG to PNG Online</h2>
@@ -392,8 +472,6 @@ function JpgToPng() {
               </ol>
             </section>
 
-            {/* JPG VS PNG */}
-
             <section className="mt-4">
               <h2>JPG vs PNG: What's the Difference?</h2>
 
@@ -418,8 +496,6 @@ function JpgToPng() {
                 already lost during the original JPG compression.
               </p>
             </section>
-
-            {/* WHY CONVERT */}
 
             <section className="mt-4">
               <h2>Why Convert JPG to PNG?</h2>
@@ -450,8 +526,6 @@ function JpgToPng() {
               </ul>
             </section>
 
-            {/* JPG AND JPEG */}
-
             <section className="mt-4">
               <h2>JPG and JPEG Conversion</h2>
 
@@ -468,8 +542,6 @@ function JpgToPng() {
                 the image.
               </p>
             </section>
-
-            {/* WITHOUT SOFTWARE */}
 
             <section className="mt-4">
               <h2>
@@ -490,8 +562,6 @@ function JpgToPng() {
               </p>
             </section>
 
-            {/* PRIVACY */}
-
             <section className="mt-4">
               <h2>Are My Images Uploaded to Toolora?</h2>
 
@@ -503,8 +573,6 @@ function JpgToPng() {
               </p>
             </section>
 
-            {/* FREE */}
-
             <section className="mt-4">
               <h2>Is JPG to PNG Conversion Free?</h2>
 
@@ -514,8 +582,6 @@ function JpgToPng() {
                 it to PNG and download the converted file.
               </p>
             </section>
-
-            {/* FAQ */}
 
             <section className="mt-5">
               <h2>Frequently Asked Questions</h2>
@@ -568,8 +634,6 @@ function JpgToPng() {
               </p>
             </section>
 
-            {/* RELATED TOOLS */}
-
             <section className="mt-5">
               <h2>Related Image Tools</h2>
 
@@ -601,6 +665,8 @@ function JpgToPng() {
                 </Link>
               </div>
             </section>
+
+            <AdPlaceholder label="Advertisement" />
           </article>
         </main>
       </div>
@@ -609,3 +675,4 @@ function JpgToPng() {
 }
 
 export default JpgToPng;
+

@@ -1,6 +1,31 @@
-
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
+
+function AdPlaceholder({ label = "Advertisement" }) {
+  return (
+    <div
+      className="mx-auto my-4"
+      style={{
+        width: "100%",
+        maxWidth: "970px",
+        minHeight: "90px",
+        border: "1px dashed #d8d5e8",
+        borderRadius: "12px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#faf9ff",
+        color: "#999",
+        fontSize: "13px",
+        textAlign: "center",
+        padding: "15px",
+      }}
+      aria-label="Advertisement"
+    >
+      {label}
+    </div>
+  );
+}
 
 function PrivacyPolicy() {
   return (
@@ -8,7 +33,7 @@ function PrivacyPolicy() {
       <SEO
         title="Privacy Policy - Toolora"
         description="Read Toolora's Privacy Policy to understand how information may be collected, used and protected when you use our free online tools."
-        keywords="Toolora privacy policy, Toolora privacy, online tools privacy policy, free online tools privacy, data privacy"
+        keywords="Toolora privacy policy, Toolora privacy, online tools privacy policy, free online tools privacy, data privacy, website privacy policy, Toolora data protection"
         canonical="/privacy-policy"
       />
 
@@ -16,20 +41,21 @@ function PrivacyPolicy() {
         <div className="row justify-content-center">
           <div className="col-lg-9">
             <article>
+              {/* Header */}
               <header className="text-center mb-5">
-                <h1 className="fw-bold">
-                  Privacy Policy
-                </h1>
+                <h1 className="fw-bold">Privacy Policy</h1>
 
-                <p className="text-muted mt-3">
+                <p className="text-muted mt-3 mb-0">
                   Your privacy is important to us.
                 </p>
               </header>
 
-              <section className="mb-4">
-                <h2 className="h4 fw-bold mb-3">
-                  Introduction
-                </h2>
+              {/* Ad 1 */}
+              <AdPlaceholder />
+
+              {/* Introduction */}
+              <section className="mb-5">
+                <h2 className="h4 fw-bold mb-3">Introduction</h2>
 
                 <p>
                   Welcome to Toolora. This Privacy Policy explains how
@@ -44,7 +70,8 @@ function PrivacyPolicy() {
                 </p>
               </section>
 
-              <section className="mb-4">
+              {/* Information We Collect */}
+              <section className="mb-5">
                 <h2 className="h4 fw-bold mb-3">
                   Information We Collect
                 </h2>
@@ -65,14 +92,13 @@ function PrivacyPolicy() {
                 </p>
               </section>
 
-              <section className="mb-4">
+              {/* How We Use Information */}
+              <section className="mb-5">
                 <h2 className="h4 fw-bold mb-3">
                   How We Use Information
                 </h2>
 
-                <p>
-                  Information may be used for purposes such as:
-                </p>
+                <p>Information may be used for purposes such as:</p>
 
                 <ul>
                   <li className="mb-2">
@@ -97,7 +123,8 @@ function PrivacyPolicy() {
                 </ul>
               </section>
 
-              <section className="mb-4">
+              {/* Files and User Content */}
+              <section className="mb-5">
                 <h2 className="h4 fw-bold mb-3">
                   Files and User Content
                 </h2>
@@ -120,7 +147,8 @@ function PrivacyPolicy() {
                 </p>
               </section>
 
-              <section className="mb-4">
+              {/* Cookies */}
+              <section className="mb-5">
                 <h2 className="h4 fw-bold mb-3">
                   Cookies and Similar Technologies
                 </h2>
@@ -139,7 +167,8 @@ function PrivacyPolicy() {
                 </p>
               </section>
 
-              <section className="mb-4">
+              {/* Third Party Services */}
+              <section className="mb-5">
                 <h2 className="h4 fw-bold mb-3">
                   Third-Party Services
                 </h2>
@@ -158,10 +187,9 @@ function PrivacyPolicy() {
                 </p>
               </section>
 
-              <section className="mb-4">
-                <h2 className="h4 fw-bold mb-3">
-                  Advertising
-                </h2>
+              {/* Advertising */}
+              <section className="mb-5">
+                <h2 className="h4 fw-bold mb-3">Advertising</h2>
 
                 <p>
                   Toolora may display advertisements from third-party
@@ -177,10 +205,31 @@ function PrivacyPolicy() {
                 </p>
               </section>
 
-              <section className="mb-4">
+              {/* Ad 2 */}
+              <AdPlaceholder />
+
+              {/* Analytics */}
+              <section className="mb-5">
                 <h2 className="h4 fw-bold mb-3">
-                  Data Security
+                  Analytics and Website Usage
                 </h2>
+
+                <p>
+                  Toolora may use analytics services to understand general
+                  website usage, such as which pages are visited, how visitors
+                  interact with the website and how the website performs.
+                </p>
+
+                <p>
+                  Analytics information may be used to improve Toolora,
+                  identify technical issues and understand how our tools are
+                  being used.
+                </p>
+              </section>
+
+              {/* Data Security */}
+              <section className="mb-5">
+                <h2 className="h4 fw-bold mb-3">Data Security</h2>
 
                 <p>
                   We take reasonable measures to help protect information
@@ -190,7 +239,8 @@ function PrivacyPolicy() {
                 </p>
               </section>
 
-              <section className="mb-4">
+              {/* Children's Privacy */}
+              <section className="mb-5">
                 <h2 className="h4 fw-bold mb-3">
                   Children's Privacy
                 </h2>
@@ -203,7 +253,8 @@ function PrivacyPolicy() {
                 </p>
               </section>
 
-              <section className="mb-4">
+              {/* External Links */}
+              <section className="mb-5">
                 <h2 className="h4 fw-bold mb-3">
                   External Links
                 </h2>
@@ -220,7 +271,8 @@ function PrivacyPolicy() {
                 </p>
               </section>
 
-              <section className="mb-4">
+              {/* Changes */}
+              <section className="mb-5">
                 <h2 className="h4 fw-bold mb-3">
                   Changes to This Privacy Policy
                 </h2>
@@ -237,20 +289,19 @@ function PrivacyPolicy() {
                 </p>
               </section>
 
+              {/* Contact */}
               <section>
-                <h2 className="h4 fw-bold mb-3">
-                  Contact Us
-                </h2>
+                <h2 className="h4 fw-bold mb-3">Contact Us</h2>
 
                 <p>
                   If you have questions about this Privacy Policy, you can
                   contact us through our{" "}
-                  <Link to="/contact">
-                    Contact Us
-                  </Link>{" "}
-                  page.
+                  <Link to="/contact">Contact Us</Link> page.
                 </p>
               </section>
+
+              {/* Ad 3 */}
+              <AdPlaceholder />
             </article>
           </div>
         </div>

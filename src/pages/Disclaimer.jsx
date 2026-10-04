@@ -1,6 +1,31 @@
-
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
+
+function AdPlaceholder({ label = "Advertisement" }) {
+  return (
+    <div
+      className="mx-auto my-4"
+      style={{
+        width: "100%",
+        maxWidth: "970px",
+        minHeight: "90px",
+        border: "1px dashed #d8d5e8",
+        borderRadius: "12px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#faf9ff",
+        color: "#999",
+        fontSize: "13px",
+        textAlign: "center",
+        padding: "15px",
+      }}
+      aria-label="Advertisement"
+    >
+      {label}
+    </div>
+  );
+}
 
 function Disclaimer() {
   return (
@@ -8,27 +33,26 @@ function Disclaimer() {
       <SEO
         title="Disclaimer - Toolora"
         description="Read Toolora's disclaimer to understand the limitations and proper use of our free online tools, calculators, converters and generators."
-        keywords="Toolora disclaimer, online tools disclaimer, calculator disclaimer, online calculator disclaimer, Toolora legal information"
+        keywords="Toolora disclaimer, online tools disclaimer, calculator disclaimer, online calculator disclaimer, Toolora legal information, free tools disclaimer"
         canonical="/disclaimer"
       />
 
       <div className="container py-5">
         <header className="text-center mb-5">
-          <div className="hero-badge mb-3">
-            📋 Legal Information
-          </div>
+          <div className="hero-badge mb-3">📋 Legal Information</div>
 
-          <h1 className="fw-bold">
-            Disclaimer
-          </h1>
+          <h1 className="fw-bold">Disclaimer</h1>
 
           <p className="text-muted">
             Important information about using Toolora's online tools.
           </p>
         </header>
 
+        {/* Ad 1 */}
+        <AdPlaceholder />
+
         <article className="tool-information mx-auto">
-          <section>
+          <section className="mb-4">
             <h2>General Information</h2>
 
             <p>
@@ -39,9 +63,15 @@ function Disclaimer() {
               completely accurate, current or suitable for every individual
               situation.
             </p>
+
+            <p>
+              Users should independently review and verify results when
+              accuracy is important or when a result may affect an important
+              decision.
+            </p>
           </section>
 
-          <section>
+          <section className="mb-4">
             <h2>Use of Our Online Tools</h2>
 
             <p>
@@ -51,9 +81,15 @@ function Disclaimer() {
               official applications, financial matters, business purposes or
               other situations where accuracy is critical.
             </p>
+
+            <p>
+              Toolora tools are provided for convenience and general use and
+              should not be considered a replacement for professional,
+              official or specialized software and services where required.
+            </p>
           </section>
 
-          <section>
+          <section className="mb-4">
             <h2>Calculator Disclaimer</h2>
 
             <p>
@@ -71,14 +107,14 @@ function Disclaimer() {
             </p>
           </section>
 
-          <section>
+          <section className="mb-4">
             <h2>File and Conversion Tools</h2>
 
             <p>
               Toolora provides tools for tasks such as image compression,
-              image conversion and PDF conversion. Results can vary depending
-              on the original file, browser, file format and other technical
-              factors.
+              image resizing, image conversion and PDF conversion. Results can
+              vary depending on the original file, browser, file format,
+              device and other technical factors.
             </p>
 
             <p>
@@ -87,7 +123,7 @@ function Disclaimer() {
             </p>
           </section>
 
-          <section>
+          <section className="mb-4">
             <h2>No Professional Advice</h2>
 
             <p>
@@ -102,7 +138,7 @@ function Disclaimer() {
             </p>
           </section>
 
-          <section>
+          <section className="mb-4">
             <h2>Third-Party Websites</h2>
 
             <p>
@@ -118,7 +154,7 @@ function Disclaimer() {
             </p>
           </section>
 
-          <section>
+          <section className="mb-4">
             <h2>Advertising and External Services</h2>
 
             <p>
@@ -134,7 +170,10 @@ function Disclaimer() {
             </p>
           </section>
 
-          <section>
+          {/* Ad 2 */}
+          <AdPlaceholder />
+
+          <section className="mb-4">
             <h2>Limitation of Liability</h2>
 
             <p>
@@ -143,9 +182,14 @@ function Disclaimer() {
               the use of, or reliance on, information, calculations,
               conversions or other results provided through the website.
             </p>
+
+            <p>
+              Users are responsible for determining whether a Toolora tool or
+              its result is appropriate for their particular purpose.
+            </p>
           </section>
 
-          <section>
+          <section className="mb-4">
             <h2>Changes to This Disclaimer</h2>
 
             <p>
@@ -155,16 +199,13 @@ function Disclaimer() {
             </p>
           </section>
 
-          <section>
+          <section className="mb-4">
             <h2>Contact Us</h2>
 
             <p>
               If you have questions about this Disclaimer, you can contact us
               through our{" "}
-              <Link to="/contact">
-                Contact page
-              </Link>
-              .
+              <Link to="/contact">Contact page</Link>.
             </p>
           </section>
 
@@ -172,26 +213,23 @@ function Disclaimer() {
             <h2>Related Pages</h2>
 
             <ul>
-              <li>
-                <Link to="/about">
-                  About Toolora
-                </Link>
+              <li className="mb-2">
+                <Link to="/about">About Toolora</Link>
+              </li>
+
+              <li className="mb-2">
+                <Link to="/privacy-policy">Privacy Policy</Link>
               </li>
 
               <li>
-                <Link to="/privacy-policy">
-                  Privacy Policy
-                </Link>
-              </li>
-
-              <li>
-                <Link to="/contact">
-                  Contact Us
-                </Link>
+                <Link to="/contact">Contact Us</Link>
               </li>
             </ul>
           </section>
         </article>
+
+        {/* Ad 3 */}
+        <AdPlaceholder />
       </div>
     </main>
   );

@@ -2,6 +2,32 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
 
+function AdPlaceholder({ label = "Advertisement" }) {
+  return (
+    <div
+      className="mx-auto my-4"
+      style={{
+        width: "100%",
+        maxWidth: "970px",
+        minHeight: "90px",
+        border: "1px dashed #d8d5e8",
+        borderRadius: "12px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#faf9ff",
+        color: "#999",
+        fontSize: "13px",
+        textAlign: "center",
+        padding: "15px",
+      }}
+      aria-label="Advertisement"
+    >
+      {label}
+    </div>
+  );
+}
+
 function ImageResizer() {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState("");
@@ -22,15 +48,26 @@ function ImageResizer() {
     };
   }, [preview, resizedUrl]);
 
+  // ======================================================
+  // UPLOAD IMAGE
+  // ======================================================
+
   const handleUpload = (event) => {
-    const file = event.target.files[0];
+    const file = event.target.files?.[0];
 
     if (!file) {
       return;
     }
 
-    if (!file.type.match(/^image\/(jpeg|png|webp)$/)) {
+    const isSupportedImage =
+      file.type === "image/jpeg" ||
+      file.type === "image/png" ||
+      file.type === "image/webp" ||
+      /\.(jpe?g|png|webp)$/i.test(file.name);
+
+    if (!isSupportedImage) {
       alert("Please select a JPG, PNG or WebP image.");
+      event.target.value = "";
       return;
     }
 
@@ -59,7 +96,13 @@ function ImageResizer() {
     };
 
     img.src = url;
+
+    event.target.value = "";
   };
+
+  // ======================================================
+  // WIDTH CHANGE
+  // ======================================================
 
   const handleWidthChange = (value) => {
     const newWidth = Number(value);
@@ -78,6 +121,10 @@ function ImageResizer() {
     }
   };
 
+  // ======================================================
+  // HEIGHT CHANGE
+  // ======================================================
+
   const handleHeightChange = (value) => {
     const newHeight = Number(value);
 
@@ -95,8 +142,12 @@ function ImageResizer() {
     }
   };
 
+  // ======================================================
+  // RESIZE IMAGE
+  // ======================================================
+
   const resizeImage = () => {
-    if (!image || width <= 0 || height <= 0) {
+    if (!image || width <= 0 || height <= 0 || !preview) {
       return;
     }
 
@@ -113,13 +164,7 @@ function ImageResizer() {
       canvas.width = width;
       canvas.height = height;
 
-      context.drawImage(
-        img,
-        0,
-        0,
-        width,
-        height
-      );
+      context.drawImage(img, 0, 0, width, height);
 
       canvas.toBlob(
         (blob) => {
@@ -146,6 +191,10 @@ function ImageResizer() {
     img.src = preview;
   };
 
+  // ======================================================
+  // DOWNLOAD IMAGE
+  // ======================================================
+
   const downloadImage = () => {
     if (!resizedUrl || !image) {
       return;
@@ -160,6 +209,10 @@ function ImageResizer() {
     link.click();
     document.body.removeChild(link);
   };
+
+  // ======================================================
+  // REMOVE IMAGE
+  // ======================================================
 
   const removeImage = () => {
     if (preview) {
@@ -178,6 +231,10 @@ function ImageResizer() {
     setLockRatio(true);
   };
 
+  // ======================================================
+  // FAQ SCHEMA
+  // ======================================================
+
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -187,7 +244,8 @@ function ImageResizer() {
         name: "What image formats does Toolora Image Resizer support?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Toolora Image Resizer supports JPG, JPEG, PNG and WebP image files.",
+          text:
+            "Toolora Image Resizer supports JPG, JPEG, PNG and WebP image files.",
         },
       },
       {
@@ -195,7 +253,8 @@ function ImageResizer() {
         name: "Can I resize an image to exact dimensions?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. You can enter the exact width and height you need in pixels.",
+          text:
+            "Yes. You can enter the exact width and height you need in pixels.",
         },
       },
       {
@@ -203,7 +262,8 @@ function ImageResizer() {
         name: "What does Lock aspect ratio mean?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Lock aspect ratio keeps the relationship between the image width and height to help prevent stretching or distortion.",
+          text:
+            "Lock aspect ratio keeps the relationship between the image width and height to help prevent stretching or distortion.",
         },
       },
       {
@@ -211,7 +271,8 @@ function ImageResizer() {
         name: "Can I resize JPG, PNG and WebP images online?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Toolora lets you upload JPG, PNG and WebP images and resize them directly through your browser.",
+          text:
+            "Yes. Toolora lets you upload JPG, PNG and WebP images and resize them directly through your browser.",
         },
       },
       {
@@ -219,17 +280,22 @@ function ImageResizer() {
         name: "Is Toolora Image Resizer free?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Yes. Toolora Image Resizer is available as a free online image resizing tool.",
+          text:
+            "Yes. Toolora Image Resizer is available as a free online image resizing tool.",
         },
       },
     ],
   };
 
+  // ======================================================
+  // WEB APPLICATION SCHEMA
+  // ======================================================
+
   const webApplicationSchema = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "Toolora Image Resizer",
-    url: "https://toolora-inky.vercel.app/image-resizer",
+    url: "https://www.toolora.click/image-resizer",
     applicationCategory: "MultimediaApplication",
     operatingSystem: "Any",
     description:
@@ -241,23 +307,102 @@ function ImageResizer() {
     },
   };
 
+  // ======================================================
+  // HOWTO SCHEMA
+  // ======================================================
+
+  const howToSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: "How to Resize an Image Online",
+    description:
+      "Learn how to resize JPG, PNG and WebP images to exact dimensions using Toolora Image Resizer.",
+    totalTime: "PT1M",
+    tool: [
+      {
+        "@type": "HowToTool",
+        name: "Web browser",
+      },
+    ],
+    step: [
+      {
+        "@type": "HowToStep",
+        position: 1,
+        name: "Upload an image",
+        text:
+          "Choose a JPG, PNG or WebP image and upload it to Toolora Image Resizer.",
+      },
+      {
+        "@type": "HowToStep",
+        position: 2,
+        name: "Enter image dimensions",
+        text:
+          "Enter the desired image width and height in pixels.",
+      },
+      {
+        "@type": "HowToStep",
+        position: 3,
+        name: "Choose aspect ratio settings",
+        text:
+          "Keep Lock aspect ratio enabled to preserve the original image proportions, or disable it for custom dimensions.",
+      },
+      {
+        "@type": "HowToStep",
+        position: 4,
+        name: "Resize the image",
+        text:
+          "Click Resize Image to create the resized image.",
+      },
+      {
+        "@type": "HowToStep",
+        position: 5,
+        name: "Download the result",
+        text:
+          "Click Download Resized Image to save the resized image.",
+      },
+    ],
+  };
+
+  // ======================================================
+  // COMBINED STRUCTURED DATA
+  // ======================================================
+
+  const structuredData = [
+    faqSchema,
+    webApplicationSchema,
+    howToSchema,
+  ];
+
   return (
     <div className="compressor-page">
+      {/* ==================================================
+          SEO
+      ================================================== */}
+
       <SEO
         title="Image Resizer Online - Resize JPG, PNG & WebP"
-        description="Resize JPG, PNG and WebP images online for free. Change image width and height while maintaining the aspect ratio with Toolora's image resizer."
-        keywords="image resizer, resize image online, image resize tool, JPG resizer, PNG resizer, WebP resizer, resize JPG, resize PNG, image dimensions, resize image to exact size, free image resizer"
+        description="Resize JPG, PNG and WebP images online for free. Change image width and height to exact dimensions while maintaining aspect ratio with Toolora's image resizer."
+        keywords="image resizer, resize image online, image resize tool, JPG resizer, PNG resizer, WebP resizer, resize JPG, resize PNG, resize WebP, image dimensions, resize image to exact size, free image resizer"
         canonical="/image-resizer"
       />
 
-      <script type="application/ld+json">
-        {JSON.stringify([faqSchema, webApplicationSchema])}
-      </script>
+      {/* ==================================================
+          STRUCTURED DATA
+      ================================================== */}
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData),
+        }}
+      />
 
       <div className="container py-5">
-        {/* PAGE INTRO */}
+        {/* ==================================================
+            PAGE INTRO
+        ================================================== */}
 
-        <header className="text-center mb-5">
+        <header className="text-center mb-4">
           <div className="hero-badge mb-3">
             📐 Free Image Resizing Tool
           </div>
@@ -273,11 +418,19 @@ function ImageResizer() {
             Resize JPG, PNG and WebP images online for free.
             Enter your desired width and height in pixels,
             maintain the aspect ratio when needed, and download
-            your resized image.
+            your resized image quickly and easily.
           </p>
         </header>
 
-        {/* IMAGE RESIZER TOOL */}
+        {/* ==================================================
+            ADVERTISEMENT - TOP
+        ================================================== */}
+
+        <AdPlaceholder label="Advertisement" />
+
+        {/* ==================================================
+            IMAGE RESIZER TOOL
+        ================================================== */}
 
         <main>
           <section
@@ -308,7 +461,7 @@ function ImageResizer() {
                 <input
                   id="image-upload"
                   type="file"
-                  accept="image/jpeg,image/png,image/webp"
+                  accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
                   onChange={handleUpload}
                   aria-label="Choose an image to resize"
                   hidden
@@ -425,7 +578,15 @@ function ImageResizer() {
             )}
           </section>
 
-          {/* SEO CONTENT */}
+          {/* ==================================================
+              ADVERTISEMENT - AFTER TOOL
+          ================================================== */}
+
+          <AdPlaceholder label="Advertisement" />
+
+          {/* ==================================================
+              SEO CONTENT
+          ================================================== */}
 
           <article className="tool-information mx-auto mt-5">
             {/* INTRODUCTION */}
@@ -486,8 +647,9 @@ function ImageResizer() {
                 </li>
 
                 <li>
-                  Click <strong>Download Resized Image</strong>
-                  to save the result.
+                  Click{" "}
+                  <strong>Download Resized Image</strong>
+                  {" "}to save the result.
                 </li>
               </ol>
             </section>
@@ -650,6 +812,12 @@ function ImageResizer() {
                 result.
               </p>
             </section>
+
+            {/* ==================================================
+                ADVERTISEMENT - CONTENT
+            ================================================== */}
+
+            <AdPlaceholder label="Advertisement" />
 
             {/* FAQ */}
 

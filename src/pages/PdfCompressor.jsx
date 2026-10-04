@@ -1,7 +1,34 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { PDFDocument } from "pdf-lib";
+
 import SEO from "../components/SEO";
+
+function AdPlaceholder({ label = "Advertisement" }) {
+  return (
+    <div
+      className="mx-auto my-4"
+      style={{
+        width: "100%",
+        maxWidth: "970px",
+        minHeight: "90px",
+        border: "1px dashed #d8d5e8",
+        borderRadius: "12px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#faf9ff",
+        color: "#999",
+        fontSize: "13px",
+        textAlign: "center",
+        padding: "15px",
+      }}
+      aria-label="Advertisement"
+    >
+      {label}
+    </div>
+  );
+}
 
 function PdfCompressor() {
   const [file, setFile] = useState(null);
@@ -10,8 +37,6 @@ function PdfCompressor() {
   const [downloadUrl, setDownloadUrl] = useState("");
   const [isCompressing, setIsCompressing] = useState(false);
 
-  // Clean up generated object URLs when the component unmounts
-  // or when a new download URL replaces the old one.
   useEffect(() => {
     return () => {
       if (downloadUrl) {
@@ -27,7 +52,11 @@ function PdfCompressor() {
       return;
     }
 
-    if (selectedFile.type !== "application/pdf") {
+    const isPdf =
+      selectedFile.type === "application/pdf" ||
+      /\.pdf$/i.test(selectedFile.name);
+
+    if (!isPdf) {
       alert("Please select a PDF file.");
       event.target.value = "";
       return;
@@ -42,6 +71,8 @@ function PdfCompressor() {
     setCompressedSize(0);
     setDownloadUrl("");
     setIsCompressing(false);
+
+    event.target.value = "";
   };
 
   const compressPDF = async () => {
@@ -51,6 +82,13 @@ function PdfCompressor() {
 
     try {
       setIsCompressing(true);
+
+      if (downloadUrl) {
+        URL.revokeObjectURL(downloadUrl);
+        setDownloadUrl("");
+      }
+
+      setCompressedSize(0);
 
       const arrayBuffer = await file.arrayBuffer();
 
@@ -69,7 +107,7 @@ function PdfCompressor() {
       setDownloadUrl(url);
       setCompressedSize(blob.size);
     } catch (error) {
-      console.error(error);
+      console.error("PDF compression error:", error);
 
       alert(
         "Unable to process this PDF. Please try another PDF file."
@@ -90,7 +128,9 @@ function PdfCompressor() {
     link.download = "toolora-compressed.pdf";
 
     document.body.appendChild(link);
+
     link.click();
+
     document.body.removeChild(link);
   };
 
@@ -165,7 +205,7 @@ function PdfCompressor() {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "Toolora PDF Compressor",
-    url: "https://toolora-inky.vercel.app/pdf-compressor",
+    url: "https://www.toolora.click/pdf-compressor",
     description:
       "Free online PDF compressor for optimizing PDF files and reducing file size where possible.",
     applicationCategory: "UtilitiesApplication",
@@ -179,21 +219,64 @@ function PdfCompressor() {
     },
   };
 
+  const howToSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: "How to Compress a PDF Online",
+    description:
+      "Process and optimize a PDF file online with Toolora's free PDF compressor.",
+    totalTime: "PT1M",
+    tool: [
+      {
+        "@type": "HowToTool",
+        name: "Web browser",
+      },
+    ],
+    step: [
+      {
+        "@type": "HowToStep",
+        position: 1,
+        name: "Choose a PDF",
+        text: "Click Choose PDF and select the PDF document you want to process.",
+      },
+      {
+        "@type": "HowToStep",
+        position: 2,
+        name: "Start PDF compression",
+        text: "Click Compress PDF to process and optimize the selected PDF.",
+      },
+      {
+        "@type": "HowToStep",
+        position: 3,
+        name: "Check the processed size",
+        text: "Compare the original PDF size with the processed PDF size.",
+      },
+      {
+        "@type": "HowToStep",
+        position: 4,
+        name: "Download the PDF",
+        text: "Click Download PDF to save the processed PDF to your device.",
+      },
+    ],
+  };
+
+  const structuredData = [
+    faqSchema,
+    webAppSchema,
+    howToSchema,
+  ];
+
   return (
     <div className="compressor-page">
       <SEO
         title="PDF Compressor Online - Compress PDF Files Free"
-        description="Compress PDF files online for free with Toolora. Optimize PDF documents, reduce file size where possible, and download the processed PDF directly in your browser."
+        description="Compress PDF files online for free with Toolora. Optimize PDF documents, reduce file size where possible, compare file sizes, and download the processed PDF directly in your browser."
         keywords="PDF compressor, compress PDF, compress PDF online, free PDF compressor, PDF file compressor, reduce PDF size, compress PDF file, PDF optimizer, online PDF compressor"
         canonical="/pdf-compressor"
       />
 
       <script type="application/ld+json">
-        {JSON.stringify(faqSchema)}
-      </script>
-
-      <script type="application/ld+json">
-        {JSON.stringify(webAppSchema)}
+        {JSON.stringify(structuredData)}
       </script>
 
       <div className="container py-5">
@@ -216,6 +299,8 @@ function PdfCompressor() {
           </p>
         </header>
 
+        <AdPlaceholder label="Advertisement" />
+
         <main>
           <section
             className="compressor-box mx-auto"
@@ -226,7 +311,10 @@ function PdfCompressor() {
                 className="upload-area"
                 htmlFor="pdf-upload"
               >
-                <div className="upload-icon" aria-hidden="true">
+                <div
+                  className="upload-icon"
+                  aria-hidden="true"
+                >
                   📄
                 </div>
 
@@ -246,7 +334,7 @@ function PdfCompressor() {
                 <input
                   id="pdf-upload"
                   type="file"
-                  accept="application/pdf"
+                  accept="application/pdf,.pdf"
                   onChange={handleFileChange}
                   aria-label="Choose a PDF file to compress"
                   hidden
@@ -331,273 +419,275 @@ function PdfCompressor() {
               </div>
             )}
           </section>
-
-          <article className="tool-information mx-auto mt-5">
-            <section>
-              <h2>Free PDF Compressor Online</h2>
-
-              <p>
-                Toolora's free PDF compressor lets you process
-                PDF documents directly in your browser. The tool
-                optimizes the internal PDF structure and creates
-                a processed PDF that you can download.
-              </p>
-
-              <p>
-                Compressing a PDF can be useful when you need
-                to upload, email, share, or store a document
-                and want to reduce its file size where possible.
-              </p>
-            </section>
-
-            <section className="mt-4">
-              <h2>How to Compress a PDF Online</h2>
-
-              <p>
-                Follow these simple steps to compress a PDF:
-              </p>
-
-              <ol>
-                <li>
-                  Click <strong>Choose PDF</strong> and select
-                  your PDF document.
-                </li>
-
-                <li>
-                  Click <strong>Compress PDF</strong>.
-                </li>
-
-                <li>
-                  Wait while Toolora processes the PDF.
-                </li>
-
-                <li>
-                  Compare the original and processed file
-                  sizes.
-                </li>
-
-                <li>
-                  Click <strong>Download PDF</strong> to save
-                  the processed document.
-                </li>
-              </ol>
-            </section>
-
-            <section className="mt-4">
-              <h2>Why Compress a PDF?</h2>
-
-              <p>
-                Large PDF files can sometimes be difficult to
-                upload, send, or store. Reducing the file size
-                can make a document more convenient to work with.
-              </p>
-
-              <ul>
-                <li>
-                  Reduce PDF file size when possible.
-                </li>
-
-                <li>
-                  Make documents easier to upload.
-                </li>
-
-                <li>
-                  Make PDFs easier to share by email or online.
-                </li>
-
-                <li>
-                  Help with file-size restrictions on websites
-                  and online forms.
-                </li>
-
-                <li>
-                  Reduce storage requirements when compression
-                  is effective.
-                </li>
-              </ul>
-            </section>
-
-            <section className="mt-4">
-              <h2>Will Every PDF Become Smaller?</h2>
-
-              <p>
-                Not necessarily. PDF documents can be created
-                and optimized in different ways. Some PDFs are
-                already highly optimized, so processing them may
-                produce little or no reduction in file size.
-              </p>
-
-              <p>
-                PDFs containing certain types of content,
-                especially already-compressed images, may not
-                become significantly smaller using structural
-                PDF optimization alone.
-              </p>
-            </section>
-
-            <section className="mt-4">
-              <h2>How Does PDF Compression Work?</h2>
-
-              <p>
-                Toolora uses browser-based PDF processing to
-                optimize the internal structure of your PDF.
-                The tool creates a processed PDF without
-                intentionally removing pages or text.
-              </p>
-
-              <p>
-                The amount of file-size reduction depends on
-                the structure and contents of the original
-                document. Some files may show a noticeable
-                reduction while others may change very little.
-              </p>
-            </section>
-
-            <section className="mt-4">
-              <h2>PDF Compression and Image Quality</h2>
-
-              <p>
-                PDF compression can work in different ways.
-                Some compression tools reduce image resolution
-                or re-encode images to achieve a much smaller
-                file size.
-              </p>
-
-              <p>
-                Toolora's current PDF compressor focuses on
-                PDF structural optimization rather than
-                aggressive image re-encoding. As a result,
-                image-heavy PDFs may not receive a large size
-                reduction.
-              </p>
-            </section>
-
-            <section className="mt-4">
-              <h2>Compress PDF Files in Your Browser</h2>
-
-              <p>
-                Toolora provides a convenient browser-based
-                way to process PDF documents. You can select
-                your PDF, start the compression process, and
-                download the resulting file without installing
-                a separate PDF compression application.
-              </p>
-
-              <p>
-                A modern browser with JavaScript enabled is
-                required to use the online PDF compressor.
-              </p>
-            </section>
-
-            <section className="mt-4">
-              <h2>Is Toolora PDF Compressor Free?</h2>
-
-              <p>
-                Yes. Toolora's PDF compressor is available as
-                a free online tool. Upload a PDF, process it,
-                and download the resulting document.
-              </p>
-            </section>
-
-            <section className="mt-5">
-              <h2>Frequently Asked Questions</h2>
-
-              <h3 className="mt-4">
-                What is a PDF compressor?
-              </h3>
-
-              <p>
-                A PDF compressor is a tool that processes a PDF
-                document to reduce or optimize its file size
-                while keeping the document usable.
-              </p>
-
-              <h3 className="mt-4">
-                Is Toolora PDF Compressor free?
-              </h3>
-
-              <p>
-                Yes. Toolora's PDF compressor is available as
-                a free online PDF processing tool.
-              </p>
-
-              <h3 className="mt-4">
-                Can I compress a large PDF?
-              </h3>
-
-              <p>
-                You can upload a large PDF and try processing
-                it. The amount of size reduction depends on
-                how the original PDF was created and optimized.
-              </p>
-
-              <h3 className="mt-4">
-                Does PDF compression delete pages or text?
-              </h3>
-
-              <p>
-                Toolora's compression process does not
-                intentionally delete pages or text from your
-                PDF. Its purpose is to optimize the PDF
-                structure.
-              </p>
-
-              <h3 className="mt-4">
-                Will every PDF become smaller?
-              </h3>
-
-              <p>
-                No. Some PDFs are already highly optimized,
-                so processing may result in little or no
-                reduction in file size.
-              </p>
-            </section>
-
-            <section className="mt-5">
-              <h2>Related PDF & Image Tools</h2>
-
-              <p>
-                Try these other free Toolora tools for working
-                with PDF and image files:
-              </p>
-
-              <div className="d-flex flex-wrap gap-3 mt-3">
-                <Link
-                  to="/jpg-to-pdf"
-                  className="btn btn-outline-primary"
-                >
-                  JPG to PDF →
-                </Link>
-
-                <Link
-                  to="/pdf-to-jpg"
-                  className="btn btn-outline-primary"
-                >
-                  PDF to JPG →
-                </Link>
-
-                <Link
-                  to="/image-compressor"
-                  className="btn btn-outline-primary"
-                >
-                  Image Compressor →
-                </Link>
-
-                <Link
-                  to="/image-resizer"
-                  className="btn btn-outline-primary"
-                >
-                  Image Resizer →
-                </Link>
-              </div>
-            </section>
-          </article>
         </main>
+
+        <AdPlaceholder label="Advertisement" />
+
+        <article className="tool-information mx-auto mt-5">
+          <section>
+            <h2>Free PDF Compressor Online</h2>
+
+            <p>
+              Toolora's free PDF compressor lets you process
+              PDF documents directly in your browser. The tool
+              optimizes the internal PDF structure and creates
+              a processed PDF that you can download.
+            </p>
+
+            <p>
+              Compressing a PDF can be useful when you need
+              to upload, email, share, or store a document
+              and want to reduce its file size where possible.
+            </p>
+          </section>
+
+          <section className="mt-4">
+            <h2>How to Compress a PDF Online</h2>
+
+            <p>
+              Follow these simple steps to compress a PDF:
+            </p>
+
+            <ol>
+              <li>
+                Click <strong>Choose PDF</strong> and select
+                your PDF document.
+              </li>
+
+              <li>
+                Click <strong>Compress PDF</strong>.
+              </li>
+
+              <li>
+                Wait while Toolora processes the PDF.
+              </li>
+
+              <li>
+                Compare the original and processed file
+                sizes.
+              </li>
+
+              <li>
+                Click <strong>Download PDF</strong> to save
+                the processed document.
+              </li>
+            </ol>
+          </section>
+
+          <section className="mt-4">
+            <h2>Why Compress a PDF?</h2>
+
+            <p>
+              Large PDF files can sometimes be difficult to
+              upload, send, or store. Reducing the file size
+              can make a document more convenient to work with.
+            </p>
+
+            <ul>
+              <li>
+                Reduce PDF file size when possible.
+              </li>
+
+              <li>
+                Make documents easier to upload.
+              </li>
+
+              <li>
+                Make PDFs easier to share by email or online.
+              </li>
+
+              <li>
+                Help with file-size restrictions on websites
+                and online forms.
+              </li>
+
+              <li>
+                Reduce storage requirements when compression
+                is effective.
+              </li>
+            </ul>
+          </section>
+
+          <section className="mt-4">
+            <h2>Will Every PDF Become Smaller?</h2>
+
+            <p>
+              Not necessarily. PDF documents can be created
+              and optimized in different ways. Some PDFs are
+              already highly optimized, so processing them may
+              produce little or no reduction in file size.
+            </p>
+
+            <p>
+              PDFs containing certain types of content,
+              especially already-compressed images, may not
+              become significantly smaller using structural
+              PDF optimization alone.
+            </p>
+          </section>
+
+          <section className="mt-4">
+            <h2>How Does PDF Compression Work?</h2>
+
+            <p>
+              Toolora uses browser-based PDF processing to
+              optimize the internal structure of your PDF.
+              The tool creates a processed PDF without
+              intentionally removing pages or text.
+            </p>
+
+            <p>
+              The amount of file-size reduction depends on
+              the structure and contents of the original
+              document. Some files may show a noticeable
+              reduction while others may change very little.
+            </p>
+          </section>
+
+          <section className="mt-4">
+            <h2>PDF Compression and Image Quality</h2>
+
+            <p>
+              PDF compression can work in different ways.
+              Some compression tools reduce image resolution
+              or re-encode images to achieve a much smaller
+              file size.
+            </p>
+
+            <p>
+              Toolora's current PDF compressor focuses on
+              PDF structural optimization rather than
+              aggressive image re-encoding. As a result,
+              image-heavy PDFs may not receive a large size
+              reduction.
+            </p>
+          </section>
+
+          <section className="mt-4">
+            <h2>Compress PDF Files in Your Browser</h2>
+
+            <p>
+              Toolora provides a convenient browser-based
+              way to process PDF documents. You can select
+              your PDF, start the compression process, and
+              download the resulting file without installing
+              a separate PDF compression application.
+            </p>
+
+            <p>
+              A modern browser with JavaScript enabled is
+              required to use the online PDF compressor.
+            </p>
+          </section>
+
+          <section className="mt-4">
+            <h2>Is Toolora PDF Compressor Free?</h2>
+
+            <p>
+              Yes. Toolora's PDF compressor is available as
+              a free online tool. Upload a PDF, process it,
+              and download the resulting document.
+            </p>
+          </section>
+
+          <section className="mt-5">
+            <h2>Frequently Asked Questions</h2>
+
+            <h3 className="mt-4">
+              What is a PDF compressor?
+            </h3>
+
+            <p>
+              A PDF compressor is a tool that processes a PDF
+              document to reduce or optimize its file size
+              while keeping the document usable.
+            </p>
+
+            <h3 className="mt-4">
+              Is Toolora PDF Compressor free?
+            </h3>
+
+            <p>
+              Yes. Toolora's PDF compressor is available as
+              a free online PDF processing tool.
+            </p>
+
+            <h3 className="mt-4">
+              Can I compress a large PDF?
+            </h3>
+
+            <p>
+              You can upload a large PDF and try processing
+              it. The amount of size reduction depends on
+              how the original PDF was created and optimized.
+            </p>
+
+            <h3 className="mt-4">
+              Does PDF compression delete pages or text?
+            </h3>
+
+            <p>
+              Toolora's compression process does not
+              intentionally delete pages or text from your
+              PDF. Its purpose is to optimize the PDF
+              structure.
+            </p>
+
+            <h3 className="mt-4">
+              Will every PDF become smaller?
+            </h3>
+
+            <p>
+              No. Some PDFs are already highly optimized,
+              so processing may result in little or no
+              reduction in file size.
+            </p>
+          </section>
+
+          <section className="mt-5">
+            <h2>Related PDF & Image Tools</h2>
+
+            <p>
+              Try these other free Toolora tools for working
+              with PDF and image files:
+            </p>
+
+            <div className="d-flex flex-wrap gap-3 mt-3">
+              <Link
+                to="/jpg-to-pdf"
+                className="btn btn-outline-primary"
+              >
+                JPG to PDF →
+              </Link>
+
+              <Link
+                to="/pdf-to-jpg"
+                className="btn btn-outline-primary"
+              >
+                PDF to JPG →
+              </Link>
+
+              <Link
+                to="/image-compressor"
+                className="btn btn-outline-primary"
+              >
+                Image Compressor →
+              </Link>
+
+              <Link
+                to="/image-resizer"
+                className="btn btn-outline-primary"
+              >
+                Image Resizer →
+              </Link>
+            </div>
+          </section>
+        </article>
+
+        <AdPlaceholder label="Advertisement" />
       </div>
     </div>
   );
 }
 
 export default PdfCompressor;
-
-

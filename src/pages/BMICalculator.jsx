@@ -1,7 +1,32 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
+
+function AdPlaceholder({ label = "Advertisement" }) {
+  return (
+    <div
+      className="mx-auto my-4"
+      style={{
+        width: "100%",
+        maxWidth: "970px",
+        minHeight: "90px",
+        border: "1px dashed #d8d5e8",
+        borderRadius: "12px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#faf9ff",
+        color: "#999",
+        fontSize: "13px",
+        textAlign: "center",
+        padding: "15px",
+      }}
+      aria-label="Advertisement"
+    >
+      {label}
+    </div>
+  );
+}
 
 function BMICalculator() {
   const [weight, setWeight] = useState("");
@@ -113,7 +138,7 @@ function BMICalculator() {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "Toolora BMI Calculator",
-    url: "https://toolora-inky.vercel.app/bmi-calculator",
+    url: "https://www.toolora.click/bmi-calculator",
     description:
       "Free online BMI calculator for calculating Body Mass Index using weight in kilograms and height in centimeters.",
     applicationCategory: "HealthApplication",
@@ -131,8 +156,8 @@ function BMICalculator() {
     <main className="compressor-page">
       <SEO
         title="BMI Calculator Online - Calculate Body Mass Index"
-        description="Calculate your BMI online using your weight and height with Toolora's free BMI calculator. Get your Body Mass Index result instantly."
-        keywords="BMI calculator, BMI calculator online, body mass index calculator, calculate BMI, BMI online, free BMI calculator, weight height BMI, BMI calculator kg cm"
+        description="Calculate your Body Mass Index online for free with Toolora's BMI calculator. Enter your weight and height to get your BMI value and general BMI category instantly."
+        keywords="BMI calculator, BMI calculator online, body mass index calculator, calculate BMI, BMI online, free BMI calculator, weight height BMI, BMI calculator kg cm, BMI calculator for adults, body mass index online"
         canonical="/bmi-calculator"
       />
 
@@ -154,11 +179,16 @@ function BMICalculator() {
             BMI Calculator Online
           </h1>
 
-          <p className="text-muted">
+          <p
+            className="text-muted mx-auto"
+            style={{ maxWidth: "700px" }}
+          >
             Calculate your Body Mass Index using your weight
             and height and get your BMI category instantly.
           </p>
         </header>
+
+        <AdPlaceholder />
 
         <section
           className="compressor-box calculator-box mx-auto"
@@ -255,14 +285,13 @@ function BMICalculator() {
             <div
               className="calculator-result mt-5 text-center"
               aria-live="polite"
+              aria-atomic="true"
             >
               <p className="mb-2">
                 Your BMI
               </p>
 
-              <h2>
-                {result.bmi}
-              </h2>
+              <h2>{result.bmi}</h2>
 
               <h5 className="mt-3">
                 {result.category}
@@ -270,6 +299,8 @@ function BMICalculator() {
             </div>
           )}
         </section>
+
+        <AdPlaceholder />
 
         <article className="tool-information mx-auto mt-5">
           <h2>
@@ -490,6 +521,8 @@ function BMICalculator() {
             </li>
           </ul>
         </article>
+
+        <AdPlaceholder />
       </div>
     </main>
   );

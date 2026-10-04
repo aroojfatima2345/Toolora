@@ -9,13 +9,24 @@ function SEO({
 }) {
   const siteName = "Toolora";
 
-  // Current live domain
-  const siteUrl = "https://toolora-inky.vercel.app";
+  // ======================================================
+  // OFFICIAL PRODUCTION DOMAIN
+  // ======================================================
+
+  const siteUrl = "https://www.toolora.click";
+
+  // ======================================================
+  // PAGE TITLE
+  // ======================================================
 
   const fullTitle =
     title === "Free Online Tools"
       ? `${siteName} - ${title}`
       : `${title} | ${siteName}`;
+
+  // ======================================================
+  // CANONICAL URL
+  // ======================================================
 
   const canonicalUrl = canonical.startsWith("http")
     ? canonical
@@ -23,21 +34,42 @@ function SEO({
         canonical.startsWith("/") ? canonical : `/${canonical}`
       }`;
 
+  // ======================================================
+  // ROBOTS
+  // ======================================================
+
   const robotsContent = noIndex
     ? "noindex, nofollow"
     : "index, follow";
+
+  // ======================================================
+  // OPEN GRAPH IMAGE
+  // ======================================================
 
   const ogImageUrl = `${siteUrl}/og-image.png`;
 
   return (
     <Helmet>
-      {/* =========================
-          BASIC SEO
-      ========================= */}
+      {/* ==================================================
+          DOCUMENT
+      ================================================== */}
 
       <html lang="en" />
 
+      <meta
+        charSet="utf-8"
+      />
+
+      <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+      />
+
       <title>{fullTitle}</title>
+
+      {/* ==================================================
+          BASIC SEO
+      ================================================== */}
 
       <meta
         name="description"
@@ -52,6 +84,16 @@ function SEO({
       )}
 
       <meta
+        name="author"
+        content={siteName}
+      />
+
+      <meta
+        name="application-name"
+        content={siteName}
+      />
+
+      <meta
         name="robots"
         content={robotsContent}
       />
@@ -62,18 +104,22 @@ function SEO({
       />
 
       <meta
-        name="author"
-        content={siteName}
+        name="referrer"
+        content="strict-origin-when-cross-origin"
       />
+
+      {/* ==================================================
+          CANONICAL
+      ================================================== */}
 
       <link
         rel="canonical"
         href={canonicalUrl}
       />
 
-      {/* =========================
+      {/* ==================================================
           OPEN GRAPH / FACEBOOK
-      ========================= */}
+      ================================================== */}
 
       <meta
         property="og:title"
@@ -130,9 +176,9 @@ function SEO({
         content="630"
       />
 
-      {/* =========================
+      {/* ==================================================
           TWITTER / X
-      ========================= */}
+      ================================================== */}
 
       <meta
         name="twitter:card"
@@ -159,9 +205,9 @@ function SEO({
         content={`${siteName} - Free Online Tools`}
       />
 
-      {/* =========================
-          WEBSITE / BROWSER
-      ========================= */}
+      {/* ==================================================
+          BROWSER / BRAND
+      ================================================== */}
 
       <meta
         name="theme-color"

@@ -2,6 +2,32 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
 
+function AdPlaceholder({ label = "Advertisement" }) {
+  return (
+    <div
+      className="mx-auto my-4"
+      style={{
+        width: "100%",
+        maxWidth: "970px",
+        minHeight: "90px",
+        border: "1px dashed #d8d5e8",
+        borderRadius: "12px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#faf9ff",
+        color: "#999",
+        fontSize: "13px",
+        textAlign: "center",
+        padding: "15px",
+      }}
+      aria-label="Advertisement"
+    >
+      {label}
+    </div>
+  );
+}
+
 function WordCounter() {
   const [text, setText] = useState("");
 
@@ -88,7 +114,7 @@ function WordCounter() {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "Toolora Word Counter",
-    url: "https://toolora-inky.vercel.app/word-counter",
+    url: "https://www.toolora.click/word-counter",
     description:
       "Free online word counter for counting words, characters, sentences and paragraphs instantly.",
     applicationCategory: "UtilitiesApplication",
@@ -106,8 +132,8 @@ function WordCounter() {
     <div className="compressor-page">
       <SEO
         title="Word Counter Online - Count Words & Characters Free"
-        description="Free online word counter to count words, characters, characters without spaces, sentences and paragraphs instantly. No signup required."
-        keywords="word counter, word count, online word counter, free word counter, character counter, character count, count words online, word count tool, sentence counter, paragraph counter"
+        description="Count words, characters, sentences and paragraphs online for free with Toolora. Check word count and character count instantly without uploading your text or creating an account."
+        keywords="word counter, word count, online word counter, free word counter, character counter, character count, count words online, word count tool, sentence counter, paragraph counter, online character counter, word counter tool"
         canonical="/word-counter"
       />
 
@@ -137,6 +163,9 @@ function WordCounter() {
             instantly with Toolora's free online word counter.
           </p>
         </header>
+
+        {/* Ad Placeholder 1 */}
+        <AdPlaceholder />
 
         <main>
           <section
@@ -252,6 +281,9 @@ function WordCounter() {
               </button>
             </div>
           </section>
+
+          {/* Ad Placeholder 2 */}
+          <AdPlaceholder />
 
           <article className="tool-information mx-auto mt-5">
             <section>
@@ -562,6 +594,9 @@ function WordCounter() {
               </div>
             </section>
           </article>
+
+          {/* Ad Placeholder 3 */}
+          <AdPlaceholder />
         </main>
       </div>
     </div>
@@ -569,4 +604,3 @@ function WordCounter() {
 }
 
 export default WordCounter;
-

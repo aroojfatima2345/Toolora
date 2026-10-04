@@ -1,112 +1,83 @@
+
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-  <!-- =========================
-       HOMEPAGE
-  ========================== -->
-
+  <!-- Homepage -->
   <url>
-    <loc>https://toolora-inky.vercel.app/</loc>
+    <loc>https://www.toolora.click/</loc>
   </url>
 
-
-  <!-- =========================
-       IMAGE TOOLS
-  ========================== -->
-
+  <!-- Image Tools -->
   <url>
-    <loc>https://toolora-inky.vercel.app/image-compressor</loc>
+    <loc>https://www.toolora.click/image-compressor</loc>
   </url>
 
   <url>
-    <loc>https://toolora-inky.vercel.app/image-resizer</loc>
-  </url>
-
-
-  <!-- =========================
-       PDF TOOLS
-  ========================== -->
-
-  <url>
-    <loc>https://toolora-inky.vercel.app/pdf-compressor</loc>
+    <loc>https://www.toolora.click/image-resizer</loc>
   </url>
 
   <url>
-    <loc>https://toolora-inky.vercel.app/pdf-to-jpg</loc>
+    <loc>https://www.toolora.click/background-remover</loc>
   </url>
 
-
-  <!-- =========================
-       CONVERTERS
-  ========================== -->
-
+  <!-- PDF Tools -->
   <url>
-    <loc>https://toolora-inky.vercel.app/jpg-to-png</loc>
+    <loc>https://www.toolora.click/pdf-compressor</loc>
   </url>
 
   <url>
-    <loc>https://toolora-inky.vercel.app/jpg-to-pdf</loc>
+    <loc>https://www.toolora.click/pdf-to-jpg</loc>
   </url>
 
-
-  <!-- =========================
-       TEXT TOOLS
-  ========================== -->
-
+  <!-- Converters -->
   <url>
-    <loc>https://toolora-inky.vercel.app/word-counter</loc>
-  </url>
-
-
-  <!-- =========================
-       DEVELOPER TOOLS
-  ========================== -->
-
-  <url>
-    <loc>https://toolora-inky.vercel.app/qr-code-generator</loc>
-  </url>
-
-
-  <!-- =========================
-       CALCULATORS
-  ========================== -->
-
-  <url>
-    <loc>https://toolora-inky.vercel.app/percentage-calculator</loc>
+    <loc>https://www.toolora.click/jpg-to-png</loc>
   </url>
 
   <url>
-    <loc>https://toolora-inky.vercel.app/age-calculator</loc>
+    <loc>https://www.toolora.click/jpg-to-pdf</loc>
+  </url>
+
+  <!-- Text Tools -->
+  <url>
+    <loc>https://www.toolora.click/word-counter</loc>
+  </url>
+
+  <!-- QR Tools -->
+  <url>
+    <loc>https://www.toolora.click/qr-code-generator</loc>
+  </url>
+
+  <!-- Calculators -->
+  <url>
+    <loc>https://www.toolora.click/percentage-calculator</loc>
   </url>
 
   <url>
-    <loc>https://toolora-inky.vercel.app/bmi-calculator</loc>
-  </url>
-
-
-  <!-- =========================
-       COMPANY PAGES
-  ========================== -->
-
-  <url>
-    <loc>https://toolora-inky.vercel.app/about</loc>
+    <loc>https://www.toolora.click/age-calculator</loc>
   </url>
 
   <url>
-    <loc>https://toolora-inky.vercel.app/contact</loc>
+    <loc>https://www.toolora.click/bmi-calculator</loc>
   </url>
 
-
-  <!-- =========================
-       LEGAL PAGES
-  ========================== -->
-
+  <!-- Company Pages -->
   <url>
-    <loc>https://toolora-inky.vercel.app/privacy-policy</loc>
+    <loc>https://www.toolora.click/about</loc>
   </url>
 
   <url>
-    <loc>https://toolora-inky.vercel.app/disclaimer</loc>
+    <loc>https://www.toolora.click/contact</loc>
+  </url>
+
+  <!-- Legal Pages -->
+  <url>
+    <loc>https://www.toolora.click/privacy-policy</loc>
+  </url>
+
+  <url>
+    <loc>https://www.toolora.click/disclaimer</loc>
   </url>
 
 </urlset>
+

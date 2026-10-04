@@ -1,12 +1,39 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+
 import * as pdfjsLib from "pdfjs-dist";
 import { GlobalWorkerOptions } from "pdfjs-dist";
-
 import workerSrc from "pdfjs-dist/build/pdf.worker.min.mjs?url";
+
 import SEO from "../components/SEO";
 
 GlobalWorkerOptions.workerSrc = workerSrc;
+
+function AdPlaceholder({ label = "Advertisement" }) {
+  return (
+    <div
+      className="mx-auto my-4"
+      style={{
+        width: "100%",
+        maxWidth: "970px",
+        minHeight: "90px",
+        border: "1px dashed #d8d5e8",
+        borderRadius: "12px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#faf9ff",
+        color: "#999",
+        fontSize: "13px",
+        textAlign: "center",
+        padding: "15px",
+      }}
+      aria-label="Advertisement"
+    >
+      {label}
+    </div>
+  );
+}
 
 function PdfToJpg() {
   const [file, setFile] = useState(null);
@@ -64,7 +91,7 @@ function PdfToJpg() {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "Toolora PDF to JPG Converter",
-    url: "https://toolora-inky.vercel.app/pdf-to-jpg",
+    url: "https://www.toolora.click/pdf-to-jpg",
     description:
       "Free online PDF to JPG converter for converting PDF pages into JPG images directly in your browser.",
     applicationCategory: "UtilitiesApplication",
@@ -78,6 +105,53 @@ function PdfToJpg() {
     },
   };
 
+  const howToSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: "How to Convert PDF to JPG Online",
+    description:
+      "Convert PDF pages into JPG images online using Toolora's free PDF to JPG converter.",
+    totalTime: "PT1M",
+    tool: [
+      {
+        "@type": "HowToTool",
+        name: "Web browser",
+      },
+    ],
+    step: [
+      {
+        "@type": "HowToStep",
+        position: 1,
+        name: "Choose a PDF",
+        text: "Click Choose PDF and select the PDF file you want to convert.",
+      },
+      {
+        "@type": "HowToStep",
+        position: 2,
+        name: "Start the conversion",
+        text: "Click Convert to JPG to convert the PDF pages into JPG images.",
+      },
+      {
+        "@type": "HowToStep",
+        position: 3,
+        name: "Preview the JPG images",
+        text: "Review the converted JPG images displayed for each PDF page.",
+      },
+      {
+        "@type": "HowToStep",
+        position: 4,
+        name: "Download the JPG images",
+        text: "Download individual JPG pages or click Download All JPGs to download all converted pages.",
+      },
+    ],
+  };
+
+  const structuredData = [
+    faqSchema,
+    webAppSchema,
+    howToSchema,
+  ];
+
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
 
@@ -85,7 +159,11 @@ function PdfToJpg() {
       return;
     }
 
-    if (selectedFile.type !== "application/pdf") {
+    const isPdf =
+      selectedFile.type === "application/pdf" ||
+      /\.pdf$/i.test(selectedFile.name);
+
+    if (!isPdf) {
       alert("Please select a PDF file.");
       event.target.value = "";
       return;
@@ -102,6 +180,7 @@ function PdfToJpg() {
 
     try {
       setIsConverting(true);
+      setImages([]);
 
       const arrayBuffer = await file.arrayBuffer();
 
@@ -125,14 +204,15 @@ function PdfToJpg() {
         });
 
         const canvas = document.createElement("canvas");
+
         const context = canvas.getContext("2d");
 
         if (!context) {
           throw new Error("Unable to create canvas context.");
         }
 
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
+        canvas.width = Math.ceil(viewport.width);
+        canvas.height = Math.ceil(viewport.height);
 
         await page.render({
           canvasContext: context,
@@ -149,14 +229,13 @@ function PdfToJpg() {
           url: imageUrl,
         });
 
-        // Release canvas memory after generating the image.
         canvas.width = 0;
         canvas.height = 0;
       }
 
       setImages(convertedImages);
     } catch (error) {
-      console.error(error);
+      console.error("PDF to JPG conversion error:", error);
 
       alert(
         "Unable to convert this PDF. Please try another PDF file."
@@ -173,7 +252,9 @@ function PdfToJpg() {
     link.download = `toolora-page-${pageNumber}.jpg`;
 
     document.body.appendChild(link);
+
     link.click();
+
     document.body.removeChild(link);
   };
 
@@ -193,6 +274,12 @@ function PdfToJpg() {
     setFile(null);
     setImages([]);
     setIsConverting(false);
+
+    const input = document.getElementById("pdf-jpg-upload");
+
+    if (input) {
+      input.value = "";
+    }
   };
 
   return (
@@ -205,11 +292,7 @@ function PdfToJpg() {
       />
 
       <script type="application/ld+json">
-        {JSON.stringify(faqSchema)}
-      </script>
-
-      <script type="application/ld+json">
-        {JSON.stringify(webAppSchema)}
+        {JSON.stringify(structuredData)}
       </script>
 
       <div className="container py-5">
@@ -231,6 +314,8 @@ function PdfToJpg() {
             individual JPG files or all pages.
           </p>
         </header>
+
+        <AdPlaceholder label="Advertisement" />
 
         <main>
           <section
@@ -265,7 +350,7 @@ function PdfToJpg() {
                 <input
                   id="pdf-jpg-upload"
                   type="file"
-                  accept="application/pdf"
+                  accept="application/pdf,.pdf"
                   onChange={handleFileChange}
                   aria-label="Choose a PDF file to convert to JPG"
                   hidden
@@ -392,6 +477,8 @@ function PdfToJpg() {
           </section>
         </main>
 
+        <AdPlaceholder label="Advertisement" />
+
         <article className="tool-information mx-auto mt-5">
           <section>
             <h2>Free PDF to JPG Converter Online</h2>
@@ -442,9 +529,9 @@ function PdfToJpg() {
               </li>
 
               <li>
-                Download individual JPG files or click
-                <strong> Download All JPGs </strong>
-                to download all converted pages.
+                Click <strong>Download All JPGs</strong> to
+                download all converted pages, or download
+                individual pages.
               </li>
             </ol>
           </section>
@@ -658,10 +745,11 @@ function PdfToJpg() {
             </div>
           </section>
         </article>
+
+        <AdPlaceholder label="Advertisement" />
       </div>
     </div>
   );
 }
 
 export default PdfToJpg;
-

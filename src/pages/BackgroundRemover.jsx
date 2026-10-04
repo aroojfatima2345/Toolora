@@ -1,6 +1,33 @@
+
 import { useRef, useState } from "react";
 import { removeBackground } from "@imgly/background-removal";
 import SEO from "../components/SEO";
+
+function AdPlaceholder({ label = "Advertisement" }) {
+  return (
+    <div
+      className="mx-auto my-4"
+      style={{
+        width: "100%",
+        maxWidth: "970px",
+        minHeight: "90px",
+        border: "1px dashed #d8d5e8",
+        borderRadius: "12px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#faf9ff",
+        color: "#999",
+        fontSize: "13px",
+        textAlign: "center",
+        padding: "15px",
+      }}
+      aria-label="Advertisement"
+    >
+      {label}
+    </div>
+  );
+}
 
 function BackgroundRemover() {
   const inputRef = useRef(null);
@@ -9,7 +36,6 @@ function BackgroundRemover() {
   const [originalPreview, setOriginalPreview] = useState("");
   const [resultPreview, setResultPreview] = useState("");
   const [resultBlob, setResultBlob] = useState(null);
-
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
   const [error, setError] = useState("");
@@ -22,14 +48,28 @@ function BackgroundRemover() {
 
     if (!file) return;
 
-    if (!file.type.startsWith("image/")) {
-      setError("Please select a valid image file.");
+    const isSupportedImage =
+      file.type === "image/jpeg" ||
+      file.type === "image/png" ||
+      file.type === "image/webp" ||
+      /\.(jpe?g|png|webp)$/i.test(file.name);
+
+    if (!isSupportedImage) {
+      setError("Please select a JPG, PNG, or WebP image.");
       return;
     }
 
     if (file.size > 10 * 1024 * 1024) {
       setError("Image size must be 10MB or smaller.");
       return;
+    }
+
+    if (originalPreview) {
+      URL.revokeObjectURL(originalPreview);
+    }
+
+    if (resultPreview) {
+      URL.revokeObjectURL(resultPreview);
     }
 
     setSelectedFile(file);
@@ -44,6 +84,8 @@ function BackgroundRemover() {
     if (file) {
       handleFile(file);
     }
+
+    event.target.value = "";
   };
 
   const handleDrop = (event) => {
@@ -104,6 +146,7 @@ function BackgroundRemover() {
     const downloadUrl = URL.createObjectURL(resultBlob);
 
     const link = document.createElement("a");
+
     link.href = downloadUrl;
     link.download = "toolora-background-removed.png";
 
@@ -135,18 +178,137 @@ function BackgroundRemover() {
     }
   };
 
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      name: "Toolora Background Remover",
+      url: "https://www.toolora.click/background-remover",
+      applicationCategory: "MultimediaApplication",
+      operatingSystem: "Web Browser",
+      description:
+        "Free online background remover that automatically removes image backgrounds and creates transparent PNG images.",
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "USD",
+      },
+      featureList: [
+        "Remove image backgrounds online",
+        "Automatic background removal",
+        "Transparent PNG output",
+        "JPG support",
+        "PNG support",
+        "WebP support",
+        "Browser-based image processing",
+      ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      name: "How to Remove an Image Background Online",
+      description:
+        "Remove the background from a JPG, PNG, or WebP image using Toolora's free online background remover.",
+      totalTime: "PT2M",
+      tool: [
+        {
+          "@type": "HowToTool",
+          name: "Web browser",
+        },
+      ],
+      step: [
+        {
+          "@type": "HowToStep",
+          position: 1,
+          name: "Upload an image",
+          text: "Upload a JPG, PNG, or WebP image to Toolora's Background Remover.",
+        },
+        {
+          "@type": "HowToStep",
+          position: 2,
+          name: "Remove the background",
+          text: "Click the Remove Background button and wait for the browser-based AI processing to finish.",
+        },
+        {
+          "@type": "HowToStep",
+          position: 3,
+          name: "Preview the result",
+          text: "Preview the image with its background removed and transparency applied.",
+        },
+        {
+          "@type": "HowToStep",
+          position: 4,
+          name: "Download the PNG",
+          text: "Download the background-removed image as a transparent PNG.",
+        },
+      ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: "How do I remove a background from an image?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Upload a JPG, PNG, or WebP image to Toolora's Background Remover, click Remove Background, wait for processing to finish, and download the transparent PNG.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Is Toolora's Background Remover free?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Yes. Toolora's Background Remover is available online for free without requiring desktop software.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Which image formats are supported?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "Toolora's Background Remover supports JPG, PNG, and WebP images up to 10MB.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "What format is the result?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "The background-removed image is provided as a PNG with a transparent background.",
+          },
+        },
+        {
+          "@type": "Question",
+          name: "Do I need to install software?",
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: "No. Toolora's Background Remover works directly in a modern web browser.",
+          },
+        },
+      ],
+    },
+  ];
+
   return (
     <>
       <SEO
-        title="Background Remover - Remove Image Background Online"
-        description="Remove image backgrounds online for free with Toolora. Upload an image and download a transparent PNG without installing software."
-        keywords="background remover, remove image background, transparent background, background remover online, remove background from image, free background remover"
+        title="Background Remover Online - Remove Image Background Free"
+        description="Remove image backgrounds online for free with Toolora. Automatically remove backgrounds from JPG, PNG and WebP images and download a transparent PNG directly in your browser."
+        keywords="background remover, remove background from image, background remover online, remove image background, transparent background, image background remover, free background remover, remove background online, JPG background remover, PNG background remover"
         canonical="/background-remover"
+      />
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData),
+        }}
       />
 
       <main className="container py-5">
         {/* HEADER */}
-
         <div className="text-center mb-5">
           <div
             style={{
@@ -170,7 +332,7 @@ function BackgroundRemover() {
               fontSize: "clamp(2rem, 5vw, 3.2rem)",
             }}
           >
-            Background Remover
+            Background Remover Online
           </h1>
 
           <p
@@ -186,8 +348,9 @@ function BackgroundRemover() {
           </p>
         </div>
 
-        {/* TOOL CARD */}
+        <AdPlaceholder label="Advertisement" />
 
+        {/* TOOL CARD */}
         <div
           className="mx-auto"
           style={{
@@ -202,18 +365,19 @@ function BackgroundRemover() {
           {!selectedFile ? (
             <>
               {/* UPLOAD AREA */}
-
               <div
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
                 onClick={() => inputRef.current?.click()}
                 role="button"
                 tabIndex={0}
+                aria-label="Upload an image"
                 onKeyDown={(event) => {
                   if (
                     event.key === "Enter" ||
                     event.key === " "
                   ) {
+                    event.preventDefault();
                     inputRef.current?.click();
                   }
                 }}
@@ -273,18 +437,25 @@ function BackgroundRemover() {
               <input
                 ref={inputRef}
                 type="file"
-                accept="image/*"
+                accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp"
                 onChange={handleInputChange}
                 hidden
               />
+
+              {error && (
+                <div
+                  className="alert alert-danger mt-4 mb-0"
+                  role="alert"
+                >
+                  {error}
+                </div>
+              )}
             </>
           ) : (
             <>
               {/* PREVIEWS */}
-
               <div className="row g-4">
                 {/* ORIGINAL */}
-
                 <div className="col-md-6">
                   <div
                     style={{
@@ -323,7 +494,6 @@ function BackgroundRemover() {
                 </div>
 
                 {/* RESULT */}
-
                 <div className="col-md-6">
                   <div
                     style={{
@@ -356,7 +526,7 @@ function BackgroundRemover() {
                       {resultPreview ? (
                         <img
                           src={resultPreview}
-                          alt="Background removed result"
+                          alt="Background removed transparent PNG result"
                           style={{
                             maxWidth: "100%",
                             maxHeight: "400px",
@@ -385,7 +555,6 @@ function BackgroundRemover() {
               </div>
 
               {/* PROGRESS */}
-
               {isProcessing && (
                 <div className="mt-4">
                   <div className="d-flex justify-content-between mb-2">
@@ -425,7 +594,6 @@ function BackgroundRemover() {
               )}
 
               {/* ERROR */}
-
               {error && (
                 <div
                   className="alert alert-danger mt-4 mb-0"
@@ -436,7 +604,6 @@ function BackgroundRemover() {
               )}
 
               {/* ACTIONS */}
-
               <div className="d-flex flex-wrap gap-2 justify-content-center mt-4">
                 {!resultPreview && !isProcessing && (
                   <button
@@ -475,8 +642,9 @@ function BackgroundRemover() {
           )}
         </div>
 
-        {/* INFO */}
+        <AdPlaceholder label="Advertisement" />
 
+        {/* SEO CONTENT */}
         <section
           className="mx-auto mt-5"
           style={{ maxWidth: "900px" }}
@@ -488,16 +656,17 @@ function BackgroundRemover() {
           <p className="text-muted">
             Toolora's Background Remover uses browser-based
             processing to automatically detect the main subject
-            of an image and remove its background.
+            of an image and remove its background. The result can
+            be downloaded as a transparent PNG.
           </p>
 
           <h3 className="h5 fw-bold mt-4">
-            How to remove a background?
+            How to remove a background from an image?
           </h3>
 
           <ol className="text-muted">
             <li className="mb-2">
-              Upload your JPG, PNG or WebP image.
+              Upload your JPG, PNG, or WebP image.
             </li>
 
             <li className="mb-2">
@@ -505,45 +674,100 @@ function BackgroundRemover() {
             </li>
 
             <li className="mb-2">
-              Wait while the image is processed.
+              Wait while the image is processed in your browser.
             </li>
 
             <li>
-              Download your transparent PNG.
+              Preview and download your transparent PNG.
             </li>
           </ol>
 
           <h3 className="h5 fw-bold mt-4">
-            Is it free?
+            Which image formats are supported?
           </h3>
 
           <p className="text-muted">
-            Yes. You can use this Toolora image tool without
-            installing desktop software.
+            You can upload JPG, JPEG, PNG, and WebP images up to
+            10MB. The processed result is downloaded as a PNG
+            with a transparent background.
           </p>
+
+          <h3 className="h5 fw-bold mt-4">
+            Is the Background Remover free?
+          </h3>
+
+          <p className="text-muted">
+            Yes. Toolora's Background Remover is free to use
+            online. You do not need to install desktop software
+            to remove an image background.
+          </p>
+
+          <h3 className="h5 fw-bold mt-4">
+            What can you use a transparent background for?
+          </h3>
+
+          <p className="text-muted">
+            Transparent PNG images are useful for product images,
+            profile pictures, social media graphics, presentations,
+            websites, logos, and other designs where you want the
+            main subject without its original background.
+          </p>
+
+          <h3 className="h5 fw-bold mt-4">
+            Frequently Asked Questions
+          </h3>
+
+          <div className="mt-3">
+            <h4 className="h6 fw-bold">
+              How do I remove a background from an image?
+            </h4>
+
+            <p className="text-muted">
+              Upload your image, click Remove Background, wait for
+              processing, and download the transparent PNG result.
+            </p>
+
+            <h4 className="h6 fw-bold mt-4">
+              Is Toolora's Background Remover free?
+            </h4>
+
+            <p className="text-muted">
+              Yes. The tool is available online for free.
+            </p>
+
+            <h4 className="h6 fw-bold mt-4">
+              Which image formats can I upload?
+            </h4>
+
+            <p className="text-muted">
+              JPG, JPEG, PNG, and WebP images up to 10MB are
+              supported.
+            </p>
+
+            <h4 className="h6 fw-bold mt-4">
+              What format will I receive?
+            </h4>
+
+            <p className="text-muted">
+              The result is downloaded as a PNG with a transparent
+              background.
+            </p>
+
+            <h4 className="h6 fw-bold mt-4">
+              Do I need to install software?
+            </h4>
+
+            <p className="text-muted">
+              No. The tool works directly in a modern web browser.
+            </p>
+          </div>
         </section>
 
-        {/* AD PLACEHOLDER */}
-
-        <div
-          className="mx-auto mt-5"
-          style={{
-            maxWidth: "900px",
-            minHeight: "90px",
-            border: "1px dashed #d8d5e8",
-            borderRadius: "12px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "#999",
-            fontSize: "13px",
-          }}
-        >
-          Advertisement
-        </div>
+        <AdPlaceholder label="Advertisement" />
       </main>
     </>
   );
 }
 
 export default BackgroundRemover;
+

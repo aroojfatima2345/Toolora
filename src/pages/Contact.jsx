@@ -1,7 +1,32 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
+
+function AdPlaceholder({ label = "Advertisement" }) {
+  return (
+    <div
+      className="mx-auto my-4"
+      style={{
+        width: "100%",
+        maxWidth: "970px",
+        minHeight: "90px",
+        border: "1px dashed #d8d5e8",
+        borderRadius: "12px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#faf9ff",
+        color: "#999",
+        fontSize: "13px",
+        textAlign: "center",
+        padding: "15px",
+      }}
+      aria-label="Advertisement"
+    >
+      {label}
+    </div>
+  );
+}
 
 function Contact() {
   const [formData, setFormData] = useState({
@@ -42,7 +67,7 @@ function Contact() {
       <SEO
         title="Contact Toolora - Get in Touch"
         description="Contact Toolora for questions, feedback, suggestions or issues related to our free online tools for images, PDFs, text, calculators and more."
-        keywords="contact Toolora, Toolora contact, Toolora support, online tools support, free online tools support, Toolora feedback"
+        keywords="contact Toolora, Toolora contact, Toolora support, online tools support, free online tools support, Toolora feedback, contact free tools website"
         canonical="/contact"
       />
 
@@ -50,15 +75,20 @@ function Contact() {
         <div className="row justify-content-center">
           <div className="col-lg-9">
             <article>
+              {/* Header */}
               <header className="text-center mb-5">
                 <h1 className="fw-bold">Contact Toolora</h1>
 
-                <p className="text-muted mt-3">
+                <p className="text-muted mt-3 mb-0">
                   Have a question, suggestion or feedback? We'd love to hear
                   from you.
                 </p>
               </header>
 
+              {/* Ad 1 */}
+              <AdPlaceholder />
+
+              {/* Success Message */}
               {submitted && (
                 <div
                   className="alert alert-success mb-4"
@@ -74,9 +104,7 @@ function Contact() {
                 {/* Contact Information */}
                 <div className="col-md-5">
                   <section className="border rounded-4 p-4 h-100">
-                    <h2 className="h4 fw-bold mb-4">
-                      Get in Touch
-                    </h2>
+                    <h2 className="h4 fw-bold mb-4">Get in Touch</h2>
 
                     <p className="text-muted">
                       If you have a question about Toolora, experience an
@@ -104,7 +132,9 @@ function Contact() {
                     </div>
 
                     <div className="mt-4">
-                      <h3 className="h6 fw-bold">What Can You Contact Us About?</h3>
+                      <h3 className="h6 fw-bold">
+                        What Can You Contact Us About?
+                      </h3>
 
                       <ul className="text-muted mb-0 ps-3">
                         <li className="mb-2">
@@ -119,9 +149,7 @@ function Contact() {
                           Suggestions for new tools
                         </li>
 
-                        <li>
-                          General feedback
-                        </li>
+                        <li>General feedback</li>
                       </ul>
                     </div>
                   </section>
@@ -228,14 +256,17 @@ function Contact() {
                 </div>
               </div>
 
+              {/* Ad 2 */}
+              <AdPlaceholder />
+
+              {/* Explore Toolora */}
               <section className="mt-5">
-                <h2 className="fw-bold mb-3">
-                  Explore Toolora
-                </h2>
+                <h2 className="fw-bold mb-3">Explore Toolora</h2>
 
                 <p>
                   Looking for a specific online tool? Explore some of
-                  Toolora's free tools:
+                  Toolora's free tools for images, PDFs, text and everyday
+                  calculations:
                 </p>
 
                 <ul>
@@ -246,8 +277,20 @@ function Contact() {
                   </li>
 
                   <li className="mb-2">
+                    <Link to="/image-resizer">
+                      Image Resizer
+                    </Link>
+                  </li>
+
+                  <li className="mb-2">
                     <Link to="/pdf-compressor">
                       PDF Compressor
+                    </Link>
+                  </li>
+
+                  <li className="mb-2">
+                    <Link to="/jpg-to-png">
+                      JPG to PNG Converter
                     </Link>
                   </li>
 
@@ -268,8 +311,42 @@ function Contact() {
                       Percentage Calculator
                     </Link>
                   </li>
+
+                  <li className="mb-2">
+                    <Link to="/age-calculator">
+                      Age Calculator
+                    </Link>
+                  </li>
+
+                  <li>
+                    <Link to="/bmi-calculator">
+                      BMI Calculator
+                    </Link>
+                  </li>
                 </ul>
               </section>
+
+              {/* Additional Information */}
+              <section className="mt-5">
+                <h2 className="fw-bold mb-3">
+                  Have Feedback About Toolora?
+                </h2>
+
+                <p>
+                  Your feedback helps us improve Toolora and create more
+                  useful online tools. If you find an issue, have a suggestion
+                  or would like to see a particular tool added to the
+                  platform, feel free to contact us.
+                </p>
+
+                <p className="mb-0">
+                  We appreciate your feedback and suggestions as we continue
+                  building and improving our collection of free online tools.
+                </p>
+              </section>
+
+              {/* Ad 3 */}
+              <AdPlaceholder />
             </article>
           </div>
         </div>

@@ -3,6 +3,32 @@ import { Link } from "react-router-dom";
 import QRCode from "qrcode";
 import SEO from "../components/SEO";
 
+function AdPlaceholder({ label = "Advertisement" }) {
+  return (
+    <div
+      className="mx-auto my-4"
+      style={{
+        width: "100%",
+        maxWidth: "970px",
+        minHeight: "90px",
+        border: "1px dashed #d8d5e8",
+        borderRadius: "12px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#faf9ff",
+        color: "#999",
+        fontSize: "13px",
+        textAlign: "center",
+        padding: "15px",
+      }}
+      aria-label="Advertisement"
+    >
+      {label}
+    </div>
+  );
+}
+
 function QRCodeGenerator() {
   const [text, setText] = useState("");
   const [qrCode, setQrCode] = useState("");
@@ -116,7 +142,7 @@ function QRCodeGenerator() {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "Toolora QR Code Generator",
-    url: "https://toolora-inky.vercel.app/qr-code-generator",
+    url: "https://www.toolora.click/qr-code-generator",
     description:
       "Free online QR code generator for creating QR codes from URLs, text and other information and downloading them as PNG images.",
     applicationCategory: "UtilitiesApplication",
@@ -135,7 +161,7 @@ function QRCodeGenerator() {
       <SEO
         title="QR Code Generator Online - Create QR Codes Free"
         description="Create QR codes online for free with Toolora. Generate QR codes for URLs, text and other information, then download them as PNG images."
-        keywords="QR code generator, QR code maker, create QR code, generate QR code online, free QR code generator, QR code creator, QR code for URL, QR code for text, online QR generator"
+        keywords="QR code generator, QR code maker, create QR code, generate QR code online, free QR code generator, QR code creator, QR code for URL, QR code for text, online QR generator, QR code maker online"
         canonical="/qr-code-generator"
       />
 
@@ -166,6 +192,9 @@ function QRCodeGenerator() {
             download it as a PNG image.
           </p>
         </header>
+
+        {/* Ad Placeholder 1 */}
+        <AdPlaceholder />
 
         <main>
           <section
@@ -278,6 +307,9 @@ function QRCodeGenerator() {
               </div>
             )}
           </section>
+
+          {/* Ad Placeholder 2 */}
+          <AdPlaceholder />
 
           <article className="tool-information mx-auto mt-5">
             <section>
@@ -583,6 +615,9 @@ function QRCodeGenerator() {
               </div>
             </section>
           </article>
+
+          {/* Ad Placeholder 3 */}
+          <AdPlaceholder />
         </main>
       </div>
     </div>

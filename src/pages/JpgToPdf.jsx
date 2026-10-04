@@ -3,6 +3,32 @@ import { Link } from "react-router-dom";
 import jsPDF from "jspdf";
 import SEO from "../components/SEO";
 
+function AdPlaceholder({ label = "Advertisement" }) {
+  return (
+    <div
+      className="mx-auto my-4"
+      style={{
+        width: "100%",
+        maxWidth: "970px",
+        minHeight: "90px",
+        border: "1px dashed #d8d5e8",
+        borderRadius: "12px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#faf9ff",
+        color: "#999",
+        fontSize: "13px",
+        textAlign: "center",
+        padding: "15px",
+      }}
+      aria-label="Advertisement"
+    >
+      {label}
+    </div>
+  );
+}
+
 function JpgToPdf() {
   const [images, setImages] = useState([]);
   const [pdfUrl, setPdfUrl] = useState("");
@@ -72,7 +98,7 @@ function JpgToPdf() {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "Toolora JPG to PDF Converter",
-    url: "https://toolora-inky.vercel.app/jpg-to-pdf",
+    url: "https://www.toolora.click/jpg-to-pdf",
     description:
       "Free online JPG to PDF converter for combining JPG and JPEG images into PDF documents directly in your browser.",
     applicationCategory: "UtilitiesApplication",
@@ -86,6 +112,53 @@ function JpgToPdf() {
     },
   };
 
+  const howToSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: "How to Convert JPG to PDF Online",
+    description:
+      "Learn how to convert one or multiple JPG and JPEG images into a PDF using Toolora's free online JPG to PDF converter.",
+    totalTime: "PT2M",
+    tool: [
+      {
+        "@type": "HowToTool",
+        name: "Web browser",
+      },
+    ],
+    step: [
+      {
+        "@type": "HowToStep",
+        position: 1,
+        name: "Upload JPG images",
+        text: "Click Choose Images and select one or multiple JPG or JPEG images.",
+      },
+      {
+        "@type": "HowToStep",
+        position: 2,
+        name: "Review the images",
+        text: "Review the selected JPG images and their previews before conversion.",
+      },
+      {
+        "@type": "HowToStep",
+        position: 3,
+        name: "Convert JPG to PDF",
+        text: "Click Convert to PDF to create a PDF document from the selected images.",
+      },
+      {
+        "@type": "HowToStep",
+        position: 4,
+        name: "Download the PDF",
+        text: "Click Download PDF to save the generated PDF document to your device.",
+      },
+    ],
+  };
+
+  const structuredData = [
+    faqSchema,
+    webAppSchema,
+    howToSchema,
+  ];
+
   const handleUpload = (event) => {
     const files = Array.from(event.target.files);
 
@@ -96,7 +169,8 @@ function JpgToPdf() {
     const jpgFiles = files.filter(
       (file) =>
         file.type === "image/jpeg" ||
-        file.type === "image/jpg"
+        file.type === "image/jpg" ||
+        /\.jpe?g$/i.test(file.name)
     );
 
     if (jpgFiles.length === 0) {
@@ -249,17 +323,16 @@ function JpgToPdf() {
       <SEO
         title="JPG to PDF Converter Online - Convert Images to PDF Free"
         description="Convert JPG and JPEG images to PDF online for free with Toolora. Combine one or multiple JPG images into a PDF and download your document directly from your browser."
-        keywords="JPG to PDF, JPG to PDF converter, convert JPG to PDF, JPEG to PDF, image to PDF, JPG PDF converter, convert image to PDF, free JPG to PDF, online JPG to PDF converter"
+        keywords="JPG to PDF, JPG to PDF converter, convert JPG to PDF, JPEG to PDF, image to PDF, JPG PDF converter, convert image to PDF, free JPG to PDF, online JPG to PDF converter, multiple JPG to PDF"
         canonical="/jpg-to-pdf"
       />
 
-      <script type="application/ld+json">
-        {JSON.stringify(faqSchema)}
-      </script>
-
-      <script type="application/ld+json">
-        {JSON.stringify(webAppSchema)}
-      </script>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(structuredData),
+        }}
+      />
 
       <div className="container py-5">
         <header className="text-center mb-5">
@@ -280,6 +353,9 @@ function JpgToPdf() {
             document and download it easily.
           </p>
         </header>
+
+        {/* Ad Placeholder 1 */}
+        <AdPlaceholder />
 
         <main>
           <section
@@ -313,7 +389,7 @@ function JpgToPdf() {
                 <input
                   id="jpg-pdf-upload"
                   type="file"
-                  accept="image/jpeg,image/jpg"
+                  accept="image/jpeg,image/jpg,.jpg,.jpeg"
                   multiple
                   onChange={handleUpload}
                   aria-label="Choose JPG or JPEG images to convert to PDF"
@@ -375,6 +451,7 @@ function JpgToPdf() {
                     className="btn btn-primary px-4"
                     onClick={convertToPdf}
                     disabled={isConverting}
+                    aria-busy={isConverting}
                     aria-label={
                       isConverting
                         ? "Creating PDF"
@@ -416,6 +493,9 @@ function JpgToPdf() {
               </div>
             )}
           </section>
+
+          {/* Ad Placeholder 2 */}
+          <AdPlaceholder />
         </main>
 
         <article className="tool-information mx-auto mt-5">
@@ -653,12 +733,13 @@ function JpgToPdf() {
             </div>
           </section>
         </article>
+
+        {/* Ad Placeholder 3 */}
+        <AdPlaceholder />
       </div>
     </div>
   );
 }
 
 export default JpgToPdf;
-
-
 

@@ -30,10 +30,6 @@ const BackgroundRemover = lazy(
   () => import("./pages/BackgroundRemover")
 );
 
-const WatermarkRemover = lazy(
-  () => import("./pages/WatermarkRemover")
-);
-
 const PercentageCalculator = lazy(
   () => import("./pages/PercentageCalculator")
 );
@@ -45,6 +41,36 @@ const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const Disclaimer = lazy(() => import("./pages/Disclaimer"));
+
+// ======================================================
+// REUSABLE AD PLACEHOLDER
+// ======================================================
+
+function AdPlaceholder({ label = "Advertisement" }) {
+  return (
+    <div
+      className="mx-auto my-4"
+      style={{
+        width: "100%",
+        maxWidth: "970px",
+        minHeight: "90px",
+        border: "1px dashed #d8d5e8",
+        borderRadius: "12px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#faf9ff",
+        color: "#999",
+        fontSize: "13px",
+        textAlign: "center",
+        padding: "15px",
+      }}
+      aria-label="Advertisement"
+    >
+      {label}
+    </div>
+  );
+}
 
 // ======================================================
 // LOADING SCREEN
@@ -115,8 +141,9 @@ function Home() {
       title: "Watermark Remover",
       description:
         "Remove unwanted marks from images you own or have permission to edit.",
-      path: "/watermark-remover",
+      path: null,
       category: "Image Tools",
+      comingSoon: true,
     },
     {
       icon: "🔄",
@@ -304,10 +331,28 @@ function Home() {
       ================================================== */}
 
       <SEO
-        title="Free Online Tools"
-        description="Toolora provides free online tools for image compression, PDF tools, image conversion, calculators, QR codes, word counting and more."
-        keywords="free online tools, image compressor, image resizer, background remover, watermark remover, PDF compressor, JPG to PNG, JPG to PDF, PDF to JPG, QR code generator, word counter, percentage calculator, age calculator, BMI calculator"
+        title="Free Online Tools - Image, PDF & Calculator Tools"
+        description="Use Toolora's free online tools to compress and resize images, remove backgrounds, convert JPG and PDF files, generate QR codes, count words, and calculate percentages, age, and BMI."
+        keywords="free online tools, image compressor, image resizer, background remover, PDF compressor, JPG to PNG, JPG to PDF, PDF to JPG, QR code generator, word counter, percentage calculator, age calculator, BMI calculator"
         canonical="/"
+      />
+
+      {/* ==================================================
+          HOME STRUCTURED DATA
+      ================================================== */}
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: "Toolora",
+            url: "https://www.toolora.click/",
+            description:
+              "Free online tools for image compression, image resizing, background removal, PDF tools, image conversion, calculators, QR codes and more.",
+          }),
+        }}
       />
 
       {/* ==================================================
@@ -422,8 +467,10 @@ function Home() {
             </h1>
 
             <p className="hero-text">
-              Compress, convert, calculate and generate
-              with our collection of simple online tools.
+              Compress images, convert JPG and PDF files,
+              remove backgrounds, generate QR codes,
+              count words and use helpful calculators —
+              all with simple free online tools.
             </p>
 
             <div className="search-box mx-auto">
@@ -459,6 +506,14 @@ function Home() {
             </div>
           </div>
         </section>
+
+        {/* ==================================================
+            TOP ADVERTISEMENT
+        ================================================== */}
+
+        <div className="container">
+          <AdPlaceholder />
+        </div>
 
         {/* ==================================================
             TOOLS
@@ -509,27 +564,68 @@ function Home() {
                 {filteredTools.map((tool) => (
                   <div
                     className="col-md-6 col-lg-4"
-                    key={tool.path}
+                    key={tool.title}
                   >
-                    <Link
-                      to={tool.path}
-                      className="tool-card text-decoration-none d-block"
-                    >
+                    {tool.comingSoon ? (
                       <div
-                        className="tool-icon"
-                        aria-hidden="true"
+                        className="tool-card d-block"
+                        aria-label={`${tool.title} - Coming Soon`}
+                        style={{
+                          cursor: "default",
+                          position: "relative",
+                        }}
                       >
-                        {tool.icon}
+                        <div
+                          className="tool-icon"
+                          aria-hidden="true"
+                        >
+                          {tool.icon}
+                        </div>
+
+                        <div className="mb-2">
+                          <span
+                            className="badge rounded-pill text-bg-warning"
+                            style={{
+                              fontSize: "0.75rem",
+                              padding: "6px 10px",
+                            }}
+                          >
+                            Coming Soon
+                          </span>
+                        </div>
+
+                        <h3>{tool.title}</h3>
+
+                        <p>{tool.description}</p>
+
+                        <span
+                          className="use-tool-btn text-muted"
+                          style={{ cursor: "default" }}
+                        >
+                          Coming Soon
+                        </span>
                       </div>
+                    ) : (
+                      <Link
+                        to={tool.path}
+                        className="tool-card text-decoration-none d-block"
+                      >
+                        <div
+                          className="tool-icon"
+                          aria-hidden="true"
+                        >
+                          {tool.icon}
+                        </div>
 
-                      <h3>{tool.title}</h3>
+                        <h3>{tool.title}</h3>
 
-                      <p>{tool.description}</p>
+                        <p>{tool.description}</p>
 
-                      <span className="use-tool-btn">
-                        Use Tool →
-                      </span>
-                    </Link>
+                        <span className="use-tool-btn">
+                          Use Tool →
+                        </span>
+                      </Link>
+                    )}
                   </div>
                 ))}
               </div>
@@ -563,6 +659,14 @@ function Home() {
             )}
           </div>
         </section>
+
+        {/* ==================================================
+            MIDDLE ADVERTISEMENT
+        ================================================== */}
+
+        <div className="container">
+          <AdPlaceholder />
+        </div>
 
         {/* ==================================================
             CATEGORIES
@@ -641,6 +745,46 @@ function Home() {
             )}
           </div>
         </section>
+
+        {/* ==================================================
+            SEO CONTENT
+        ================================================== */}
+
+        <section
+          className="py-5 bg-light"
+          aria-labelledby="about-toolora-heading"
+        >
+          <div className="container">
+            <div className="row justify-content-center">
+              <div className="col-lg-9">
+                <div className="text-center">
+                  <h2 id="about-toolora-heading">
+                    Free Online Tools for Everyday Tasks
+                  </h2>
+
+                  <p className="text-muted mb-0">
+                    Toolora is a collection of simple,
+                    browser-based online tools designed to
+                    help you complete everyday digital tasks
+                    quickly. Compress and resize images,
+                    remove image backgrounds, convert JPG
+                    and PDF files, generate QR codes, count
+                    words, and use useful calculators without
+                    installing additional software.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ==================================================
+            BOTTOM ADVERTISEMENT
+        ================================================== */}
+
+        <div className="container pb-4">
+          <AdPlaceholder />
+        </div>
       </main>
     </>
   );
@@ -689,12 +833,6 @@ function Footer() {
               <li>
                 <Link to="/background-remover">
                   Background Remover
-                </Link>
-              </li>
-
-              <li>
-                <Link to="/watermark-remover">
-                  Watermark Remover
                 </Link>
               </li>
 
@@ -875,14 +1013,8 @@ function App() {
           }
         />
 
-        <Route
-          path="/watermark-remover"
-          element={
-            <Suspense fallback={<PageLoader />}>
-              <WatermarkRemover />
-            </Suspense>
-          }
-        />
+        {/* WATERMARK REMOVER IS CURRENTLY COMING SOON */}
+        {/* No route is intentionally added here. */}
 
         {/* CONVERTERS */}
 

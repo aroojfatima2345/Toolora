@@ -1,7 +1,32 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
+
+function AdPlaceholder({ label = "Advertisement" }) {
+  return (
+    <div
+      className="mx-auto my-4"
+      style={{
+        width: "100%",
+        maxWidth: "970px",
+        minHeight: "90px",
+        border: "1px dashed #d8d5e8",
+        borderRadius: "12px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#faf9ff",
+        color: "#999",
+        fontSize: "13px",
+        textAlign: "center",
+        padding: "15px",
+      }}
+      aria-label="Advertisement"
+    >
+      {label}
+    </div>
+  );
+}
 
 function AgeCalculator() {
   const [dateOfBirth, setDateOfBirth] = useState("");
@@ -95,7 +120,9 @@ function AgeCalculator() {
 
     const daysUntilBirthday = Math.max(
       0,
-      Math.ceil(difference / (1000 * 60 * 60 * 24))
+      Math.ceil(
+        difference / (1000 * 60 * 60 * 24)
+      )
     );
 
     setAge({
@@ -162,7 +189,7 @@ function AgeCalculator() {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "Toolora Age Calculator",
-    url: "https://toolora-inky.vercel.app/age-calculator",
+    url: "https://www.toolora.click/age-calculator",
     description:
       "Free online age calculator for calculating exact age in years, months and days and finding days remaining until the next birthday.",
     applicationCategory: "UtilitiesApplication",
@@ -180,8 +207,8 @@ function AgeCalculator() {
     <div className="compressor-page">
       <SEO
         title="Age Calculator Online - Calculate Your Exact Age"
-        description="Calculate your exact age in years, months and days with Toolora's free online age calculator. Find your age and days remaining until your next birthday."
-        keywords="age calculator, age calculator online, calculate age, exact age calculator, date of birth calculator, birthday calculator, age in years months days, free age calculator, calculate age from date of birth"
+        description="Calculate your exact age in years, months and days online for free with Toolora. Enter your date of birth to find your age and days remaining until your next birthday."
+        keywords="age calculator, age calculator online, calculate age, exact age calculator, date of birth calculator, birthday calculator, age in years months days, free age calculator, calculate age from date of birth, age calculator by date of birth"
         canonical="/age-calculator"
       />
 
@@ -203,12 +230,17 @@ function AgeCalculator() {
             Age Calculator Online
           </h1>
 
-          <p className="text-muted">
+          <p
+            className="text-muted mx-auto"
+            style={{ maxWidth: "700px" }}
+          >
             Calculate your exact age in years, months and days
             and find out how many days remain until your next
             birthday.
           </p>
         </header>
+
+        <AdPlaceholder />
 
         <main>
           <section
@@ -240,7 +272,8 @@ function AgeCalculator() {
                 id="dob-help"
                 className="text-muted d-block mt-2"
               >
-                Select your date of birth to calculate your exact age.
+                Select your date of birth to calculate your
+                exact age.
               </small>
             </div>
 
@@ -267,6 +300,7 @@ function AgeCalculator() {
               <div
                 className="calculator-result mt-5"
                 aria-live="polite"
+                aria-atomic="true"
               >
                 <p className="mb-3">
                   Your Exact Age
@@ -306,6 +340,8 @@ function AgeCalculator() {
             )}
           </section>
 
+          <AdPlaceholder />
+
           <section className="tool-information mx-auto mt-5">
             <h2>
               Free Age Calculator Online
@@ -339,7 +375,8 @@ function AgeCalculator() {
               </li>
 
               <li>
-                Your exact age will appear in years, months and days.
+                Your exact age will appear in years, months and
+                days.
               </li>
 
               <li>
@@ -485,6 +522,8 @@ function AgeCalculator() {
               </li>
             </ul>
           </section>
+
+          <AdPlaceholder />
         </main>
       </div>
     </div>

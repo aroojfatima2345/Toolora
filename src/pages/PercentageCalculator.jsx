@@ -2,6 +2,32 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import SEO from "../components/SEO";
 
+function AdPlaceholder({ label = "Advertisement" }) {
+  return (
+    <div
+      className="mx-auto my-4"
+      style={{
+        width: "100%",
+        maxWidth: "970px",
+        minHeight: "90px",
+        border: "1px dashed #d8d5e8",
+        borderRadius: "12px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#faf9ff",
+        color: "#999",
+        fontSize: "13px",
+        textAlign: "center",
+        padding: "15px",
+      }}
+      aria-label="Advertisement"
+    >
+      {label}
+    </div>
+  );
+}
+
 function PercentageCalculator() {
   const [type, setType] = useState("of");
   const [value1, setValue1] = useState("");
@@ -59,9 +85,9 @@ function PercentageCalculator() {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "Toolora Percentage Calculator",
-    url: "https://toolora-inky.vercel.app/percentage-calculator",
+    url: "https://www.toolora.click/percentage-calculator",
     description:
-      "Free online percentage calculator for calculating percentages, percentage increase and percentage decrease.",
+      "Free online percentage calculator for calculating percentages, percentage increase, percentage decrease and percentage changes.",
     applicationCategory: "UtilitiesApplication",
     operatingSystem: "Any",
     browserRequirements:
@@ -170,8 +196,8 @@ function PercentageCalculator() {
     <div className="compressor-page">
       <SEO
         title="Percentage Calculator Online - Calculate Percentages Free"
-        description="Free online percentage calculator to calculate percentages, percentage increase, percentage decrease and find what percentage one number is of another."
-        keywords="percentage calculator, percentage calculator online, calculate percentage, percent calculator, percentage increase calculator, percentage decrease calculator, free percentage calculator, percentage change calculator"
+        description="Calculate percentages, percentage increase, percentage decrease and percentage change online for free with Toolora. Get quick and accurate percentage results directly in your browser."
+        keywords="percentage calculator, percentage calculator online, calculate percentage, percent calculator, percentage increase calculator, percentage decrease calculator, percentage change calculator, free percentage calculator, percentage calculator online, percentage of a number, percentage difference calculator"
         canonical="/percentage-calculator"
       />
 
@@ -202,6 +228,8 @@ function PercentageCalculator() {
             and accurately.
           </p>
         </header>
+
+        <AdPlaceholder />
 
         <main>
           <section
@@ -319,9 +347,7 @@ function PercentageCalculator() {
                 aria-live="polite"
                 aria-atomic="true"
               >
-                <p className="mb-2">
-                  Your Result
-                </p>
+                <p className="mb-2">Your Result</p>
 
                 <h2>
                   {result.toFixed(2)}
@@ -331,11 +357,11 @@ function PercentageCalculator() {
             )}
           </section>
 
+          <AdPlaceholder />
+
           <article className="tool-information mx-auto mt-5">
             <section>
-              <h2>
-                Free Percentage Calculator Online
-              </h2>
+              <h2>Free Percentage Calculator Online</h2>
 
               <p>
                 Toolora's free percentage calculator helps you
@@ -358,19 +384,14 @@ function PercentageCalculator() {
               </h2>
 
               <ul>
-                <li>
-                  Calculate X% of a number.
-                </li>
-
+                <li>Calculate X% of a number.</li>
                 <li>
                   Find what percentage one value is of another.
                 </li>
-
                 <li>
                   Calculate percentage increase between two
                   values.
                 </li>
-
                 <li>
                   Calculate percentage decrease between two
                   values.
@@ -379,9 +400,7 @@ function PercentageCalculator() {
             </section>
 
             <section className="mt-4">
-              <h2>
-                How to Calculate a Percentage
-              </h2>
+              <h2>How to Calculate a Percentage</h2>
 
               <p>
                 To calculate a percentage of a number, use this
@@ -440,9 +459,7 @@ function PercentageCalculator() {
             </section>
 
             <section className="mt-4">
-              <h2>
-                How to Calculate Percentage Increase
-              </h2>
+              <h2>How to Calculate Percentage Increase</h2>
 
               <p>
                 Percentage increase measures how much a value
@@ -474,9 +491,7 @@ function PercentageCalculator() {
             </section>
 
             <section className="mt-4">
-              <h2>
-                How to Calculate Percentage Decrease
-              </h2>
+              <h2>How to Calculate Percentage Decrease</h2>
 
               <p>
                 Percentage decrease shows how much a value has
@@ -508,9 +523,7 @@ function PercentageCalculator() {
             </section>
 
             <section className="mt-4">
-              <h2>
-                Where Are Percentages Used?
-              </h2>
+              <h2>Where Are Percentages Used?</h2>
 
               <p>
                 Percentages are commonly used in everyday
@@ -529,9 +542,7 @@ function PercentageCalculator() {
             </section>
 
             <section className="mt-4">
-              <h2>
-                Percentage vs Percentage Points
-              </h2>
+              <h2>Percentage vs Percentage Points</h2>
 
               <p>
                 A percentage describes a relative proportion or
@@ -547,9 +558,7 @@ function PercentageCalculator() {
             </section>
 
             <section className="mt-4">
-              <h2>
-                Is Toolora Percentage Calculator Free?
-              </h2>
+              <h2>Is Toolora Percentage Calculator Free?</h2>
 
               <p>
                 Yes. Toolora's percentage calculator is
@@ -573,9 +582,7 @@ function PercentageCalculator() {
             </section>
 
             <section className="mt-5">
-              <h2>
-                Frequently Asked Questions
-              </h2>
+              <h2>Frequently Asked Questions</h2>
 
               <h3 className="mt-3">
                 What is a percentage?
@@ -626,9 +633,7 @@ function PercentageCalculator() {
             </section>
 
             <section className="mt-5">
-              <h2>
-                Try Our Other Free Tools
-              </h2>
+              <h2>Try Our Other Free Tools</h2>
 
               <p>
                 Explore more useful online tools from Toolora:
@@ -665,6 +670,8 @@ function PercentageCalculator() {
               </div>
             </section>
           </article>
+
+          <AdPlaceholder />
         </main>
       </div>
     </div>
